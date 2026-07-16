@@ -66,10 +66,10 @@ export default function TeamResearchersPage() {
           publicApi.getTeam('research'), // mapped as category = 'research'
           publicApi.getTeam('postdoc') // mapped as category = 'postdoc'
         ]);
-        if (scholarsRes.data && scholarsRes.data.length > 0) {
+        if (Array.isArray(scholarsRes.data) && scholarsRes.data.length > 0) {
           setScholars(scholarsRes.data.map(m => ({ ...m, image_url: resolveImageUrl(m.image_url), initials: getInitials(m.name), area: m.bio || m.title })));
         }
-        if (postdocsRes.data && postdocsRes.data.length > 0) {
+        if (Array.isArray(postdocsRes.data) && postdocsRes.data.length > 0) {
           setPostdocs(postdocsRes.data.map(m => ({ ...m, image_url: resolveImageUrl(m.image_url), initials: getInitials(m.name), area: m.bio || m.title })));
         }
       } catch (err) {

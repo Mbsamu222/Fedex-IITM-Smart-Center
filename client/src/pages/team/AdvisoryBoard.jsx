@@ -61,10 +61,10 @@ export default function TeamAdvisoryPage() {
           publicApi.getTeam('advisory'),
           publicApi.getTeam('executive')
         ]);
-        if (advisoryRes.data && advisoryRes.data.length > 0) {
+        if (Array.isArray(advisoryRes.data) && advisoryRes.data.length > 0) {
           setAdvisory(advisoryRes.data.map(m => ({ ...m, image_url: resolveImageUrl(m.image_url), initials: getInitials(m.name), dept: m.department })));
         }
-        if (execRes.data && execRes.data.length > 0) {
+        if (Array.isArray(execRes.data) && execRes.data.length > 0) {
           setExecutive(execRes.data.map(m => ({ ...m, image_url: resolveImageUrl(m.image_url), initials: getInitials(m.name), dept: m.department })));
         }
       } catch (err) {

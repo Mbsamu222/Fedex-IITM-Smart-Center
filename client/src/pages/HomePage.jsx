@@ -230,15 +230,15 @@ export default function HomePage() {
           setSlides(apiSlides);
         }
 
-        if (statsRes.data && statsRes.data.length > 0) {
+        if (Array.isArray(statsRes.data) && statsRes.data.length > 0) {
           setStats(statsRes.data);
         }
 
-        if (areasRes.data && areasRes.data.length > 0) {
+        if (Array.isArray(areasRes.data) && areasRes.data.length > 0) {
           setResearchAreas(areasRes.data);
         }
 
-        if (projectsRes.data && projectsRes.data.length > 0) {
+        if (Array.isArray(projectsRes.data) && projectsRes.data.length > 0) {
           setProjects(projectsRes.data.map(p => ({
             title: p.title,
             description: p.description,
@@ -247,7 +247,7 @@ export default function HomePage() {
           })));
         }
 
-        if (eventsRes.data && eventsRes.data.length > 0) {
+        if (Array.isArray(eventsRes.data) && eventsRes.data.length > 0) {
           setEvents(eventsRes.data.map(e => {
             const dateObj = new Date(e.start_date);
             const dateString = isNaN(dateObj.getTime()) ? '' : dateObj.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });

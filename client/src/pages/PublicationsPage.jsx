@@ -43,7 +43,7 @@ export default function PublicationsPage() {
     const fetchPubs = async () => {
       try {
         const res = await publicApi.getPublications();
-        if (res.data && res.data.length > 0) {
+        if (Array.isArray(res.data) && res.data.length > 0) {
           setPublications(res.data);
         }
       } catch {

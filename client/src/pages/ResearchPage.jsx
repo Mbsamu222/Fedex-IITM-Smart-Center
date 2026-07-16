@@ -93,10 +93,10 @@ export default function ResearchPage() {
           publicApi.getResearchAreas(),
           publicApi.getProjects()
         ]);
-        if (areasRes.data && areasRes.data.length > 0) {
+        if (Array.isArray(areasRes.data) && areasRes.data.length > 0) {
           setAreas(areasRes.data.map(area => ({ ...area, image_url: resolveImageUrl(area.image_url) })));
         }
-        if (projectsRes.data && projectsRes.data.length > 0) {
+        if (Array.isArray(projectsRes.data) && projectsRes.data.length > 0) {
           setProjects(projectsRes.data.map(p => ({ ...p, image_url: resolveImageUrl(p.image_url) })));
         }
       } catch (err) {

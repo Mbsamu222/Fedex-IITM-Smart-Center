@@ -20,7 +20,12 @@ pool.on('connect', () => {
 
 pool.on('error', (err) => {
   console.error('❌ PostgreSQL connection error:', err);
-  process.exit(-1);
+  // Don't crash the process here: on Vercel this runs inside a serverless
+  // function, and killing the process mid-request corrupts whatever
+  // response was in flight instead of surfacing a clean error.
+  if (!process.env.VERCEL) {
+    process.exit(-1);
+  }
 });
 
 module.exports = pool;

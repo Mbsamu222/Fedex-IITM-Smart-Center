@@ -72,7 +72,7 @@ export default function EventsPage() {
     const fetchEvents = async () => {
       try {
         const res = await publicApi.getEvents();
-        if (res.data && res.data.length > 0) {
+        if (Array.isArray(res.data) && res.data.length > 0) {
           setEvents(res.data.map(event => ({ ...event, image_url: resolveImageUrl(event.image_url) })));
         }
       } catch {

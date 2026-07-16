@@ -70,7 +70,7 @@ export default function ContactPage() {
           setContactInfo(prev => ({ ...prev, ...contactRes.data }));
         }
 
-        if (centerTeamRes.data && centerTeamRes.data.length > 0) {
+        if (Array.isArray(centerTeamRes.data) && centerTeamRes.data.length > 0) {
           const excludedNames = ['grason', 'shifa'];
           const filtered = centerTeamRes.data.filter(
             m => !excludedNames.includes((m.name || '').trim().toLowerCase())

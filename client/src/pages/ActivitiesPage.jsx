@@ -48,7 +48,7 @@ export default function ActivitiesPage() {
     const fetchActivities = async () => {
       try {
         const res = await publicApi.getActivities();
-        if (res.data && res.data.length > 0) {
+        if (Array.isArray(res.data) && res.data.length > 0) {
           // Filter out archived ones if necessary
           const activeActivities = res.data.filter(a => a.status !== 'Archived');
           setActivities(activeActivities.map(activity => ({ ...activity, image_url: resolveImageUrl(activity.image_url) })));

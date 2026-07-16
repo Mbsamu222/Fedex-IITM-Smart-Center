@@ -49,7 +49,7 @@ export default function TeamCenterPage() {
     const fetchTeam = async () => {
       try {
         const res = await publicApi.getTeam('center');
-        if (res.data && res.data.length > 0) {
+        if (Array.isArray(res.data) && res.data.length > 0) {
           setTeam(res.data.map(m => ({ ...m, image_url: resolveImageUrl(m.image_url), initials: getInitials(m.name) })));
         }
       } catch (err) {

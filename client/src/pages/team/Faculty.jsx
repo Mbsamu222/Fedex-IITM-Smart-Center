@@ -61,7 +61,7 @@ export default function TeamFacultyPage() {
     const fetchTeam = async () => {
       try {
         const res = await publicApi.getTeam('faculty');
-        if (res.data && res.data.length > 0) {
+        if (Array.isArray(res.data) && res.data.length > 0) {
           setFaculty(res.data.map(m => ({ 
             ...m, 
             image_url: resolveImageUrl(m.image_url),

@@ -50,7 +50,7 @@ export default function GalleryPage() {
     const fetchGallery = async () => {
       try {
         const res = await publicApi.getGallery();
-        if (res.data && res.data.length > 0) {
+        if (Array.isArray(res.data) && res.data.length > 0) {
           setImages(res.data.map(img => ({ ...img, image_url: resolveImageUrl(img.image_url) })));
         }
       } catch {

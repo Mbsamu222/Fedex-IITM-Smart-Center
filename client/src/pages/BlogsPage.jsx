@@ -53,7 +53,7 @@ export default function BlogsPage() {
     const fetchBlogs = async () => {
       try {
         const res = await publicApi.getBlogs();
-        if (res.data && res.data.length > 0) {
+        if (Array.isArray(res.data) && res.data.length > 0) {
           setBlogs(res.data.map(blog => ({ ...blog, image_url: resolveImageUrl(blog.image_url) })));
         }
       } catch {
