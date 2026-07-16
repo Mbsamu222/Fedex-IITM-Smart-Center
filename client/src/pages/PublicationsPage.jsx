@@ -46,7 +46,8 @@ export default function PublicationsPage() {
         if (Array.isArray(res.data) && res.data.length > 0) {
           setPublications(res.data);
         }
-      } catch {
+      } catch (err) {
+        console.error('Failed to load publications from API:', err);
         // API unavailable — keep static fallback
       } finally {
         setLoading(false);

@@ -72,6 +72,7 @@ export default function TeamFacultyPage() {
           })));
         }
       } catch (err) {
+        console.error('Failed to load faculty data from API:', err);
         // Fall back to default
       } finally {
         setLoading(false);

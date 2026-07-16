@@ -84,6 +84,7 @@ export default function ContactPage() {
           }
         }
       } catch (err) {
+        console.error('Failed to load contact page data from API:', err);
         // keep defaults
       }
     };

@@ -68,6 +68,7 @@ export default function TeamAdvisoryPage() {
           setExecutive(execRes.data.map(m => ({ ...m, image_url: resolveImageUrl(m.image_url), initials: getInitials(m.name), dept: m.department })));
         }
       } catch (err) {
+        console.error('Failed to load team data from API:', err);
         // Fall back to default
       } finally {
         setLoading(false);

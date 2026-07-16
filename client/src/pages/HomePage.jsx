@@ -261,6 +261,7 @@ export default function HomePage() {
         }
       } catch (err) {
         // Fall back to default arrays
+        console.error('Failed to load homepage data from API:', err);
       }
     };
     fetchHomeData();

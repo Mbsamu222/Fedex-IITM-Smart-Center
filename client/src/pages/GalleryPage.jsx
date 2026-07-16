@@ -53,7 +53,8 @@ export default function GalleryPage() {
         if (Array.isArray(res.data) && res.data.length > 0) {
           setImages(res.data.map(img => ({ ...img, image_url: resolveImageUrl(img.image_url) })));
         }
-      } catch {
+      } catch (err) {
+        console.error('Failed to load gallery from API:', err);
         // API unavailable — keep static fallback
       } finally {
         setLoading(false);

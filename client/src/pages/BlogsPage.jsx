@@ -56,7 +56,8 @@ export default function BlogsPage() {
         if (Array.isArray(res.data) && res.data.length > 0) {
           setBlogs(res.data.map(blog => ({ ...blog, image_url: resolveImageUrl(blog.image_url) })));
         }
-      } catch {
+      } catch (err) {
+        console.error('Failed to load blogs from API:', err);
         // API unavailable — keep static fallback
       } finally {
         setLoading(false);

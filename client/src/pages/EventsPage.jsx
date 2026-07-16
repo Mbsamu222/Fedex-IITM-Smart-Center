@@ -75,7 +75,8 @@ export default function EventsPage() {
         if (Array.isArray(res.data) && res.data.length > 0) {
           setEvents(res.data.map(event => ({ ...event, image_url: resolveImageUrl(event.image_url) })));
         }
-      } catch {
+      } catch (err) {
+        console.error('Failed to load events from API:', err);
         // API unavailable — keep static fallback
       } finally {
         setLoading(false);

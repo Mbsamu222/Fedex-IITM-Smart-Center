@@ -100,6 +100,7 @@ export default function ResearchPage() {
           setProjects(projectsRes.data.map(p => ({ ...p, image_url: resolveImageUrl(p.image_url) })));
         }
       } catch (err) {
+        console.error('Failed to load research data from API:', err);
         // API failed or database is empty: fall back to default design details
       } finally {
         setLoading(false);
