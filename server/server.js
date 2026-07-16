@@ -12,15 +12,16 @@ const allowedOrigins = [
   'http://localhost:5174',
   'http://localhost:5175',
 ];
-if (process.env.VERCEL_URL) {
-  allowedOrigins.push(`https://${process.env.VERCEL_URL}`);
-}
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
+    // No Origin header (same-origin requests, curl, server-to-server) is always allowed.
+    // Any *.vercel.app origin is allowed since client and API are served from the same
+    // Vercel project (covers the production alias and every preview deployment URL,
+    // neither of which match the single VERCEL_URL env var).
+    if (!origin || allowedOrigins.includes(origin) || /^https:\/\/[^/]+\.vercel\.app$/.test(origin)) {
       return callback(null, true);
     }
-    callback(new Error('Not allowed by CORS'));
+    callback(null, false);
   },
   credentials: true,
 }));
