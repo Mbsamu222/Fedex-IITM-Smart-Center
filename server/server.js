@@ -28,6 +28,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// API responses are dynamic (backed by the database) and must never be
+// cached by the browser or Vercel's edge — otherwise admin edits can
+// appear stale on reload.
+app.use('/api', (req, res, next) => {
+  res.set('Cache-Control', 'no-store');
+  next();
+});
+
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/hero', require('./routes/hero'));
