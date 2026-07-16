@@ -164,7 +164,7 @@ const defaultEvents = [
 ];
 
 const renderTitle = (title, highlight) => {
-  if (!highlight) return title;
+  if (!title || !highlight) return title;
   const parts = title.split(highlight);
   return (
     <>
