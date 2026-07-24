@@ -84,17 +84,17 @@ export default function ActivitiesPage() {
             <div className="absolute -top-40 right-1/4 size-[500px] rounded-full bg-[var(--primary-soft)] opacity-50 blur-3xl"></div>
             <div className="absolute -bottom-32 left-10 size-80 rounded-full bg-[var(--accent-soft)] opacity-60 blur-3xl"></div>
           </div>
-          <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 py-20 lg:py-28">
+          <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16 py-20 lg:py-28 2xl:py-36">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
               <span className="size-1.5 rounded-full bg-accent"></span>Announcements
             </div>
-            <h1 className="mt-6 max-w-3xl text-4xl font-medium leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl">Stay informed with the latest updates.</h1>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">Explore current and past announcements, job postings, seminars, workshops, and other key activities from the IIT Madras-led FedEx SMART Center.</p>
+            <h1 className="mt-6 max-w-3xl 2xl:max-w-4xl text-4xl font-medium leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl 2xl:text-7xl">Stay informed with the latest updates.</h1>
+            <p className="mt-6 max-w-2xl 2xl:max-w-3xl text-lg 2xl:text-xl leading-relaxed text-muted-foreground">Explore current and past announcements, job postings, seminars, workshops, and other key activities from the IIT Madras-led FedEx SMART Center.</p>
           </div>
         </section>
 
-        <section className="py-16">
-          <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 ">
+        <section className="py-16 2xl:py-24">
+          <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
             <div className="flex flex-wrap gap-2">
               {filterTabs.map(tab => (
                 <button

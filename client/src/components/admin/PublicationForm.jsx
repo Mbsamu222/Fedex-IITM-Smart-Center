@@ -55,7 +55,7 @@ export default function PublicationForm({ publication, onSave, onCancel }) {
   ];
 
   return (
-    <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-3xl shadow-xl my-8 animate-scale-in text-slate-800 font-sans">
+    <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-3xl 2xl:max-w-4xl 3xl:max-w-5xl shadow-xl my-8 animate-scale-in text-slate-800 font-sans">
       <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
         <h2 className="font-display text-lg font-semibold text-slate-900">{publication ? 'Modify Publication' : 'Create New Publication'}</h2>
         <button type="button" onClick={onCancel} className="text-slate-400 hover:text-slate-700 transition-colors p-1.5 rounded-lg hover:bg-slate-100">

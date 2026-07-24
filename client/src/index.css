@@ -76,11 +76,11 @@
   }
 
   .section-title {
-    @apply text-3xl md:text-4xl lg:text-5xl font-display font-bold text-gray-900 mb-6;
+    @apply text-3xl md:text-4xl lg:text-5xl 2xl:text-6xl 3xl:text-7xl font-display font-bold text-gray-900 mb-6;
   }
   
   .section-subtitle {
-    @apply text-lg text-gray-600 max-w-2xl mx-auto;
+    @apply text-lg 2xl:text-xl 3xl:text-2xl text-gray-600 max-w-2xl 2xl:max-w-3xl 3xl:max-w-4xl mx-auto;
   }
   
   .card {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { publicApi, resolveImageUrl } from '../services/api';
+import NewsPopup from '../components/common/NewsPopup';
 
 // Icons mapping for research areas
 const BrainIcon = () => (
@@ -289,16 +290,16 @@ export default function HomePage() {
           <div className="pointer-events-none absolute inset-0 -z-10">
             <div className="absolute -top-40 left-1/2 size-[700px] -translate-x-1/2 rounded-full bg-[var(--primary-soft)] opacity-60 blur-3xl"></div>
           </div>
-          <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 grid items-center gap-12 py-16 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:py-28">
+          <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16 grid items-center gap-12 py-16 lg:grid-cols-[1.05fr_1fr] lg:gap-16 2xl:gap-24 lg:py-28 3xl:py-36">
             <div key={activeSlide} className="animate-fade-in-up">
               <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
                 <span className="size-1.5 rounded-full bg-accent"></span>
                 {currentSlide.tag}
               </div>
-              <h1 className="mt-6 text-5xl font-medium leading-[1.12] tracking-tight text-foreground sm:text-6xl lg:text-7xl">
+              <h1 className="mt-6 text-5xl font-medium leading-[1.12] tracking-tight text-foreground sm:text-6xl lg:text-7xl 2xl:text-8xl">
                 {renderTitle(currentSlide.title, currentSlide.titleHighlight)}
               </h1>
-              <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
+              <p className="mt-6 max-w-xl 2xl:max-w-2xl text-lg 2xl:text-xl leading-relaxed text-muted-foreground">
                 {currentSlide.description}
               </p>
               <div className="mt-10 flex flex-wrap items-center gap-3">
@@ -385,27 +386,27 @@ export default function HomePage() {
         </section>
 
         {/* Mission */}
-        <section id="mission" className="border-t border-border bg-surface py-24">
-          <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 ">
+        <section id="mission" className="border-t border-border bg-surface py-24 2xl:py-32">
+          <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
             <div className="grid gap-12 lg:grid-cols-[1fr_2fr]">
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
                   <span className="size-1.5 rounded-full bg-accent"></span>Our Mission
                 </div>
-                <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl">A centre built for the problems that matter.</h2>
+                <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl 2xl:text-6xl">A centre built for the problems that matter.</h2>
               </div>
               <div className="grid gap-5 sm:grid-cols-3">
-                <div className="group rounded-2xl border border-border bg-card p-7 transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-lift)]">
+                <div className="group rounded-2xl border border-border bg-card p-7 2xl:p-9 transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-lift)]">
                   <div className="inline-flex size-11 items-center justify-center rounded-xl bg-[var(--primary-soft)] text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-flask-conical size-5" aria-hidden="true">
                       <path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"></path>
                       <path d="M6.453 15h11.094"></path><path d="M8.5 2h7"></path>
                     </svg>
                   </div>
-                  <h3 className="mt-5 text-lg font-semibold tracking-tight">World-class research</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">Publish frontier research in supply chain science, optimisation, AI, and operations.</p>
+                  <h3 className="mt-5 text-lg 2xl:text-xl font-semibold tracking-tight">World-class research</h3>
+                  <p className="mt-2 text-sm 2xl:text-base leading-relaxed text-muted-foreground">Publish frontier research in supply chain science, optimisation, AI, and operations.</p>
                 </div>
-                <div className="group rounded-2xl border border-border bg-card p-7 transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-lift)]">
+                <div className="group rounded-2xl border border-border bg-card p-7 2xl:p-9 transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-lift)]">
                   <div className="inline-flex size-11 items-center justify-center rounded-xl bg-[var(--primary-soft)] text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-building2 lucide-building-2 size-5" aria-hidden="true">
                       <path d="M10 12h4"></path><path d="M10 8h4"></path><path d="M14 21v-3a2 2 0 0 0-4 0v3"></path>
@@ -413,18 +414,18 @@ export default function HomePage() {
                       <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
                     </svg>
                   </div>
-                  <h3 className="mt-5 text-lg font-semibold tracking-tight">Industry impact</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">Translate research into deployable systems that move goods, people, and economies.</p>
+                  <h3 className="mt-5 text-lg 2xl:text-xl font-semibold tracking-tight">Industry impact</h3>
+                  <p className="mt-2 text-sm 2xl:text-base leading-relaxed text-muted-foreground">Translate research into deployable systems that move goods, people, and economies.</p>
                 </div>
-                <div className="group rounded-2xl border border-border bg-card p-7 transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-lift)]">
+                <div className="group rounded-2xl border border-border bg-card p-7 2xl:p-9 transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-lift)]">
                   <div className="inline-flex size-11 items-center justify-center rounded-xl bg-[var(--primary-soft)] text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-graduation-cap size-5" aria-hidden="true">
                       <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path>
                       <path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path>
                     </svg>
                   </div>
-                  <h3 className="mt-5 text-lg font-semibold tracking-tight">Talent for the world</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">Train the next generation of engineers, scientists, and supply chain leaders.</p>
+                  <h3 className="mt-5 text-lg 2xl:text-xl font-semibold tracking-tight">Talent for the world</h3>
+                  <p className="mt-2 text-sm 2xl:text-base leading-relaxed text-muted-foreground">Train the next generation of engineers, scientists, and supply chain leaders.</p>
                 </div>
               </div>
             </div>
@@ -432,41 +433,41 @@ export default function HomePage() {
         </section>
 
         {/* Vision */}
-        <section id="vision" className="relative overflow-hidden py-24">
-          <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 ">
+        <section id="vision" className="relative overflow-hidden py-24 2xl:py-32">
+          <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
             <div className="relative overflow-hidden rounded-[2.5rem] border border-border bg-primary text-primary-foreground">
               <img src="https://smart-redesign-essence.lovable.app/assets/vision-lab-DhvVcMX0.jpg" alt="Researchers at the SMART Center lab" width="1920" height="1080" loading="lazy" className="absolute inset-0 size-full object-cover opacity-30" />
               <div className="absolute inset-0 bg-gradient-to-tr from-primary via-primary/85 to-primary/40"></div>
-              <div className="relative grid gap-10 p-6 sm:p-16 lg:grid-cols-[1.2fr_1fr] lg:p-20">
+              <div className="relative grid gap-10 p-6 sm:p-16 lg:grid-cols-[1.2fr_1fr] lg:p-20 2xl:p-24">
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.18em]">
                     <span className="size-1.5 rounded-full bg-accent"></span> Our Vision
                   </div>
-                  <h2 className="mt-6 text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">To be the world’s most trusted research centre for supply chain intelligence.</h2>
+                  <h2 className="mt-6 text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl 2xl:text-7xl">To be the world’s most trusted research centre for supply chain intelligence.</h2>
                 </div>
-                <p className="self-end text-lg leading-relaxed text-white/80">We bring together engineers, data scientists, behavioural researchers, and industry practitioners to design supply chains that are faster, fairer, and more sustainable — and to share what we learn openly with the world.</p>
+                <p className="self-end text-lg 2xl:text-xl leading-relaxed text-white/80">We bring together engineers, data scientists, behavioural researchers, and industry practitioners to design supply chains that are faster, fairer, and more sustainable — and to share what we learn openly with the world.</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* Stats / Milestones */}
-        <section className="border-y border-border bg-surface py-20">
-          <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 ">
+        <section className="border-y border-border bg-surface py-20 2xl:py-28">
+          <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
             <div className="mb-12 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
                   <span className="size-1.5 rounded-full bg-accent"></span>Milestones
                 </div>
-                <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl">Built in the open. Measured in impact.</h2>
+                <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl 2xl:text-6xl">Built in the open. Measured in impact.</h2>
               </div>
-              <p className="max-w-md text-muted-foreground">A snapshot of what the SMART Center community has accomplished together.</p>
+              <p className="max-w-md 2xl:max-w-lg text-muted-foreground 2xl:text-lg">A snapshot of what the SMART Center community has accomplished together.</p>
             </div>
             <div className="grid grid-cols-2 gap-px overflow-hidden rounded-3xl border border-border bg-border md:grid-cols-3 lg:grid-cols-6">
               {stats.map((stat, idx) => (
-                <div key={idx} className="bg-card p-6 sm:p-8">
-                  <div className="font-display text-4xl sm:text-5xl font-semibold text-primary">{stat.value}{stat.suffix}</div>
-                  <div className="mt-3 text-sm leading-snug text-muted-foreground">{stat.label}</div>
+                <div key={idx} className="bg-card p-6 sm:p-8 2xl:p-10">
+                  <div className="font-display text-4xl sm:text-5xl 2xl:text-6xl font-semibold text-primary">{stat.value}{stat.suffix}</div>
+                  <div className="mt-3 text-sm 2xl:text-base leading-snug text-muted-foreground">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -474,27 +475,27 @@ export default function HomePage() {
         </section>
 
         {/* Research Areas */}
-        <section id="research" className="py-28">
-          <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 ">
-            <div className="mx-auto max-w-3xl text-center">
+        <section id="research" className="py-28 2xl:py-36">
+          <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
+            <div className="mx-auto max-w-3xl 2xl:max-w-4xl text-center">
               <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
                 <span className="size-1.5 rounded-full bg-accent"></span>Research Areas
               </div>
-              <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl">Research that moves industry forward.</h2>
-              <p className="mt-5 text-lg text-muted-foreground">Each area pairs rigorous methodology with deployment-grade engineering, in partnership with FedEx and industry collaborators.</p>
+              <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl 2xl:text-6xl">Research that moves industry forward.</h2>
+              <p className="mt-5 text-lg 2xl:text-xl text-muted-foreground">Each area pairs rigorous methodology with deployment-grade engineering, in partnership with FedEx and industry collaborators.</p>
             </div>
-            <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
               {researchAreas.map((area, idx) => (
                 <div
                   key={idx}
                   className={"group relative overflow-hidden rounded-3xl border border-border bg-card p-8 transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-lift)] " +
-                    (idx === 0 ? "lg:row-span-2 lg:bg-gradient-to-br lg:from-[var(--primary-soft)] lg:to-card" : "")}
+                    (idx === 0 ? "lg:row-span-2 2xl:row-span-1 lg:bg-gradient-to-br lg:from-[var(--primary-soft)] lg:to-card" : "")}
                 >
                   <div className="inline-flex size-12 items-center justify-center rounded-2xl bg-[var(--accent-soft)] text-accent">
                     {renderAreaIcon(area.icon)}
                   </div>
-                  <h3 className="mt-6 text-xl font-semibold tracking-tight">{area.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{area.description}</p>
+                  <h3 className="mt-6 text-xl 2xl:text-2xl font-semibold tracking-tight">{area.title}</h3>
+                  <p className="mt-3 text-sm 2xl:text-base leading-relaxed text-muted-foreground">{area.description}</p>
                   <ArrowIcon />
                 </div>
               ))}
@@ -503,16 +504,16 @@ export default function HomePage() {
         </section>
 
         {/* Featured Projects */}
-        <section id="projects" className="bg-surface py-28">
-          <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 ">
+        <section id="projects" className="bg-surface py-28 2xl:py-36">
+          <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
             <div className="mb-14 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
                   <span className="size-1.5 rounded-full bg-accent"></span>Research Projects
                 </div>
-                <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl">From theory to deployed systems.</h2>
+                <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl 2xl:text-6xl">From theory to deployed systems.</h2>
               </div>
-              <Link to="/research" className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline">
+              <Link to="/research" className="inline-flex items-center gap-2 text-sm 2xl:text-base font-medium text-primary hover:underline">
                 View all projects <ArrowIcon />
               </Link>
             </div>
@@ -520,14 +521,14 @@ export default function HomePage() {
             <div className="grid gap-6 lg:grid-cols-2">
               {/* Primary Featured project */}
               {projects[0] && (
-                <article className="group relative overflow-hidden rounded-3xl border border-border bg-card p-6 sm:p-10 transition-shadow hover:shadow-[var(--shadow-lift)]">
+                <article className="group relative overflow-hidden rounded-3xl border border-border bg-card p-6 sm:p-10 2xl:p-12 transition-shadow hover:shadow-[var(--shadow-lift)]">
                   <div className="absolute inset-x-0 top-0 h-1 bg-[var(--gradient-brand)]"></div>
                   <span className="inline-flex rounded-full bg-primary/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-primary">
                     {projects[0].label}
                   </span>
-                  <h3 className="mt-5 text-3xl font-medium tracking-tight">{projects[0].title}</h3>
-                  <p className="mt-4 max-w-md text-muted-foreground">{projects[0].description}</p>
-                  <Link to="/research" className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-primary">
+                  <h3 className="mt-5 text-3xl 2xl:text-4xl font-medium tracking-tight">{projects[0].title}</h3>
+                  <p className="mt-4 max-w-md 2xl:max-w-xl text-muted-foreground 2xl:text-lg">{projects[0].description}</p>
+                  <Link to="/research" className="mt-8 inline-flex items-center gap-2 text-sm 2xl:text-base font-medium text-primary">
                     Read case study <ArrowIcon />
                   </Link>
                 </article>
@@ -535,15 +536,15 @@ export default function HomePage() {
 
               <div className="grid gap-6">
                 {projects.slice(1, 4).map((project, idx) => (
-                  <article key={idx} className="group rounded-3xl border border-border bg-card p-6 sm:p-8 transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[var(--shadow-soft)]">
+                  <article key={idx} className="group rounded-3xl border border-border bg-card p-6 sm:p-8 2xl:p-10 transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[var(--shadow-soft)]">
                     <div className="flex items-center justify-between">
                       <span className="rounded-full bg-[var(--accent-soft)] px-3 py-1 text-xs font-medium uppercase tracking-wider text-accent">
                         {project.label}
                       </span>
                       <ArrowIcon />
                     </div>
-                    <h3 className="mt-4 text-xl font-semibold tracking-tight">{project.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{project.description}</p>
+                    <h3 className="mt-4 text-xl 2xl:text-2xl font-semibold tracking-tight">{project.title}</h3>
+                    <p className="mt-2 text-sm 2xl:text-base leading-relaxed text-muted-foreground">{project.description}</p>
                   </article>
                 ))}
               </div>
@@ -552,14 +553,14 @@ export default function HomePage() {
         </section>
 
         {/* Timeline Events */}
-        <section id="events" className="py-28">
-          <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 ">
+        <section id="events" className="py-28 2xl:py-36">
+          <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
             <div className="mb-14 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
                   <span className="size-1.5 rounded-full bg-accent"></span>Events &amp; Activities
                 </div>
-                <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl">Where research meets practice.</h2>
+                <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl 2xl:text-6xl">Where research meets practice.</h2>
               </div>
             </div>
 
@@ -573,13 +574,13 @@ export default function HomePage() {
                   >
                     <div className="absolute left-4 top-3 size-2.5 -translate-x-1/2 rounded-full bg-accent ring-4 ring-background md:left-1/2"></div>
                     <div className={`pl-10 md:pl-0 ${idx % 2 === 0 ? 'md:pr-12 md:text-right' : 'md:pl-12 md:text-left'}`}>
-                      <div className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-accent">
+                      <div className="inline-flex items-center gap-2 text-xs 2xl:text-sm font-medium uppercase tracking-wider text-accent">
                         <CalendarIcon /> {event.date}
                       </div>
-                      <h3 className="mt-2 text-2xl font-medium tracking-tight">{event.title}</h3>
+                      <h3 className="mt-2 text-2xl 2xl:text-3xl font-medium tracking-tight">{event.title}</h3>
                     </div>
                     <div className={`pl-10 md:pl-0 ${idx % 2 === 0 ? 'md:pl-12' : 'md:pr-12 md:text-right'}`}>
-                      <p className="text-muted-foreground">{event.desc}</p>
+                      <p className="text-muted-foreground 2xl:text-lg">{event.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -589,84 +590,84 @@ export default function HomePage() {
         </section>
 
         {/* Internships */}
-        <section id="talent" className="bg-surface py-28">
-          <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 grid gap-14 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+        <section id="talent" className="bg-surface py-28 2xl:py-36">
+          <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16 grid gap-14 lg:grid-cols-[1fr_1.1fr] lg:items-center">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
                 <span className="size-1.5 rounded-full bg-accent"></span>Internship &amp; Talent
               </div>
-              <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl">Train where the work happens.</h2>
-              <p className="mt-5 text-lg text-muted-foreground">Students and early-career researchers join SMART for hands-on projects with faculty mentors and FedEx partners — building real systems that ship to the world.</p>
+              <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl 2xl:text-6xl">Train where the work happens.</h2>
+              <p className="mt-5 text-lg 2xl:text-xl text-muted-foreground">Students and early-career researchers join SMART for hands-on projects with faculty mentors and FedEx partners — building real systems that ship to the world.</p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <a href="#contact" className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-[var(--shadow-soft)]">Apply for internship</a>
-                <Link to="/about" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-medium">Programme details</Link>
+                <a href="#contact" className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm 2xl:text-base font-medium text-primary-foreground shadow-[var(--shadow-soft)]">Apply for internship</a>
+                <Link to="/about" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm 2xl:text-base font-medium">Programme details</Link>
               </div>
             </div>
 
-            <div className="grid gap-5 sm:grid-cols-2">
-              <div className="rounded-3xl border border-border bg-card p-7">
+            <div className="grid gap-5 sm:grid-cols-2 2xl:grid-cols-2">
+              <div className="rounded-3xl border border-border bg-card p-7 2xl:p-9">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-users size-6 text-accent" aria-hidden="true">
                   <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
                   <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle>
                 </svg>
-                <div className="mt-6 font-display text-4xl font-semibold text-primary">1,500+</div>
-                <div className="mt-1 text-sm text-muted-foreground">Internship applications</div>
+                <div className="mt-6 font-display text-4xl 2xl:text-5xl font-semibold text-primary">1,500+</div>
+                <div className="mt-1 text-sm 2xl:text-base text-muted-foreground">Internship applications</div>
               </div>
-              <div className="rounded-3xl border border-border bg-card p-7">
+              <div className="rounded-3xl border border-border bg-card p-7 2xl:p-9">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-graduation-cap size-6 text-accent" aria-hidden="true">
                   <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path>
                   <path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path>
                 </svg>
-                <div className="mt-6 font-display text-4xl font-semibold text-primary">3,500+</div>
-                <div className="mt-1 text-sm text-muted-foreground">Talent outreach</div>
+                <div className="mt-6 font-display text-4xl 2xl:text-5xl font-semibold text-primary">3,500+</div>
+                <div className="mt-1 text-sm 2xl:text-base text-muted-foreground">Talent outreach</div>
               </div>
-              <div className="rounded-3xl border border-border bg-card p-7">
+              <div className="rounded-3xl border border-border bg-card p-7 2xl:p-9">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-flask-conical size-6 text-accent" aria-hidden="true">
                   <path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"></path>
                   <path d="M6.453 15h11.094"></path><path d="M8.5 2h7"></path>
                 </svg>
-                <div className="mt-6 font-display text-4xl font-semibold text-primary">50+</div>
-                <div className="mt-1 text-sm text-muted-foreground">Active researchers</div>
+                <div className="mt-6 font-display text-4xl 2xl:text-5xl font-semibold text-primary">50+</div>
+                <div className="mt-1 text-sm 2xl:text-base text-muted-foreground">Active researchers</div>
               </div>
-              <div className="rounded-3xl border border-border bg-card p-7">
+              <div className="rounded-3xl border border-border bg-card p-7 2xl:p-9">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-building-2 size-6 text-accent" aria-hidden="true">
                   <path d="M10 12h4"></path><path d="M10 8h4"></path><path d="M14 21v-3a2 2 0 0 0-4 0v3"></path>
                   <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"></path>
                   <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
                 </svg>
-                <div className="mt-6 font-display text-4xl font-semibold text-primary">30+</div>
-                <div className="mt-1 text-sm text-muted-foreground">Faculty mentors</div>
+                <div className="mt-6 font-display text-4xl 2xl:text-5xl font-semibold text-primary">30+</div>
+                <div className="mt-1 text-sm 2xl:text-base text-muted-foreground">Faculty mentors</div>
               </div>
             </div>
           </div>
         </section>
 
         {/* Partners */}
-        <section id="partners" className="py-24">
-          <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 ">
+        <section id="partners" className="py-24 2xl:py-32">
+          <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
             <div className="text-center">
               <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
                 <span className="size-1.5 rounded-full bg-accent"></span>Industry Collaborations
               </div>
-              <h2 className="mx-auto mt-5 max-w-2xl text-3xl font-medium tracking-tight sm:text-4xl">In partnership with the institutions building the future.</h2>
+              <h2 className="mx-auto mt-5 max-w-2xl 2xl:max-w-3xl text-3xl font-medium tracking-tight sm:text-4xl 2xl:text-5xl">In partnership with the institutions building the future.</h2>
             </div>
-            <div className="mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-3xl border border-border bg-border sm:grid-cols-4">
-              <div className="flex h-24 items-center justify-center bg-card font-display text-lg font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">FedEx</div>
-              <div className="flex h-24 items-center justify-center bg-card font-display text-lg font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">IIT Madras</div>
-              <div className="flex h-24 items-center justify-center bg-card font-display text-lg font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">Govt. of India</div>
-              <div className="flex h-24 items-center justify-center bg-card font-display text-lg font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">DST</div>
-              <div className="flex h-24 items-center justify-center bg-card font-display text-lg font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">NITI Aayog</div>
-              <div className="flex h-24 items-center justify-center bg-card font-display text-lg font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">CII</div>
-              <div className="flex h-24 items-center justify-center bg-card font-display text-lg font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">NASSCOM</div>
-              <div className="flex h-24 items-center justify-center bg-card font-display text-lg font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">World Bank</div>
+            <div className="mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-3xl border border-border bg-border sm:grid-cols-4 2xl:grid-cols-8">
+              <div className="flex h-24 items-center justify-center bg-card font-display text-lg 2xl:text-xl font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">FedEx</div>
+              <div className="flex h-24 items-center justify-center bg-card font-display text-lg 2xl:text-xl font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">IIT Madras</div>
+              <div className="flex h-24 items-center justify-center bg-card font-display text-lg 2xl:text-xl font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">Govt. of India</div>
+              <div className="flex h-24 items-center justify-center bg-card font-display text-lg 2xl:text-xl font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">DST</div>
+              <div className="flex h-24 items-center justify-center bg-card font-display text-lg 2xl:text-xl font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">NITI Aayog</div>
+              <div className="flex h-24 items-center justify-center bg-card font-display text-lg 2xl:text-xl font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">CII</div>
+              <div className="flex h-24 items-center justify-center bg-card font-display text-lg 2xl:text-xl font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">NASSCOM</div>
+              <div className="flex h-24 items-center justify-center bg-card font-display text-lg 2xl:text-xl font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">World Bank</div>
             </div>
           </div>
         </section>
 
         {/* Startups */}
-        <section className="py-28">
-          <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 ">
-            <div className="relative overflow-hidden rounded-[2.5rem] border border-border bg-card p-10 sm:p-16">
+        <section className="py-28 2xl:py-36">
+          <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
+            <div className="relative overflow-hidden rounded-[2.5rem] border border-border bg-card p-10 sm:p-16 2xl:p-20">
               <div className="absolute -right-20 -top-20 size-80 rounded-full bg-[var(--accent-soft)] blur-3xl"></div>
               <div className="absolute -bottom-32 -left-20 size-96 rounded-full bg-[var(--primary-soft)] blur-3xl"></div>
               <div className="relative grid items-end gap-10 lg:grid-cols-[1.4fr_1fr]">
@@ -674,11 +675,11 @@ export default function HomePage() {
                   <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
                     <span className="size-1.5 rounded-full bg-accent"></span>Startup &amp; Innovation Ecosystem
                   </div>
-                  <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl">An incubator for the next generation of supply chain companies.</h2>
-                  <p className="mt-5 max-w-xl text-lg text-muted-foreground">Through IIT Madras’ deep-tech incubation network, SMART supports founders building category-defining ventures in logistics, AI, robotics, and sustainability.</p>
+                  <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl 2xl:text-6xl">An incubator for the next generation of supply chain companies.</h2>
+                  <p className="mt-5 max-w-xl 2xl:max-w-2xl text-lg 2xl:text-xl text-muted-foreground">Through IIT Madras’ deep-tech incubation network, SMART supports founders building category-defining ventures in logistics, AI, robotics, and sustainability.</p>
                 </div>
                 <div className="grid gap-4">
-                  <div className="rounded-2xl border border-border bg-card/80 p-6 backdrop-blur">
+                  <div className="rounded-2xl border border-border bg-card/80 p-6 2xl:p-8 backdrop-blur">
                     <div className="inline-flex size-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-rocket size-5" aria-hidden="true">
                         <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
@@ -687,18 +688,18 @@ export default function HomePage() {
                         <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05"></path>
                       </svg>
                     </div>
-                    <h3 className="mt-4 font-semibold tracking-tight">Incubation</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">Funding, mentorship, and infrastructure to take research to market.</p>
+                    <h3 className="mt-4 font-semibold tracking-tight 2xl:text-lg">Incubation</h3>
+                    <p className="mt-1 text-sm 2xl:text-base text-muted-foreground">Funding, mentorship, and infrastructure to take research to market.</p>
                   </div>
-                  <div className="rounded-2xl border border-border bg-card/80 p-6 backdrop-blur">
+                  <div className="rounded-2xl border border-border bg-card/80 p-6 2xl:p-8 backdrop-blur">
                     <div className="inline-flex size-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-sparkles size-5" aria-hidden="true">
                         <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path>
                         <path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle>
                       </svg>
                     </div>
-                    <h3 className="mt-4 font-semibold tracking-tight">Open innovation</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">Industry challenges, hackathons, and pilots with global partners.</p>
+                    <h3 className="mt-4 font-semibold tracking-tight 2xl:text-lg">Open innovation</h3>
+                    <p className="mt-1 text-sm 2xl:text-base text-muted-foreground">Industry challenges, hackathons, and pilots with global partners.</p>
                   </div>
                 </div>
               </div>
@@ -707,23 +708,25 @@ export default function HomePage() {
         </section>
 
         {/* Contact CTA */}
-        <section className="border-t border-border bg-surface py-24">
-          <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 grid items-center gap-10 lg:grid-cols-[1.4fr_1fr]">
+        <section className="border-t border-border bg-surface py-24 2xl:py-32">
+          <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16 grid items-center gap-10 lg:grid-cols-[1.4fr_1fr]">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
                 <span className="size-1.5 rounded-full bg-accent"></span>Get in Touch
               </div>
-              <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl">Let’s build the next decade of supply chain research, together.</h2>
-              <p className="mt-5 max-w-xl text-muted-foreground">Whether you are a researcher, student, industry partner, or policymaker — we’d love to hear from you.</p>
+              <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl 2xl:text-6xl">Let’s build the next decade of supply chain research, together.</h2>
+              <p className="mt-5 max-w-xl 2xl:max-w-2xl text-muted-foreground 2xl:text-lg">Whether you are a researcher, student, industry partner, or policymaker — we’d love to hear from you.</p>
             </div>
             <div className="flex flex-wrap gap-3 lg:justify-end">
-              <Link to="/contact" className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-[var(--shadow-soft)] transition-transform hover:-translate-y-0.5">
+              <Link to="/contact" className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm 2xl:text-base font-medium text-primary-foreground shadow-[var(--shadow-soft)] transition-transform hover:-translate-y-0.5">
                 Contact the Center <ArrowIcon />
               </Link>
             </div>
           </div>
         </section>
       </div>
+
+      <NewsPopup />
 
       <button
         type="button"

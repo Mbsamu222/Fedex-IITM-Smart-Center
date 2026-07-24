@@ -45,6 +45,7 @@ app.use('/api/research-areas', require('./routes/researchAreas'));
 app.use('/api/projects', require('./routes/projects'));
 app.use('/api/events', require('./routes/events'));
 app.use('/api/activities', require('./routes/activities'));
+app.use('/api/news', require('./routes/news'));
 app.use('/api/blogs', require('./routes/blogs'));
 app.use('/api/publications', require('./routes/publications'));
 app.use('/api/team', require('./routes/team'));

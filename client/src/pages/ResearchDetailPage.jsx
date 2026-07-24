@@ -56,7 +56,7 @@ export default function ResearchDetailPage() {
   return (
     <div className="min-h-screen bg-background text-foreground pb-24 font-sans selection:bg-primary/20 selection:text-primary">
       {/* Top Header Section */}
-      <section className="w-full pt-32 pb-12 px-6 lg:px-10 max-w-7xl mx-auto">
+      <section className="w-full pt-32 pb-12 px-6 lg:px-10 2xl:px-12 3xl:px-16 max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] mx-auto">
         <Link to="/research" className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-8 text-sm font-semibold w-fit">
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Research</span>
@@ -76,7 +76,7 @@ export default function ResearchDetailPage() {
           )}
         </div>
 
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight leading-[1.1] text-foreground mb-8 max-w-4xl drop-shadow-sm">
+        <h1 className="text-xl sm:text-2xl md:text-3xl 2xl:text-4xl font-display font-bold tracking-tight leading-snug text-foreground mb-6 max-w-4xl 2xl:max-w-5xl">
           {project.title}
         </h1>
 
@@ -88,7 +88,7 @@ export default function ResearchDetailPage() {
             </div>
             <div className="flex flex-col">
               <span className="text-xs uppercase tracking-widest text-muted-foreground font-bold mb-0.5">Timeline</span>
-              <span className="text-sm md:text-base text-foreground font-semibold">
+              <span className="text-sm md:text-base 2xl:text-lg text-foreground font-semibold">
                 {project.start_date ? new Date(project.start_date).toLocaleDateString(undefined, { year: 'numeric', month: 'long' }) : 'Started'}
                 {' — '}
                 {project.end_date ? new Date(project.end_date).toLocaleDateString(undefined, { year: 'numeric', month: 'long' }) : 'Present'}
@@ -100,12 +100,12 @@ export default function ResearchDetailPage() {
 
       {/* Full Width Image Display */}
       {headerImage && (
-        <section className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 mb-16 md:mb-24 flex justify-center">
+        <section className="max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] mx-auto px-4 sm:px-6 lg:px-10 2xl:px-12 3xl:px-16 mb-16 md:mb-24 flex justify-center">
           <div className="relative inline-block max-w-full rounded-[2rem] overflow-hidden shadow-2xl shadow-muted/50 group border border-border bg-card">
             <img
               src={resolveImageUrl(headerImage)}
               alt={project.title}
-              className="max-w-full max-h-[300px] sm:max-h-[420px] lg:max-h-[480px] w-auto h-auto object-contain transition-transform duration-1000 group-hover:scale-105"
+              className="max-w-full max-h-[300px] sm:max-h-[420px] lg:max-h-[480px] 2xl:max-h-[600px] w-auto h-auto object-contain transition-transform duration-1000 group-hover:scale-105"
             />
             {/* Very subtle inner shadow for depth, no dark overlays */}
             <div className="absolute inset-0 shadow-[inset_0_0_100px_rgba(0,0,0,0.1)] pointer-events-none rounded-[2rem]"></div>
@@ -114,7 +114,7 @@ export default function ResearchDetailPage() {
       )}
 
       {/* Main Content Area */}
-      <section className="max-w-7xl mx-auto px-6 lg:px-10 pb-16 md:pb-24 grid grid-cols-1 lg:grid-cols-12 gap-16">
+      <section className="max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] mx-auto px-6 lg:px-10 2xl:px-12 3xl:px-16 pb-16 md:pb-24 grid grid-cols-1 lg:grid-cols-12 gap-16">
 
         {/* Left Column: Abstract & Content */}
         <div className="lg:col-span-8 space-y-16 min-w-0">
@@ -130,7 +130,7 @@ export default function ResearchDetailPage() {
                 <span className="leading-none">Abstract</span>
               </h3>
 
-              <p className="text-lg md:text-xl text-card-foreground leading-relaxed font-medium">
+              <p className="text-base md:text-lg text-card-foreground leading-relaxed font-medium">
                 {project.description}
               </p>
             </div>

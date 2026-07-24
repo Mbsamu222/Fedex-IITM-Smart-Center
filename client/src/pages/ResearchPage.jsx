@@ -49,12 +49,12 @@ const ArrowIcon = () => (
 );
 
 const gradientPairs = [
-  'from-primary/30 to-accent/20',
-  'from-accent/30 to-primary/20',
-  'from-primary/25 to-accent/30',
-  'from-accent/25 to-primary/25',
-  'from-primary/30 to-primary/10',
-  'from-accent/30 to-accent/10',
+  'from-purple-100 via-purple-50 to-orange-100',
+  'from-orange-100 via-amber-50 to-purple-100',
+  'from-purple-100 via-indigo-50 to-purple-50',
+  'from-amber-100 via-orange-50 to-purple-100',
+  'from-indigo-100 via-purple-50 to-amber-100',
+  'from-purple-50 via-pink-50 to-orange-100',
 ];
 
 const defaultAreas = [
@@ -84,7 +84,7 @@ export default function ResearchPage() {
   const [projects, setProjects] = useState(defaultProjects);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 6;
+  const ITEMS_PER_PAGE = 8;
 
   useEffect(() => {
     const fetchResearchData = async () => {
@@ -97,7 +97,16 @@ export default function ResearchPage() {
           setAreas(areasRes.data.map(area => ({ ...area, image_url: resolveImageUrl(area.image_url) })));
         }
         if (Array.isArray(projectsRes.data) && projectsRes.data.length > 0) {
-          setProjects(projectsRes.data.map(p => ({ ...p, image_url: resolveImageUrl(p.image_url) })));
+          const fetchedProjects = projectsRes.data.map(p => ({ ...p, image_url: resolveImageUrl(p.image_url) }));
+          if (fetchedProjects.length < 8) {
+            const existingTitles = new Set(fetchedProjects.map(p => p.title.toLowerCase()));
+            const fillProjects = defaultProjects.filter(dp => !existingTitles.has(dp.title.toLowerCase()));
+            const combined = [...fetchedProjects, ...fillProjects];
+            const targetCount = Math.max(8, Math.floor(combined.length / 4) * 4);
+            setProjects(combined.slice(0, targetCount));
+          } else {
+            setProjects(fetchedProjects);
+          }
         }
       } catch (err) {
         console.error('Failed to load research data from API:', err);
@@ -153,23 +162,23 @@ export default function ResearchPage() {
             <div className="absolute -top-40 right-1/4 size-[500px] rounded-full bg-[var(--primary-soft)] opacity-50 blur-3xl"></div>
             <div className="absolute -bottom-32 left-10 size-80 rounded-full bg-[var(--accent-soft)] opacity-60 blur-3xl"></div>
           </div>
-          <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 py-20 lg:py-28">
+          <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16 py-20 lg:py-28 2xl:py-36">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
               <span className="size-1.5 rounded-full bg-accent"></span>Research
             </div>
-            <h1 className="mt-6 max-w-3xl text-4xl font-medium leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl">Our Research Landscape</h1>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">Discover the ongoing research projects and technological explorations at the IIT Madras-led FedEx SMART Center, driving innovation across the logistics spectrum. Explore our featured projects under each vertical to understand what we are doing.</p>
+            <h1 className="mt-6 max-w-3xl 2xl:max-w-4xl text-4xl font-medium leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl 2xl:text-7xl">Our Research Landscape</h1>
+            <p className="mt-6 max-w-2xl 2xl:max-w-3xl text-lg 2xl:text-xl leading-relaxed text-muted-foreground">Discover the ongoing research projects and technological explorations at the IIT Madras-led FedEx SMART Center, driving innovation across the logistics spectrum. Explore our featured projects under each vertical to understand what we are doing.</p>
           </div>
         </section>
 
-        <section className="py-20">
-          <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 ">
+        <section className="py-20 2xl:py-28">
+          <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
               <span className="size-1.5 rounded-full bg-accent"></span>Research Verticals
             </div>
-            <h2 className="mt-5 text-3xl font-medium tracking-tight sm:text-4xl">Four interconnected verticals.</h2>
+            <h2 className="mt-5 text-3xl font-medium tracking-tight sm:text-4xl 2xl:text-5xl">Four interconnected verticals.</h2>
             {loading ? (
-              <div className="mt-12 grid gap-5 sm:grid-cols-2">
+              <div className="mt-12 grid gap-5 sm:grid-cols-2 2xl:grid-cols-4">
                 {[...Array(4)].map((_, i) => (
                   <div key={i} className="h-44 rounded-3xl border border-border bg-card p-8 animate-pulse">
                     <div className="size-12 rounded-2xl bg-muted"></div>
@@ -179,14 +188,14 @@ export default function ResearchPage() {
                 ))}
               </div>
             ) : (
-              <div className="mt-12 grid gap-5 sm:grid-cols-2">
+              <div className="mt-12 grid gap-5 sm:grid-cols-2 2xl:grid-cols-4">
                 {areas.map((area, idx) => (
-                  <div key={area.id || idx} className={`group relative overflow-hidden rounded-3xl border border-border ${getAreaBgClass(idx)} p-8 transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-lift)]`}>
+                  <div key={area.id || idx} className={`group relative overflow-hidden rounded-3xl border border-border ${getAreaBgClass(idx)} p-8 2xl:p-10 transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-lift)]`}>
                     <div className="inline-flex size-12 items-center justify-center rounded-2xl bg-card/80 text-accent shadow-[var(--shadow-soft)] backdrop-blur">
                       {renderIcon(area.icon || area.title)}
                     </div>
-                    <h3 className="mt-6 text-xl font-semibold tracking-tight">{area.title}</h3>
-                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{area.description}</p>
+                    <h3 className="mt-6 text-xl 2xl:text-2xl font-semibold tracking-tight">{area.title}</h3>
+                    <p className="mt-3 text-sm 2xl:text-base leading-relaxed text-muted-foreground">{area.description}</p>
                   </div>
                 ))}
               </div>
@@ -194,14 +203,14 @@ export default function ResearchPage() {
           </div>
         </section>
 
-        <section className="border-t border-border bg-surface py-20">
-          <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 ">
+        <section className="border-t border-border bg-surface py-20 2xl:py-28">
+          <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
               <span className="size-1.5 rounded-full bg-accent"></span>Featured Projects
             </div>
-            <h2 className="mt-5 text-3xl font-medium tracking-tight sm:text-4xl">Projects in motion.</h2>
+            <h2 className="mt-5 text-3xl font-medium tracking-tight sm:text-4xl 2xl:text-5xl">Projects in motion.</h2>
             {loading ? (
-              <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
                 {[...Array(6)].map((_, i) => (
                   <div key={i} className="h-48 rounded-3xl border border-border bg-card p-6 animate-pulse">
                     <div className="aspect-[16/9] w-full bg-muted rounded-2xl"></div>
@@ -212,10 +221,10 @@ export default function ResearchPage() {
               </div>
             ) : (
               <>
-                <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-4">
                   {paginatedProjects.map((project, idx) => (
                     <Link to={`/research/${project.slug || project.id}`} key={project.id || idx} className="group flex flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-lift)]">
-                      <div className={`relative flex aspect-[16/9] items-center justify-center bg-gradient-to-br ${gradientPairs[idx % gradientPairs.length]}`}>
+                      <div className={`relative flex aspect-[16/9] w-full shrink-0 items-center justify-center bg-gradient-to-br ${gradientPairs[idx % gradientPairs.length]}`}>
                         {project.image_url ? (
                           <img src={project.image_url} alt={project.title} className="absolute inset-0 h-full w-full object-cover" />
                         ) : (
@@ -223,18 +232,22 @@ export default function ResearchPage() {
                         )}
                         <ArrowIcon />
                       </div>
-                      <div className="flex flex-1 flex-col p-6">
-                        <div className="flex items-center justify-between mb-4">
-                          <span className="w-fit rounded-full bg-[var(--primary-soft)] px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-primary">
-                            {project.research_area_name || 'Featured Project'}
-                          </span>
-                          {project.status && (
-                            <span className={`w-fit rounded-full px-2 py-1 text-[10px] font-medium uppercase tracking-wider ${project.status === 'Ongoing' ? 'bg-amber-500/10 text-amber-500' : 'bg-emerald-500/10 text-emerald-500'}`}>
-                              {project.status}
+                      <div className="flex flex-1 flex-col justify-between p-6">
+                        <div>
+                          <div className="flex items-center justify-between gap-2 mb-3 min-h-[1.75rem]">
+                            <span className="truncate max-w-[70%] rounded-full bg-[var(--primary-soft)] px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary" title={project.research_area_name || 'Featured Project'}>
+                              {project.research_area_name || 'Featured Project'}
                             </span>
-                          )}
+                            {project.status && (
+                              <span className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider ${project.status === 'Ongoing' ? 'bg-amber-500/10 text-amber-600 border border-amber-500/20' : 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20'}`}>
+                                {project.status}
+                              </span>
+                            )}
+                          </div>
+                          <h3 className="text-base font-semibold leading-snug tracking-tight text-foreground group-hover:text-primary transition-colors line-clamp-2 min-h-[2.75rem]">
+                            {project.title}
+                          </h3>
                         </div>
-                        <h3 className="text-base font-semibold leading-snug tracking-tight">{project.title}</h3>
                       </div>
                     </Link>
                   ))}

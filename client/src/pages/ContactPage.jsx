@@ -118,53 +118,53 @@ export default function ContactPage() {
             <div className="absolute -top-40 right-1/4 size-[500px] rounded-full bg-[var(--primary-soft)] opacity-50 blur-3xl"></div>
             <div className="absolute -bottom-32 left-10 size-80 rounded-full bg-[var(--accent-soft)] opacity-60 blur-3xl"></div>
           </div>
-          <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 py-20 lg:py-28">
+          <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16 py-20 lg:py-28 2xl:py-36">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
               <span className="size-1.5 rounded-full bg-accent"></span>Get in Touch
             </div>
-            <h1 className="mt-6 max-w-3xl text-4xl font-medium leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl">We're here to help.</h1>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">Have questions about our research, collaborations, student opportunities, or any general inquiries regarding the IIT Madras-led FedEx SMART Center? We're here to assist you.</p>
+            <h1 className="mt-6 max-w-3xl 2xl:max-w-4xl text-4xl font-medium leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl 2xl:text-7xl">We're here to help.</h1>
+            <p className="mt-6 max-w-2xl 2xl:max-w-3xl text-lg 2xl:text-xl leading-relaxed text-muted-foreground">Have questions about our research, collaborations, student opportunities, or any general inquiries regarding the IIT Madras-led FedEx SMART Center? We're here to assist you.</p>
           </div>
         </section>
         {/* Contact Info */}
-        <section className="py-20">
-          <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 ">
+        <section className="py-20 2xl:py-28">
+          <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
               <span className="size-1.5 rounded-full bg-accent"></span>Contact Information
             </div>
-            <h2 className="mt-5 max-w-2xl text-3xl font-medium tracking-tight">For primary inquiries and official correspondence.</h2>
+            <h2 className="mt-5 max-w-2xl 2xl:max-w-3xl text-3xl font-medium tracking-tight sm:text-4xl 2xl:text-5xl">For primary inquiries and official correspondence.</h2>
             <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               <a href={`tel:+91${contactInfo.contact_phone?.replace(/\s/g, '')}`}>
-                <div className="flex h-full flex-col gap-4 rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[var(--shadow-soft)]">
+                <div className="flex h-full flex-col gap-4 rounded-2xl border border-border bg-card p-6 2xl:p-8 transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[var(--shadow-soft)]">
                   <div className="inline-flex size-11 items-center justify-center rounded-xl bg-[var(--primary-soft)] text-primary"><PhoneIcon /></div>
                   <div>
                     <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Phone</div>
-                    <div className="mt-2 text-base font-medium leading-snug text-foreground">{contactInfo.contact_phone}</div>
+                    <div className="mt-2 text-base 2xl:text-lg font-medium leading-snug text-foreground">{contactInfo.contact_phone}</div>
                   </div>
                 </div>
               </a>
               <a href={`mailto:${contactInfo.contact_email}`}>
-                <div className="flex h-full flex-col gap-4 rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[var(--shadow-soft)]">
+                <div className="flex h-full flex-col gap-4 rounded-2xl border border-border bg-card p-6 2xl:p-8 transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[var(--shadow-soft)]">
                   <div className="inline-flex size-11 items-center justify-center rounded-xl bg-[var(--primary-soft)] text-primary"><MailIcon /></div>
                   <div>
                     <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Email</div>
-                    <div className="mt-2 text-base font-medium leading-snug text-foreground">{contactInfo.contact_email}</div>
+                    <div className="mt-2 text-base 2xl:text-lg font-medium leading-snug text-foreground">{contactInfo.contact_email}</div>
                   </div>
                 </div>
               </a>
-              <div className="flex h-full flex-col gap-4 rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[var(--shadow-soft)]">
+              <div className="flex h-full flex-col gap-4 rounded-2xl border border-border bg-card p-6 2xl:p-8 transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[var(--shadow-soft)]">
                 <div className="inline-flex size-11 items-center justify-center rounded-xl bg-[var(--primary-soft)] text-primary"><MapPinIcon /></div>
                 <div>
                   <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Address</div>
-                  <div className="mt-2 text-base font-medium leading-snug text-foreground">{contactInfo.contact_address}</div>
+                  <div className="mt-2 text-base 2xl:text-lg font-medium leading-snug text-foreground">{contactInfo.contact_address}</div>
                 </div>
               </div>
             </div>
 
             {/* Map */}
             <div className="mt-10 overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-soft)]">
-              <iframe title="IIT Madras campus map" src="https://www.google.com/maps?q=IIT+Madras+NAC+1,+Chennai&output=embed" className="block h-[260px] w-full border-0 sm:h-[340px] md:h-[420px]" loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen></iframe>
-              <div className="flex items-center justify-between border-t border-border bg-surface px-5 py-3 text-sm">
+              <iframe title="IIT Madras campus map" src="https://www.google.com/maps?q=IIT+Madras+NAC+1,+Chennai&output=embed" className="block h-[260px] w-full border-0 sm:h-[340px] md:h-[420px] 2xl:h-[500px]" loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen></iframe>
+              <div className="flex items-center justify-between border-t border-border bg-surface px-5 py-3 text-sm 2xl:text-base">
                 <span className="text-muted-foreground">IIT Madras Campus, Chennai</span>
                 <a href="https://maps.google.com/?q=IIT+Madras+NAC+1" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 font-medium text-primary hover:underline">Open in Google Maps <ExternalLinkIcon /></a>
               </div>
@@ -173,8 +173,8 @@ export default function ContactPage() {
         </section>
 
         {/* Center Management */}
-        <section className="border-t border-border bg-surface py-20">
-          <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 ">
+        <section className="border-t border-border bg-surface py-20 2xl:py-28">
+          <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
               <span className="size-1.5 rounded-full bg-accent"></span>Center Management
             </div>

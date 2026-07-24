@@ -2,6 +2,7 @@
 -- PostgreSQL
 
 -- Drop tables if they exist (for clean setup)
+DROP TABLE IF EXISTS news_updates CASCADE;
 DROP TABLE IF EXISTS contact_messages CASCADE;
 DROP TABLE IF EXISTS gallery_images CASCADE;
 DROP TABLE IF EXISTS team_members CASCADE;
@@ -179,6 +180,20 @@ CREATE TABLE gallery_images (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- News & Updates (homepage announcement popup)
+CREATE TABLE news_updates (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  published_date DATE DEFAULT CURRENT_DATE,
+  link TEXT,
+  image_url TEXT,
+  is_active BOOLEAN DEFAULT true,
+  sort_order INT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Contact Form Messages
 CREATE TABLE contact_messages (
   id SERIAL PRIMARY KEY,
@@ -211,3 +226,5 @@ CREATE INDEX idx_publications_year ON publications(year);
 CREATE INDEX idx_team_category ON team_members(category);
 CREATE INDEX idx_gallery_category ON gallery_images(category);
 CREATE INDEX idx_contact_read ON contact_messages(is_read);
+CREATE INDEX idx_news_active ON news_updates(is_active);
+CREATE INDEX idx_news_date ON news_updates(published_date);

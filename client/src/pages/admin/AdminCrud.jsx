@@ -7,7 +7,7 @@ import {
   Plus, Edit3, Trash2, X, Save, ArrowLeft, LogOut, Search,
   ChevronLeft, Eye, EyeOff, Check, Menu, LayoutDashboard, Monitor,
   TrendingUp, Briefcase, Calendar, PenLine, BookOpen, Users, Image,
-  BarChart3, MessageSquare, Settings
+  BarChart3, MessageSquare, Settings, Bell
 } from 'lucide-react';
 import Pagination from '../../components/common/Pagination';
 import ProjectForm from '../../components/admin/ProjectForm';
@@ -112,6 +112,20 @@ const sectionConfig = {
       { key: 'external_url', label: 'External URL', type: 'text' },
     ],
     api: { get: adminApi.getActivities, create: adminApi.createActivity, update: adminApi.updateActivity, delete: adminApi.deleteActivity },
+    displayField: 'title',
+  },
+  news: {
+    title: 'News & Updates',
+    fields: [
+      { key: 'title', label: 'Title', type: 'text', required: true },
+      { key: 'description', label: 'Description', type: 'textarea', required: true },
+      { key: 'published_date', label: 'Published Date', type: 'date' },
+      { key: 'link', label: 'Read More Link', type: 'text' },
+      { key: 'image_url', label: 'Image', type: 'image' },
+      { key: 'is_active', label: 'Active (show in homepage popup)', type: 'checkbox' },
+      { key: 'sort_order', label: 'Sort Order', type: 'number' },
+    ],
+    api: { get: adminApi.getNews, create: adminApi.createNews, update: adminApi.updateNews, delete: adminApi.deleteNews },
     displayField: 'title',
   },
   blogs: {
@@ -225,6 +239,7 @@ const navigationLinks = [
   { key: 'projects', label: 'Projects', icon: Briefcase },
   { key: 'events', label: 'Events', icon: Calendar },
   { key: 'activities', label: 'Announcements', icon: BookOpen },
+  { key: 'news', label: 'News & Updates', icon: Bell },
   { key: 'blogs', label: 'Blogs & Insights', icon: PenLine },
   { key: 'publications', label: 'Publications', icon: BookOpen },
   { key: 'team', label: 'Team Members', icon: Users },
@@ -569,7 +584,7 @@ export default function AdminCrud() {
         
         {/* TOP NAVBAR */}
         <header className="bg-white/80 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-40 h-16 flex items-center">
-          <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+          <div className="max-w-7xl 2xl:max-w-[1600px] 3xl:max-w-[1920px] mx-auto w-full px-4 sm:px-6 lg:px-8 2xl:px-12 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button onClick={() => setSidebarOpen(true)} className="p-2 -ml-2 rounded-lg hover:bg-slate-100 text-slate-500 lg:hidden">
                 <Menu className="w-6 h-6" />
@@ -592,7 +607,7 @@ export default function AdminCrud() {
         </header>
 
         {/* WORKSPACE CONTENT */}
-        <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex-grow">
+        <main className="max-w-7xl 2xl:max-w-[1600px] 3xl:max-w-[1920px] mx-auto w-full px-4 sm:px-6 lg:px-8 2xl:px-12 py-8 flex-grow">
           
           {/* Header Actions */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">

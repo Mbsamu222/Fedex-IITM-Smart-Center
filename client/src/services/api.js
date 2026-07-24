@@ -46,6 +46,7 @@ export const publicApi = {
   getEvents: (params) => api.get('/events', { params }),
   getEvent: (slug) => api.get(`/events/slug/${slug}`),
   getActivities: (params) => api.get('/activities', { params }),
+  getNews: (params) => api.get('/news', { params }),
   getBlogs: (params) => api.get('/blogs', { params }),
   getPublications: (params) => api.get('/publications', { params }),
   getTeam: (category) => api.get('/team', { params: { category } }),
@@ -96,6 +97,12 @@ export const adminApi = {
   createActivity: (data) => api.post('/activities', data),
   updateActivity: (id, data) => api.put(`/activities/${id}`, data),
   deleteActivity: (id) => api.delete(`/activities/${id}`),
+
+  // News & Updates
+  getNews: () => api.get('/news'),
+  createNews: (data) => api.post('/news', data),
+  updateNews: (id, data) => api.put(`/news/${id}`, data),
+  deleteNews: (id) => api.delete(`/news/${id}`),
 
   // Blogs
   getBlogs: () => api.get('/blogs/all'),

@@ -54,7 +54,7 @@ export default function EventDetailPage() {
   return (
     <div className="min-h-screen bg-background text-foreground pb-24 font-sans selection:bg-primary/20 selection:text-primary">
       {/* Top Header Section */}
-      <section className="w-full pt-32 pb-12 px-6 lg:px-10 max-w-7xl mx-auto">
+      <section className="w-full pt-32 pb-12 px-6 lg:px-10 2xl:px-12 3xl:px-16 max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] mx-auto">
         <Link to="/events" className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-8 text-sm font-semibold w-fit">
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Events</span>
@@ -71,19 +71,19 @@ export default function EventDetailPage() {
           )}
         </div>
 
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight leading-[1.1] text-foreground mb-8 max-w-4xl drop-shadow-sm">
+        <h1 className="text-xl sm:text-2xl md:text-3xl 2xl:text-4xl font-display font-bold tracking-tight leading-snug text-foreground mb-6 max-w-4xl 2xl:max-w-5xl">
           {event.title}
         </h1>
       </section>
 
       {/* Premium Event Flyer Display */}
       {event.image_url && (
-        <section className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 mb-16 md:mb-24 flex justify-center">
+        <section className="max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] mx-auto px-4 sm:px-6 lg:px-10 2xl:px-12 3xl:px-16 mb-16 md:mb-24 flex justify-center">
           <div className="relative inline-block max-w-full rounded-[2rem] overflow-hidden shadow-2xl shadow-muted/50 group border border-border bg-card">
             <img
               src={resolveImageUrl(event.image_url)}
               alt={event.title}
-              className="max-w-full max-h-[300px] sm:max-h-[420px] lg:max-h-[480px] w-auto h-auto object-contain transition-transform duration-1000 group-hover:scale-105"
+              className="max-w-full max-h-[300px] sm:max-h-[420px] lg:max-h-[480px] 2xl:max-h-[600px] w-auto h-auto object-contain transition-transform duration-1000 group-hover:scale-105"
             />
             <div className="absolute inset-0 shadow-[inset_0_0_100px_rgba(0,0,0,0.1)] pointer-events-none rounded-[2rem]"></div>
           </div>
@@ -91,7 +91,7 @@ export default function EventDetailPage() {
       )}
 
       {/* Main Content Area — matches ResearchDetailPage's 8/4 grid */}
-      <section className="max-w-7xl mx-auto px-6 lg:px-10 pb-16 md:pb-24 grid grid-cols-1 lg:grid-cols-12 gap-16">
+      <section className="max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] mx-auto px-6 lg:px-10 2xl:px-12 3xl:px-16 pb-16 md:pb-24 grid grid-cols-1 lg:grid-cols-12 gap-16">
 
         {/* Left Column: Summary & Content */}
         <div className="lg:col-span-8 space-y-16 min-w-0">
@@ -106,7 +106,7 @@ export default function EventDetailPage() {
                 <span className="leading-none">Summary</span>
               </h3>
 
-              <p className="text-lg md:text-xl text-card-foreground leading-relaxed font-medium">
+              <p className="text-base md:text-lg text-card-foreground leading-relaxed font-medium">
                 {event.description}
               </p>
             </div>

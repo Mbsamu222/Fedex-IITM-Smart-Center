@@ -29,14 +29,14 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-border bg-background py-14">
-      <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 grid gap-10 md:grid-cols-4">
-        <div className="md:col-span-2">
+      <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16 grid gap-10 md:grid-cols-4 2xl:grid-cols-5">
+        <div className="md:col-span-2 2xl:col-span-2">
           <img 
             src="https://smart-redesign-essence.lovable.app/__l5e/assets-v1/410da1d9-e72f-4983-a547-87da3aaac616/smart-logo.png" 
             alt="SMART" 
             className="h-10 w-auto" 
           />
-          <p className="mt-5 max-w-md text-sm leading-relaxed text-muted-foreground">
+          <p className="mt-5 max-w-md 2xl:max-w-lg text-sm 2xl:text-base leading-relaxed text-muted-foreground">
             The IIT Madras-led FedEx SMART Center — a research hub advancing sustainable logistics, funded by FedEx and managed by IIT Madras.
           </p>
           <div className="mt-5 flex gap-3">
@@ -78,12 +78,12 @@ export default function Footer() {
           </div>
         </div>
         
-        <div>
+        <div className="2xl:col-span-2">
           <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Quick Links</div>
-          <ul className="mt-4 space-y-2 text-sm">
+          <ul className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-4 text-sm 2xl:text-base">
             <li><Link className="text-foreground hover:text-primary" to="/">Home</Link></li>
             <li><Link to="/research" className="text-foreground hover:text-primary">Research</Link></li>
-            <li><Link to="/team/advisory-board" className="text-foreground hover:text-primary">Advisory Board &amp; Executive Committee</Link></li>
+            <li><Link to="/team/advisory-board" className="text-foreground hover:text-primary">Advisory Board &amp; Exec</Link></li>
             <li><Link to="/team/center-team" className="text-foreground hover:text-primary">Center Team</Link></li>
             <li><Link to="/team/faculty" className="text-foreground hover:text-primary">Faculty Team</Link></li>
             <li><Link to="/team/research-scholars" className="text-foreground hover:text-primary">Research Team</Link></li>
@@ -97,23 +97,23 @@ export default function Footer() {
         
         <div>
           <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Contact Us</div>
-          <ul className="mt-4 space-y-3 text-sm text-foreground">
+          <ul className="mt-4 space-y-3 text-sm 2xl:text-base text-foreground">
             <li className="flex gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-map-pin size-4 shrink-0 text-primary" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-map-pin size-4 shrink-0 text-primary mt-1" aria-hidden="true">
                 <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path>
                 <circle cx="12" cy="10" r="3"></circle>
               </svg> 
               {settings.contact_address}
             </li>
             <li className="flex gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-mail size-4 shrink-0 text-primary" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-mail size-4 shrink-0 text-primary mt-1" aria-hidden="true">
                 <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path>
                 <rect x="2" y="4" width="20" height="16" rx="2"></rect>
               </svg> 
               <a href={`mailto:${settings.contact_email}`} className="hover:text-primary">{settings.contact_email}</a>
             </li>
             <li className="flex gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-phone size-4 shrink-0 text-primary" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-phone size-4 shrink-0 text-primary mt-1" aria-hidden="true">
                 <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path>
               </svg> 
               {settings.contact_phone}
@@ -122,7 +122,7 @@ export default function Footer() {
         </div>
       </div>
       
-      <div className="mx-auto w-full max-w-7xl px-6 lg:px-10 mt-10 border-t border-border pt-6 text-xs text-muted-foreground">
+      <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16 mt-10 border-t border-border pt-6 text-xs 2xl:text-sm text-muted-foreground">
         <p>{settings.footer_disclaimer}</p>
         <p className="mt-2">{settings.copyright_text}</p>
       </div>

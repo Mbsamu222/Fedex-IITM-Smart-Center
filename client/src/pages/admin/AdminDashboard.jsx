@@ -13,6 +13,7 @@ const sections = [
   { key: 'research-areas', label: 'Research Areas', description: 'Modify the center\'s key research verticals.', icon: TrendingUp, color: 'bg-blue-50 text-blue-600 border-blue-100' },
   { key: 'projects', label: 'Projects', description: 'Add/edit active and featured research projects.', icon: Briefcase, color: 'bg-orange-50 text-fedex-orange border-orange-100' },
   { key: 'events', label: 'Events & News', description: 'Publish announcements, seminars and hackathons.', icon: Calendar, color: 'bg-emerald-50 text-emerald-600 border-emerald-100' },
+  { key: 'news', label: 'News & Updates', description: 'Publish the latest news shown in the homepage popup.', icon: Bell, color: 'bg-cyan-50 text-cyan-600 border-cyan-100' },
   { key: 'blogs', label: 'Blogs & Insights', description: 'Draft field notes and stories from researchers.', icon: PenLine, color: 'bg-pink-50 text-pink-600 border-pink-100' },
   { key: 'publications', label: 'Publications', description: 'List journal papers and academic publications.', icon: BookOpen, color: 'bg-violet-50 text-violet-600 border-violet-100' },
   { key: 'team', label: 'Team Members', description: 'Configure advisory board, faculty & scholars.', icon: Users, color: 'bg-sky-50 text-sky-600 border-sky-100' },
@@ -41,6 +42,7 @@ export default function AdminDashboard() {
           adminApi.getResearchAreas(),
           adminApi.getProjects(),
           adminApi.getEvents(),
+          adminApi.getNews(),
           adminApi.getBlogs(),
           adminApi.getPublications(),
           adminApi.getTeam(),
@@ -48,7 +50,7 @@ export default function AdminDashboard() {
           adminApi.getStats(),
           adminApi.getMessages(),
         ]);
-        const keys = ['research-areas', 'projects', 'events', 'blogs', 'publications', 'team', 'gallery', 'stats', 'messages'];
+        const keys = ['research-areas', 'projects', 'events', 'news', 'blogs', 'publications', 'team', 'gallery', 'stats', 'messages'];
         const c = {};
         results.forEach((r, i) => {
           c[keys[i]] = r.status === 'fulfilled' ? (r.value.data?.length || 0) : 0;
@@ -157,7 +159,7 @@ export default function AdminDashboard() {
         
         {/* TOP NAVBAR */}
         <header className="bg-white/80 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-40 h-16 flex items-center">
-          <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+          <div className="max-w-7xl 2xl:max-w-[1600px] 3xl:max-w-[1920px] mx-auto w-full px-4 sm:px-6 lg:px-8 2xl:px-12 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button onClick={() => setSidebarOpen(true)} className="p-2 -ml-2 rounded-lg hover:bg-slate-100 text-slate-500 lg:hidden">
                 <Menu className="w-6 h-6" />
@@ -189,7 +191,7 @@ export default function AdminDashboard() {
         </header>
 
         {/* WORKSPACE CONTENT */}
-        <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex-grow">
+        <main className="max-w-7xl 2xl:max-w-[1600px] 3xl:max-w-[1920px] mx-auto w-full px-4 sm:px-6 lg:px-8 2xl:px-12 py-8 flex-grow">
           
           {/* WELCOME BANNER */}
           <div className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-6 sm:p-8 mb-8 shadow-sm">
