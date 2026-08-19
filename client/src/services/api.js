@@ -117,7 +117,7 @@ export const adminApi = {
   deletePublication: (id) => api.delete(`/publications/${id}`),
 
   // Team
-  getTeam: (category) => api.get('/team', { params: { category } }),
+  getTeam: (category) => api.get('/team', { params: { category, all: true } }),
   createTeamMember: (data) => api.post('/team', data),
   updateTeamMember: (id, data) => api.put(`/team/${id}`, data),
   deleteTeamMember: (id) => api.delete(`/team/${id}`),

@@ -42,7 +42,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16 flex h-20 items-center gap-6 justify-between lg:justify-start">
         <Link className="flex shrink-0 items-center gap-3 lg:mr-12 xl:mr-20 2xl:mr-24 3xl:mr-32" to="/" onClick={closeMenu}>
-          <img src="https://smart-redesign-essence.lovable.app/__l5e/assets-v1/410da1d9-e72f-4983-a547-87da3aaac616/smart-logo.png" alt="IIT Madras FedEx SMART Center" className="h-10 w-auto" />
+          <img src="/smart-logo.png" alt="IIT Madras FedEx SMART Center" className="h-10 w-auto" />
         </Link>
         
         <nav className="hidden flex-1 items-center justify-end gap-1 lg:flex xl:gap-2 2xl:gap-4 3xl:gap-6">

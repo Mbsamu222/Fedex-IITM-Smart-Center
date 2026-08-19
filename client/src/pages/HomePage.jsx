@@ -86,7 +86,7 @@ const defaultSlides = [
     ctaPrimaryLink: "#research",
     ctaSecondaryText: "View Projects",
     ctaSecondaryLink: "#projects",
-    image: "https://smart-redesign-essence.lovable.app/assets/hero-network-D4naFa_1.jpg",
+    image: "/hero-logistics.png",
     floatingTag: "Live research",
     floatingText: "National Logistics Digital Twin — modelling freight flows across India."
   },
@@ -99,7 +99,7 @@ const defaultSlides = [
     ctaPrimaryLink: "#research",
     ctaSecondaryText: "View Case Studies",
     ctaSecondaryLink: "/publications",
-    image: "https://smart-redesign-essence.lovable.app/assets/hero-2-CdyypM83.jpg",
+    image: "/hero-air-cargo.png",
     floatingTag: "Network Design",
     floatingText: "Multi-modal routing algorithms for large-scale operations."
   },
@@ -112,7 +112,7 @@ const defaultSlides = [
     ctaPrimaryLink: "#research",
     ctaSecondaryText: "See Publications",
     ctaSecondaryLink: "/publications",
-    image: "https://smart-redesign-essence.lovable.app/assets/hero-3-BWnU1bBK.jpg",
+    image: "/hero-ai.png",
     floatingTag: "AI Models",
     floatingText: "SKU-level forecasting models powered by deep learning."
   },
@@ -125,7 +125,7 @@ const defaultSlides = [
     ctaPrimaryLink: "#research",
     ctaSecondaryText: "Watch Demo",
     ctaSecondaryLink: "/gallery",
-    image: "https://smart-redesign-essence.lovable.app/assets/hero-4-O8KFGH54.jpg",
+    image: "/hero-incubation.png",
     floatingTag: "Drone Tech",
     floatingText: "Path-planning algorithms for last-mile autonomous deliveries."
   }
@@ -224,7 +224,7 @@ export default function HomePage() {
             ctaPrimaryLink: h.cta_primary_link || "#research",
             ctaSecondaryText: h.cta_secondary_text || "View Projects",
             ctaSecondaryLink: h.cta_secondary_link || "#projects",
-            image: resolveImageUrl(h.image_url) || "https://smart-redesign-essence.lovable.app/assets/hero-network-D4naFa_1.jpg",
+            image: resolveImageUrl(h.image_url) || "/hero-logistics.png",
             floatingTag: h.floating_tag || "Live research",
             floatingText: h.floating_text || "National Logistics Digital Twin — modelling freight flows across India."
           }));
@@ -436,8 +436,8 @@ export default function HomePage() {
         <section id="vision" className="relative overflow-hidden py-24 2xl:py-32">
           <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
             <div className="relative overflow-hidden rounded-[2.5rem] border border-border bg-primary text-primary-foreground">
-              <img src="https://smart-redesign-essence.lovable.app/assets/vision-lab-DhvVcMX0.jpg" alt="Researchers at the SMART Center lab" width="1920" height="1080" loading="lazy" className="absolute inset-0 size-full object-cover opacity-30" />
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary via-primary/85 to-primary/40"></div>
+              <img src="/vision-bg.png" alt="Supply Chain Intelligence Network Vision" width="1920" height="1080" loading="lazy" className="absolute inset-0 size-full object-cover opacity-45 mix-blend-luminosity" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-[#3b1275]/90 via-[#4a1d96]/80 to-[#2e0a6b]/70"></div>
               <div className="relative grid gap-10 p-6 sm:p-16 lg:grid-cols-[1.2fr_1fr] lg:p-20 2xl:p-24">
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.18em]">

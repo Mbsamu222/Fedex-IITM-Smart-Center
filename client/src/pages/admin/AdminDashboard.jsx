@@ -75,7 +75,7 @@ export default function AdminDashboard() {
         <div className="p-6 border-b border-slate-100 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2.5">
             <img 
-              src="https://smart-redesign-essence.lovable.app/__l5e/assets-v1/410da1d9-e72f-4983-a547-87da3aaac616/smart-logo.png" 
+              src="/smart-logo.png" 
               alt="IIT Madras FedEx SMART Center Logo" 
               className="h-9 w-auto" 
             />
@@ -116,7 +116,7 @@ export default function AdminDashboard() {
           <aside className="relative flex flex-col w-80 max-w-[85vw] bg-white h-full border-r border-slate-200 animate-slide-in-left">
             <div className="p-6 border-b border-slate-100 flex items-center justify-between">
               <img 
-                src="https://smart-redesign-essence.lovable.app/__l5e/assets-v1/410da1d9-e72f-4983-a547-87da3aaac616/smart-logo.png" 
+                src="/smart-logo.png" 
                 alt="IIT Madras FedEx SMART Center Logo" 
                 className="h-9 w-auto" 
               />
@@ -166,7 +166,7 @@ export default function AdminDashboard() {
               </button>
               <div className="flex items-center gap-2 lg:hidden">
                 <img 
-                  src="https://smart-redesign-essence.lovable.app/__l5e/assets-v1/410da1d9-e72f-4983-a547-87da3aaac616/smart-logo.png" 
+                  src="/smart-logo.png" 
                   alt="IIT Madras FedEx SMART Center Logo" 
                   className="h-6 w-auto" 
                 />
@@ -199,9 +199,6 @@ export default function AdminDashboard() {
             <div className="relative z-10 max-w-2xl">
               <span className="text-xs font-bold text-accent uppercase tracking-wider">SMART Center Portal</span>
               <h1 className="font-display text-3xl sm:text-4xl font-semibold mt-2 text-slate-900">{greeting}, {user?.name || 'Admin'}!</h1>
-              <p className="mt-3 text-slate-500 text-sm leading-relaxed sm:text-base">
-                Welcome to the IIT Madras FedEx SMART Center dashboard. Use this secure portal to update Hero sections, research programs, staff listings, news events, and manage inbox messages.
-              </p>
             </div>
           </div>
 

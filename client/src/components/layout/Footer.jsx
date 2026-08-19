@@ -32,7 +32,7 @@ export default function Footer() {
       <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16 grid gap-10 md:grid-cols-4 2xl:grid-cols-5">
         <div className="md:col-span-2 2xl:col-span-2">
           <img 
-            src="https://smart-redesign-essence.lovable.app/__l5e/assets-v1/410da1d9-e72f-4983-a547-87da3aaac616/smart-logo.png" 
+            src="/smart-logo.png" 
             alt="SMART" 
             className="h-10 w-auto" 
           />

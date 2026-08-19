@@ -176,6 +176,7 @@ const sectionConfig = {
       ] },
       { key: 'bio', label: 'Bio', type: 'textarea' },
       { key: 'sort_order', label: 'Sort Order', type: 'number' },
+      { key: 'is_active', label: 'Active (visible on public site)', type: 'checkbox' },
     ],
     api: { get: () => adminApi.getTeam(), create: adminApi.createTeamMember, update: adminApi.updateTeamMember, delete: adminApi.deleteTeamMember },
     displayField: 'name',
@@ -363,7 +364,14 @@ export default function AdminCrud() {
   const openCreateModal = () => {
     const initial = {};
     config.fields.forEach(f => {
-      initial[f.key] = f.type === 'checkbox' ? false : f.type === 'number' ? 0 : '';
+      if (f.type === 'checkbox') {
+        // is_active defaults to true (visible) for team members, false for other checkboxes
+        initial[f.key] = (section === 'team' && f.key === 'is_active') ? true : false;
+      } else if (f.type === 'number') {
+        initial[f.key] = 0;
+      } else {
+        initial[f.key] = '';
+      }
     });
     setFormData(initial);
     setLocalPreviews({});
@@ -502,7 +510,7 @@ export default function AdminCrud() {
         <div className="p-6 border-b border-slate-100 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2.5">
             <img 
-              src="https://smart-redesign-essence.lovable.app/__l5e/assets-v1/410da1d9-e72f-4983-a547-87da3aaac616/smart-logo.png" 
+              src="/smart-logo.png" 
               alt="IIT Madras FedEx SMART Center Logo" 
               className="h-9 w-auto" 
             />
@@ -542,7 +550,7 @@ export default function AdminCrud() {
           <aside className="relative flex flex-col w-80 max-w-[85vw] bg-white h-full border-r border-slate-200 animate-slide-in-left">
             <div className="p-6 border-b border-slate-100 flex items-center justify-between">
               <img 
-                src="https://smart-redesign-essence.lovable.app/__l5e/assets-v1/410da1d9-e72f-4983-a547-87da3aaac616/smart-logo.png" 
+                src="/smart-logo.png" 
                 alt="IIT Madras FedEx SMART Center Logo" 
                 className="h-9 w-auto" 
               />
@@ -758,6 +766,9 @@ export default function AdminCrud() {
                           {config.subtitleField.charAt(0).toUpperCase() + config.subtitleField.slice(1)}
                         </th>
                       )}
+                      {section === 'team' && (
+                        <th className="py-4 px-6 hidden sm:table-cell">Status</th>
+                      )}
                       <th className="py-4 px-6 hidden lg:table-cell">Created</th>
                       <th className="py-4 px-6 text-right">Actions</th>
                     </tr>
@@ -774,6 +785,21 @@ export default function AdminCrud() {
                         {config.subtitleField && (
                           <td className="py-4 px-6 hidden md:table-cell">
                             <span className="text-slate-500 text-xs bg-slate-50 border border-slate-100 px-2 py-1 rounded">{item[config.subtitleField]}</span>
+                          </td>
+                        )}
+                        {section === 'team' && (
+                          <td className="py-4 px-6 hidden sm:table-cell">
+                            {item.is_active !== false ? (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                <span className="size-1.5 rounded-full bg-emerald-500"></span>
+                                Active
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-red-50 text-red-600 border border-red-200">
+                                <span className="size-1.5 rounded-full bg-red-500"></span>
+                                Inactive
+                              </span>
+                            )}
                           </td>
                         )}
                         <td className="py-4 px-6 hidden lg:table-cell">
@@ -852,14 +878,30 @@ export default function AdminCrud() {
                     {field.label} {field.required && <span className="text-rose-500">*</span>}
                   </label>
                   {field.type === 'checkbox' ? (
-                    <label className="flex items-center gap-3 cursor-pointer select-none">
+                    <label className="flex items-center gap-3 cursor-pointer select-none group">
                       <input
                         type="checkbox"
                         checked={!!formData[field.key]}
                         onChange={(e) => setFormData({ ...formData, [field.key]: e.target.checked })}
                         className="w-5 h-5 rounded border-slate-300 bg-slate-50 text-fedex-purple focus:ring-fedex-purple"
                       />
-                      <span className="text-slate-700 font-medium text-sm">Activate and publish</span>
+                      {section === 'team' && field.key === 'is_active' ? (
+                        <span className="flex items-center gap-2">
+                          {formData[field.key] ? (
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 transition-all">
+                              <span className="size-2 rounded-full bg-emerald-500"></span>
+                              Active — Visible on public site
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-50 text-red-600 border border-red-200 transition-all">
+                              <span className="size-2 rounded-full bg-red-500"></span>
+                              Inactive — Hidden from public site
+                            </span>
+                          )}
+                        </span>
+                      ) : (
+                        <span className="text-slate-700 font-medium text-sm">Activate and publish</span>
+                      )}
                     </label>
                   ) : field.type === 'textarea' ? (
                     <textarea

@@ -46,7 +46,7 @@ export default function AdminLogin() {
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center mb-4 animate-fade-in">
             <img 
-              src="https://smart-redesign-essence.lovable.app/__l5e/assets-v1/410da1d9-e72f-4983-a547-87da3aaac616/smart-logo.png" 
+              src="/smart-logo.png" 
               alt="IIT Madras FedEx SMART Center Logo" 
               className="h-10 w-auto" 
             />
