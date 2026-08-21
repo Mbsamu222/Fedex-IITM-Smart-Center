@@ -59,6 +59,34 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Diagnostic route — shows live DB state for team members (helps debug Vercel issues)
+app.get('/api/debug/team', async (req, res) => {
+  try {
+    const pool = require('./config/db');
+    const columns = await pool.query(`
+      SELECT column_name, data_type, column_default
+      FROM information_schema.columns
+      WHERE table_name = 'team_members'
+      ORDER BY ordinal_position
+    `);
+    const counts = await pool.query(`
+      SELECT category,
+             COUNT(*) AS total,
+             COUNT(*) FILTER (WHERE is_active = true) AS active,
+             COUNT(*) FILTER (WHERE is_active = false OR is_active IS NULL) AS inactive
+      FROM team_members
+      GROUP BY category
+      ORDER BY category
+    `).catch(() => pool.query(`SELECT category, COUNT(*) AS total FROM team_members GROUP BY category`));
+    res.json({
+      columns: columns.rows,
+      summary: counts.rows,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Server Error:', err.stack);
