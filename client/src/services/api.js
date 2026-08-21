@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+// In development VITE_API_URL should point to http://localhost:5000/api.
+// In production (Vercel) leave VITE_API_URL unset — the rewrites in vercel.json
+// proxy /api/* to the serverless function, so we use a relative base URL.
+const API_BASE_URL = import.meta.env.VITE_API_URL ||
+  (import.meta.env.DEV ? 'http://localhost:5000/api' : '/api');
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -147,6 +151,13 @@ export const resolveImageUrl = (url) => {
   if (!url) return '';
   if (url.startsWith('http://') || url.startsWith('https://')) return url;
   if (url.startsWith('/uploads')) {
+    // If the API base URL is relative (e.g. '/api' on Vercel), we can't construct
+    // a usable absolute URL for uploads — uploads are only accessible when the
+    // backend is a long-running server (local dev). Return the path as-is so it
+    // resolves against the current origin (works for same-origin deployments).
+    if (API_BASE_URL.startsWith('/')) {
+      return url;
+    }
     const backendUrl = API_BASE_URL.replace('/api', '');
     return `${backendUrl}${url}`;
   }
