@@ -37,7 +37,7 @@ export default function Footer() {
             className="h-10 w-auto" 
           />
           <p className="mt-5 max-w-md 2xl:max-w-lg text-sm 2xl:text-base leading-relaxed text-muted-foreground">
-            The IIT Madras-led FedEx SMART Center — a research hub advancing sustainable logistics, funded by FedEx and managed by IIT Madras.
+            A research hub advancing sustainable logistics.
           </p>
           <div className="mt-5 flex gap-3">
             <Link 

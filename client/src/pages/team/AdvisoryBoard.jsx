@@ -9,14 +9,6 @@ const CrownIcon = () => (
   </svg>
 );
 
-const BuildingIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-building2 lucide-building-2 absolute right-4 top-4 size-5 text-foreground/40" aria-hidden="true">
-    <path d="M10 12h4"></path><path d="M10 8h4"></path><path d="M14 21v-3a2 2 0 0 0-4 0v3"></path>
-    <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"></path>
-    <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
-  </svg>
-);
-
 const gradientPairs = [
   'from-primary/30 to-accent/20',
   'from-accent/30 to-primary/20',
@@ -26,22 +18,18 @@ const gradientPairs = [
   'from-accent/30 to-accent/10',
 ];
 
-const defaultAdvisory = [
-  { name: 'Prof. V. Kamakoti', title: 'Director, IIT Madras', dept: 'IIT Madras', initials: 'VK' },
-  { name: 'Kami Viswanathan', title: 'President, FedEx MEISA', dept: 'FedEx', initials: 'KV' },
-  { name: 'Prof. R. Nagarajan', title: 'Dean, ICSR, IIT Madras', dept: 'IIT Madras', initials: 'RN' },
-  { name: 'Prof. Devendra Jalihal', title: 'Dean, Planning, IIT Madras', dept: 'IIT Madras', initials: 'DJ' },
-  { name: 'Suvendu Choudhury', title: 'VP Operations, FedEx India', dept: 'FedEx', initials: 'SC' },
-  { name: 'Mohammed Sayeed', title: 'MD, FedEx Express TSCS India', dept: 'FedEx', initials: 'MS' },
-];
-
-const defaultExecutive = [
-  { name: 'Prof. Arshinder Kaur', title: 'Center Head, IIT Madras', initials: 'AK' },
-  { name: 'Prof. B. Ravindran', title: 'Co-Head, IIT Madras', initials: 'BR' },
-  { name: 'Prof. Gitakrishnan Ramadurai', title: 'Co-Head, IIT Madras', initials: 'GR' },
-  { name: 'Prof. Rajagopalan Srinivasan', title: 'Co-Head, IIT Madras', initials: 'RS' },
-  { name: 'Mohammed Sayeed', title: 'Executive Sponsor, FedEx', initials: 'MS' },
-  { name: 'Suvendu Choudhury', title: 'Executive Sponsor, FedEx', initials: 'SC' },
+const defaultMembers = [
+  { name: 'Ms. Kami Viswanathan', title: 'President MEISA, Advisory Board', dept: 'FedEx', initials: 'KV' },
+  { name: 'Mr. Nitin Tatiwala', title: 'VP Marketing, Customer Experience & Air Network MEISA, Advisory Board, Executive Committee', dept: 'FedEx', initials: 'NT' },
+  { name: 'Dr. Manu Santhanam', title: 'Dean for Industrial Consultancy and Sponsored Research (ICSR), Advisory Board', dept: 'Dept. of Civil Engineering IIT Madras', initials: 'MS' },
+  { name: 'Dr. Ashwin Mahalingam', title: 'Dean for Alumni and Corporate Relations, Advisory Board', dept: 'Dept. of Civil Engineering, IIT Madras', initials: 'AM' },
+  { name: 'Dr. Arshinder Kaur', title: 'Head, FedEx SMART Center, Advisory Board, Executive Committee', dept: 'Dept. of Management Studies IIT Madras', initials: 'AK' },
+  { name: 'Dr. Gitakrishnan Ramadurai', title: 'Co-Head, FedEx SMART Center, Executive Committee', dept: 'Wadhwani School of Data Science and Artificial Intelligence', initials: 'GR' },
+  { name: 'Dr. Babji Srinivasan', title: 'Co-Head, FedEx SMART Center, Executive Committee', dept: 'Dept. of Applied Mechanics IIT Madras', initials: 'BS' },
+  { name: 'Dr. N S Narayanaswamy', title: 'Co-Head, FedEx SMART Center, Advisory Board, Executive Committee', dept: 'Dept. of Computer Science & Engineering', initials: 'NN' },
+  { name: 'Dr. Ashutosh Mahajan', title: 'Professor-in- Charge,FedEx ALFA, Advisory Board, Executive Committee', dept: 'Dept. of Industrial Engineering and Operations Research IIT Bombay', initials: 'AM' },
+  { name: 'Mr. Varun Sood', title: 'Lead Government Affairs AMEA, Executive Committee', dept: 'FedEx', initials: 'VS' },
+  { name: 'Mr. Digvijay Kharote', title: 'Strategic Development Advisor, Marketing & Air Network MEISA, Executive Committee', dept: 'FedEx', initials: 'DK' },
 ];
 
 function getInitials(name) {
@@ -50,8 +38,7 @@ function getInitials(name) {
 }
 
 export default function TeamAdvisoryPage() {
-  const [advisory, setAdvisory] = useState(defaultAdvisory);
-  const [executive, setExecutive] = useState(defaultExecutive);
+  const [members, setMembers] = useState(defaultMembers);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -61,15 +48,30 @@ export default function TeamAdvisoryPage() {
           publicApi.getTeam('advisory'),
           publicApi.getTeam('executive')
         ]);
-        if (Array.isArray(advisoryRes.data) && advisoryRes.data.length > 0) {
-          setAdvisory(advisoryRes.data.map(m => ({ ...m, image_url: resolveImageUrl(m.image_url), initials: getInitials(m.name), dept: m.department })));
-        }
-        if (Array.isArray(execRes.data) && execRes.data.length > 0) {
-          setExecutive(execRes.data.map(m => ({ ...m, image_url: resolveImageUrl(m.image_url), initials: getInitials(m.name), dept: m.department })));
+
+        const advisoryList = Array.isArray(advisoryRes.data) ? advisoryRes.data : [];
+        const execList = Array.isArray(execRes.data) ? execRes.data : [];
+        const combinedRaw = [...advisoryList, ...execList];
+
+        if (combinedRaw.length > 0) {
+          const seen = new Set();
+          const combined = [];
+          for (const m of combinedRaw) {
+            const key = m.id || m.name;
+            if (!seen.has(key)) {
+              seen.add(key);
+              combined.push({
+                ...m,
+                image_url: resolveImageUrl(m.image_url),
+                initials: getInitials(m.name),
+                dept: m.department
+              });
+            }
+          }
+          setMembers(combined);
         }
       } catch (err) {
         console.error('Failed to load team data from API:', err);
-        // Fall back to default
       } finally {
         setLoading(false);
       }
@@ -94,18 +96,17 @@ export default function TeamAdvisoryPage() {
           </div>
         </section>
 
-        <section className="py-20 2xl:py-28">
+        <section className="py-16 lg:py-20 2xl:py-28">
           <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
-            <h2 className="text-2xl 2xl:text-3xl font-medium tracking-tight">Advisory Board</h2>
             {loading ? (
-              <div className="mt-8 grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="h-56 rounded-3xl border border-border bg-card animate-pulse"></div>
+              <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
+                {[...Array(8)].map((_, i) => (
+                  <div key={i} className="h-72 rounded-3xl border border-border bg-card animate-pulse"></div>
                 ))}
               </div>
             ) : (
-              <div className="mt-8 grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
-                {advisory.map((member, idx) => (
+              <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
+                {members.map((member, idx) => (
                   <article key={member.id || idx} className="group flex flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-lift)]">
                     <div className={`relative flex aspect-square items-center justify-center bg-gradient-to-br ${gradientPairs[idx % gradientPairs.length]}`}>
                       {member.image_url ? (
@@ -126,40 +127,10 @@ export default function TeamAdvisoryPage() {
                 ))}
               </div>
             )}
-
-            <h2 className="mt-20 text-2xl font-medium tracking-tight">Executive Committee</h2>
-            {loading ? (
-              <div className="mt-8 grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="h-56 rounded-3xl border border-border bg-card animate-pulse"></div>
-                ))}
-              </div>
-            ) : (
-              <div className="mt-8 grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
-                {executive.map((member, idx) => (
-                  <article key={member.id || idx} className="group flex flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-lift)]">
-                    <div className={`relative flex aspect-square items-center justify-center bg-gradient-to-br ${gradientPairs[(idx + 3) % gradientPairs.length]}`}>
-                      {member.image_url ? (
-                        <img src={member.image_url} alt={member.name} className="absolute inset-0 h-full w-full object-cover object-center" />
-                      ) : (
-                        <div className="flex size-24 items-center justify-center rounded-full bg-card/80 font-display text-3xl font-semibold text-primary shadow-[var(--shadow-soft)] backdrop-blur">
-                          {member.initials}
-                        </div>
-                      )}
-                      <BuildingIcon />
-                    </div>
-                    <div className="flex flex-1 flex-col p-6">
-                      <h3 className="text-lg font-semibold tracking-tight">{member.name}</h3>
-                      <p className="mt-2 text-sm text-muted-foreground">{member.title}</p>
-                      {member.dept && <p className="mt-1 text-xs text-muted-foreground/80">{member.dept}</p>}
-                    </div>
-                  </article>
-                ))}
-              </div>
-            )}
           </div>
         </section>
       </div>
     </>
   );
 }
+

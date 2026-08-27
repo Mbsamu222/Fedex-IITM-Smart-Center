@@ -125,6 +125,7 @@ export const adminApi = {
   createTeamMember: (data) => api.post('/team', data),
   updateTeamMember: (id, data) => api.put(`/team/${id}`, data),
   deleteTeamMember: (id) => api.delete(`/team/${id}`),
+  reorderTeam: (orders) => api.put('/team/reorder/batch', { orders }),
 
   // Gallery
   getGallery: () => api.get('/gallery'),

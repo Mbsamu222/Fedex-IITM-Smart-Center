@@ -101,7 +101,7 @@ export default function TeamResearchersPage() {
 
         <section className="py-20 2xl:py-28">
           <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
-            <h2 className="text-2xl 2xl:text-3xl font-medium tracking-tight">Research Scholars</h2>
+            <h2 className="text-2xl 2xl:text-3xl font-medium tracking-tight">Postdoctoral Researchers</h2>
             {loading ? (
               <div className="mt-8 grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
                 {[...Array(4)].map((_, i) => (
@@ -110,9 +110,9 @@ export default function TeamResearchersPage() {
               </div>
             ) : (
               <div className="mt-8 grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
-                {scholars.map((member, idx) => (
+                {postdocs.map((member, idx) => (
                   <article key={member.id || idx} className="group flex flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-lift)]">
-                    <div className={`relative flex aspect-square items-center justify-center bg-gradient-to-br ${gradientPairs[idx % gradientPairs.length]}`}>
+                    <div className={`relative flex aspect-square items-center justify-center bg-gradient-to-br ${gradientPairs[(idx + 4) % gradientPairs.length]}`}>
                       {member.image_url ? (
                         <img src={member.image_url} alt={member.name} className="absolute inset-0 h-full w-full object-cover object-center" />
                       ) : (
@@ -136,7 +136,7 @@ export default function TeamResearchersPage() {
               </div>
             )}
 
-            <h2 className="mt-20 text-2xl font-medium tracking-tight">Postdoctoral Researchers</h2>
+            <h2 className="mt-20 text-2xl 2xl:text-3xl font-medium tracking-tight">Research Scholars</h2>
             {loading ? (
               <div className="mt-8 grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
                 {[...Array(4)].map((_, i) => (
@@ -145,9 +145,9 @@ export default function TeamResearchersPage() {
               </div>
             ) : (
               <div className="mt-8 grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
-                {postdocs.map((member, idx) => (
+                {scholars.map((member, idx) => (
                   <article key={member.id || idx} className="group flex flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-lift)]">
-                    <div className={`relative flex aspect-square items-center justify-center bg-gradient-to-br ${gradientPairs[(idx + 4) % gradientPairs.length]}`}>
+                    <div className={`relative flex aspect-square items-center justify-center bg-gradient-to-br ${gradientPairs[idx % gradientPairs.length]}`}>
                       {member.image_url ? (
                         <img src={member.image_url} alt={member.name} className="absolute inset-0 h-full w-full object-cover object-center" />
                       ) : (

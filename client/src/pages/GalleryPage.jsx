@@ -26,15 +26,15 @@ const ImagePlaceholder = () => (
 
 // Static fallback data matching the original scraped design
 const staticGallery = [
-  { id: 1, caption: 'Group pic of participants of FedEx SMART Grand Challenge', category: 'Main Gallery' },
+  { id: 1, caption: 'Group pic of participants of FedEx SMART Grand Challenge', category: 'Highlights' },
   { id: 2, caption: 'Winners of FedEx SMART Grand Challenge 2025', category: 'Event Gallery' },
   { id: 3, caption: 'Second place winners — FedEx SMART Grand Challenge 2025', category: 'Event Gallery' },
   { id: 4, caption: 'Third place winners — FedEx SMART Grand Challenge 2025', category: 'Event Gallery' },
-  { id: 5, caption: 'Interactions with Mr. Gautam Bose at the IIT Madras FedEx SMART Center', category: 'Main Gallery' },
+  { id: 5, caption: 'Interactions with Mr. Gautam Bose at the IIT Madras FedEx SMART Center', category: 'Highlights' },
   { id: 6, caption: 'Team pic — Everyday GenAI Logistics Operations, Analytics & Management course', category: 'Research' },
-  { id: 7, caption: 'Team Picture with Prof. N Hemachandra', category: 'Main Gallery' },
-  { id: 8, caption: 'A group of people in front of the FedEx facility', category: 'Main Gallery' },
-  { id: 9, caption: 'Team picture of IIT Madras FedEx SMART Center', category: 'Main Gallery' },
+  { id: 7, caption: 'Team Picture with Prof. N Hemachandra', category: 'Highlights' },
+  { id: 8, caption: 'A group of people in front of the FedEx facility', category: 'Highlights' },
+  { id: 9, caption: 'Team picture of IIT Madras FedEx SMART Center', category: 'Highlights' },
   { id: 10, caption: 'Ms. Kami Viswanathan at the inauguration of the Center', category: 'Event Gallery' },
   { id: 11, caption: 'Group pic post project sharing sessions', category: 'Event Gallery' },
 ];
@@ -44,7 +44,7 @@ export default function GalleryPage() {
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('All');
 
-  const categories = ['All', 'Main Gallery', 'Event Gallery', 'Research'];
+  const categories = ['All', 'Highlights', 'Event Gallery', 'Research'];
 
   useEffect(() => {
     const fetchGallery = async () => {

@@ -2,7 +2,7 @@ const router = require('express').Router();
 const pool = require('../config/db');
 const auth = require('../middleware/auth');
 
-// Ensure the is_active column exists in team_members (idempotent migration).
+// Ensure the is_active column exists and category column is wide enough (idempotent migration).
 // This runs once per cold-start, harmlessly on every restart.
 (async () => {
   try {
@@ -10,13 +10,20 @@ const auth = require('../middleware/auth');
       ALTER TABLE team_members
       ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true;
     `);
+    await pool.query(`
+      ALTER TABLE team_members
+      ALTER COLUMN category TYPE VARCHAR(255);
+    `);
+    await pool.query(`
+      ALTER TABLE team_members
+      DROP CONSTRAINT IF EXISTS team_members_category_check;
+    `);
     // Back-fill any NULLs so existing rows are visible on the public site
     await pool.query(`
       UPDATE team_members SET is_active = true WHERE is_active IS NULL;
     `);
   } catch (err) {
-    // Non-fatal – the query below will still run without the filter if needed
-    console.warn('team: could not ensure is_active column:', err.message);
+    console.warn('team: could not ensure columns/constraints:', err.message);
   }
 })();
 
@@ -46,8 +53,8 @@ router.get('/', async (req, res) => {
     const conditions = [];
 
     if (category) {
-      params.push(category);
-      conditions.push(`category = $${params.length}`);
+      params.push(`%${category.trim()}%`);
+      conditions.push(`category ILIKE $${params.length}`);
     }
 
     // Public requests only see active members unless ?all=true is passed (admin)
@@ -60,6 +67,25 @@ router.get('/', async (req, res) => {
   } catch (error) {
     console.error('GET /api/team error:', error.message);
     res.status(500).json({ message: 'Server error.' });
+  }
+});
+
+// PUT /api/team/reorder/batch - batch update sort orders
+router.put('/reorder/batch', auth, async (req, res) => {
+  try {
+    const { orders } = req.body; // Array of { id, sort_order }
+    if (!Array.isArray(orders)) {
+      return res.status(400).json({ message: 'Orders array is required.' });
+    }
+    for (const item of orders) {
+      if (item.id !== undefined && typeof item.sort_order === 'number') {
+        await pool.query('UPDATE team_members SET sort_order = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2', [item.sort_order, item.id]);
+      }
+    }
+    res.json({ message: 'Orders updated successfully.' });
+  } catch (error) {
+    console.error('Batch reorder error:', error.message);
+    res.status(500).json({ message: 'Server error during reorder.' });
   }
 });
 
@@ -78,12 +104,13 @@ router.get('/:id', async (req, res) => {
 router.post('/', auth, async (req, res) => {
   try {
     const { name, title, department, email, image_url, category, bio, sort_order, is_active } = req.body;
-    if (!name || !category) {
+    const categoryStr = Array.isArray(category) ? category.join(', ') : (category || '').trim();
+    if (!name || !categoryStr) {
       return res.status(400).json({ message: 'Name and category are required.' });
     }
     const result = await pool.query(
       'INSERT INTO team_members (name, title, department, email, image_url, category, bio, sort_order, is_active) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *',
-      [name, title, department, email, image_url, category, bio, sort_order || 0, is_active !== false]
+      [name, title, department, email, image_url, categoryStr, bio, sort_order || 0, is_active !== false]
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {
@@ -95,9 +122,10 @@ router.post('/', auth, async (req, res) => {
 router.put('/:id', auth, async (req, res) => {
   try {
     const { name, title, department, email, image_url, category, bio, sort_order, is_active } = req.body;
+    const categoryStr = Array.isArray(category) ? category.join(', ') : (category || '').trim();
     const result = await pool.query(
       'UPDATE team_members SET name=$1, title=$2, department=$3, email=$4, image_url=$5, category=$6, bio=$7, sort_order=$8, is_active=$9, updated_at=CURRENT_TIMESTAMP WHERE id=$10 RETURNING *',
-      [name, title, department, email, image_url, category, bio, sort_order || 0, is_active !== false, req.params.id]
+      [name, title, department, email, image_url, categoryStr, bio, sort_order || 0, is_active !== false, req.params.id]
     );
     if (result.rows.length === 0) return res.status(404).json({ message: 'Not found.' });
     res.json(result.rows[0]);
