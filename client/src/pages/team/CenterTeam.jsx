@@ -2,13 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { publicApi, resolveImageUrl } from '../../services/api';
 
-const UsersIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-users absolute right-4 top-4 size-5 text-foreground/40" aria-hidden="true">
-    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
-    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle>
-  </svg>
-);
-
 const MailIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-mail size-4" aria-hidden="true">
     <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path>
@@ -36,9 +29,18 @@ const defaultCenterTeam = [
   { name: 'Lakshmi Narayanan', title: 'Finance & Compliance', initials: 'LN' },
 ];
 
+function formatName(name) {
+  if (!name) return '';
+  return name.replace(/^(Dr\.|Prof\.|Mr\.|Ms\.|Mrs\.)(?=[^\s])/i, '$1 ');
+}
+
 function getInitials(name) {
   if (!name) return 'TM';
-  return name.split(' ').map(n => n[0]).filter(Boolean).slice(0, 2).join('').toUpperCase();
+  const clean = name.replace(/^(Dr\.|Prof\.|Mr\.|Ms\.|Mrs\.)\s*/i, '').trim();
+  const parts = clean.split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return 'TM';
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
 export default function TeamCenterPage() {
@@ -88,26 +90,34 @@ export default function TeamCenterPage() {
                 ))}
               </div>
             ) : (
-              <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
+              <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 items-stretch">
                 {team.map((member, idx) => (
-                  <article key={member.id || idx} className="group flex flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-lift)]">
-                    <div className={`relative flex aspect-square items-center justify-center bg-gradient-to-br ${gradientPairs[idx % gradientPairs.length]}`}>
-                      {member.image_url ? (
-                        <img src={member.image_url} alt={member.name} className="absolute inset-0 h-full w-full object-cover object-center" />
-                      ) : (
-                        <div className="flex size-24 items-center justify-center rounded-full bg-card/80 font-display text-3xl font-semibold text-primary shadow-[var(--shadow-soft)] backdrop-blur">
-                          {member.initials}
-                        </div>
+                  <article key={member.id || idx} className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-lift)]">
+                    <div className={`relative flex aspect-[4/5] items-center justify-center bg-gradient-to-br ${gradientPairs[idx % gradientPairs.length]} overflow-hidden`}>
+                      <div className="flex size-24 items-center justify-center rounded-full bg-card/80 font-display text-3xl font-semibold text-primary shadow-[var(--shadow-soft)] backdrop-blur">
+                        {member.initials}
+                      </div>
+                      {member.image_url && (
+                        <img 
+                          src={member.image_url} 
+                          alt={member.name} 
+                          className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105" 
+                          loading="lazy"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                          }}
+                        />
                       )}
-                      <UsersIcon />
                     </div>
                     <div className="flex flex-1 flex-col p-6">
-                      <h3 className="text-lg font-semibold tracking-tight">{member.name}</h3>
-                      <p className="mt-2 text-sm text-muted-foreground">{member.title}</p>
+                      <h3 className="text-lg font-semibold tracking-tight text-foreground">{formatName(member.name)}</h3>
+                      <p className="mt-2 text-sm text-muted-foreground leading-snug">{member.title}</p>
                       {member.email && (
-                        <a href={`mailto:${member.email}`} className="mt-4 inline-flex w-fit items-center gap-2 text-xs font-medium text-primary hover:underline">
-                          <MailIcon /> {member.email}
-                        </a>
+                        <div className="mt-auto pt-4">
+                          <a href={`mailto:${member.email}`} className="inline-flex w-fit items-center gap-2 text-xs font-medium text-primary hover:underline">
+                            <MailIcon /> {member.email}
+                          </a>
+                        </div>
                       )}
                     </div>
                   </article>

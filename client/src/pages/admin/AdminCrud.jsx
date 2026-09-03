@@ -998,7 +998,7 @@ export default function AdminCrud() {
                             </div>
                             <div className="size-12 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0 flex items-center justify-center">
                               {fullImg ? (
-                                <img src={fullImg} alt={member.name} className="size-full object-cover" />
+                                <img src={fullImg} alt={member.name} className="size-full object-cover object-top" />
                               ) : (
                                 <Users className="w-5 h-5 text-slate-400" />
                               )}

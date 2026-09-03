@@ -2,13 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { publicApi, resolveImageUrl } from '../../services/api';
 
-const GradCapIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-graduation-cap absolute right-4 top-4 size-5 text-foreground/40" aria-hidden="true">
-    <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path>
-    <path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path>
-  </svg>
-);
-
 const MailIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-mail size-4" aria-hidden="true">
     <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path>
@@ -48,9 +41,18 @@ const defaultFaculty = [
   { name: 'Dr. Prathamesh Vivek Kittur', dept: 'Dept. of Management Studies', category: 'Supply Chain Sustainability and Modelling', initials: 'PV', affiliation: 'IIT Madras' },
 ];
 
+function formatName(name) {
+  if (!name) return '';
+  return name.replace(/^(Dr\.|Prof\.|Mr\.|Ms\.|Mrs\.)(?=[^\s])/i, '$1 ');
+}
+
 function getInitials(name) {
   if (!name) return 'TM';
-  return name.replace('Dr. ', '').replace('Prof. ', '').split(' ').map(n => n[0]).filter(Boolean).slice(0, 2).join('').toUpperCase();
+  const clean = name.replace(/^(Dr\.|Prof\.|Mr\.|Ms\.|Mrs\.)\s*/i, '').trim();
+  const parts = clean.split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return 'TM';
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
 export default function TeamFacultyPage() {
@@ -107,23 +109,29 @@ export default function TeamFacultyPage() {
                 ))}
               </div>
             ) : (
-              <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
+              <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 items-stretch">
                 {faculty.map((member, idx) => (
-                  <article key={member.id || idx} className="group flex flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-lift)]">
-                    <div className={`relative flex aspect-square items-center justify-center bg-gradient-to-br ${gradientPairs[idx % gradientPairs.length]}`}>
-                      {member.image_url ? (
-                        <img src={member.image_url} alt={member.name} className="absolute inset-0 h-full w-full object-cover object-center" />
-                      ) : (
-                        <div className="flex size-24 items-center justify-center rounded-full bg-card/80 font-display text-3xl font-semibold text-primary shadow-[var(--shadow-soft)] backdrop-blur">
-                          {member.initials}
-                        </div>
+                  <article key={member.id || idx} className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-lift)]">
+                    <div className={`relative flex aspect-[4/5] items-center justify-center bg-gradient-to-br ${gradientPairs[idx % gradientPairs.length]} overflow-hidden`}>
+                      <div className="flex size-24 items-center justify-center rounded-full bg-card/80 font-display text-3xl font-semibold text-primary shadow-[var(--shadow-soft)] backdrop-blur">
+                        {member.initials}
+                      </div>
+                      {member.image_url && (
+                        <img 
+                          src={member.image_url} 
+                          alt={member.name} 
+                          className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105" 
+                          loading="lazy"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                          }}
+                        />
                       )}
-                      <GradCapIcon />
                     </div>
                     <div className="flex flex-1 flex-col p-6">
-                      <h3 className="text-lg font-semibold tracking-tight">{member.name}</h3>
+                      <h3 className="text-lg font-semibold tracking-tight text-foreground">{formatName(member.name)}</h3>
                       {member.title && (
-                        <p className="mt-2 text-[11px] font-bold uppercase tracking-wider text-primary">
+                        <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-primary">
                           {member.title}
                         </p>
                       )}
@@ -133,19 +141,21 @@ export default function TeamFacultyPage() {
                         </p>
                       )}
                       {member.affiliation && (
-                        <p className="mt-2 text-xs text-muted-foreground">{member.affiliation}</p>
+                        <p className="mt-1.5 text-xs text-muted-foreground">{member.affiliation}</p>
                       )}
                       {member.category && (
-                        <div className="mt-4 inline-flex w-fit rounded-full bg-[var(--accent-soft)] px-3 py-1 text-[11px] font-medium uppercase tracking-wider text-accent">
+                        <div className="mt-3 inline-flex w-fit rounded-full bg-[var(--accent-soft)] px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-accent leading-none">
                           {member.category}
                         </div>
                       )}
-                      <p className="mt-auto pt-4 text-sm text-muted-foreground">{member.dept}</p>
-                      {member.email && (
-                        <a href={`mailto:${member.email}`} className="mt-2 inline-flex w-fit items-center gap-2 text-xs font-medium text-primary hover:underline">
-                          <MailIcon /> {member.email}
-                        </a>
-                      )}
+                      <div className="mt-auto pt-4 flex flex-col gap-1.5">
+                        <p className="text-xs text-muted-foreground">{member.dept}</p>
+                        {member.email && (
+                          <a href={`mailto:${member.email}`} className="inline-flex w-fit items-center gap-2 text-xs font-medium text-primary hover:underline">
+                            <MailIcon /> {member.email}
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </article>
                 ))}

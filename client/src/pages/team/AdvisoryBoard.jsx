@@ -2,13 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { publicApi, resolveImageUrl } from '../../services/api';
 
-const CrownIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-crown absolute right-4 top-4 size-5 text-foreground/40" aria-hidden="true">
-    <path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"></path>
-    <path d="M5 21h14"></path>
-  </svg>
-);
-
 const gradientPairs = [
   'from-primary/30 to-accent/20',
   'from-accent/30 to-primary/20',
@@ -32,9 +25,18 @@ const defaultMembers = [
   { name: 'Mr. Digvijay Kharote', title: 'Strategic Development Advisor, Marketing & Air Network MEISA, Executive Committee', dept: 'FedEx', initials: 'DK' },
 ];
 
+function formatName(name) {
+  if (!name) return '';
+  return name.replace(/^(Dr\.|Prof\.|Mr\.|Ms\.|Mrs\.)(?=[^\s])/i, '$1 ');
+}
+
 function getInitials(name) {
   if (!name) return 'TM';
-  return name.split(' ').map(n => n[0]).filter(Boolean).slice(0, 2).join('').toUpperCase();
+  const clean = name.replace(/^(Dr\.|Prof\.|Mr\.|Ms\.|Mrs\.)\s*/i, '').trim();
+  const parts = clean.split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return 'TM';
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
 export default function TeamAdvisoryPage() {
@@ -105,23 +107,31 @@ export default function TeamAdvisoryPage() {
                 ))}
               </div>
             ) : (
-              <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
+              <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 items-stretch">
                 {members.map((member, idx) => (
-                  <article key={member.id || idx} className="group flex flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-lift)]">
-                    <div className={`relative flex aspect-square items-center justify-center bg-gradient-to-br ${gradientPairs[idx % gradientPairs.length]}`}>
-                      {member.image_url ? (
-                        <img src={member.image_url} alt={member.name} className="absolute inset-0 h-full w-full object-cover object-center" />
-                      ) : (
-                        <div className="flex size-24 items-center justify-center rounded-full bg-card/80 font-display text-3xl font-semibold text-primary shadow-[var(--shadow-soft)] backdrop-blur">
-                          {member.initials}
-                        </div>
+                  <article key={member.id || idx} className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-lift)]">
+                    <div className={`relative flex aspect-[4/5] items-center justify-center bg-gradient-to-br ${gradientPairs[idx % gradientPairs.length]} overflow-hidden`}>
+                      <div className="flex size-24 items-center justify-center rounded-full bg-card/80 font-display text-3xl font-semibold text-primary shadow-[var(--shadow-soft)] backdrop-blur">
+                        {member.initials}
+                      </div>
+                      {member.image_url && (
+                        <img 
+                          src={member.image_url} 
+                          alt={member.name} 
+                          className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105" 
+                          loading="lazy"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                          }}
+                        />
                       )}
-                      <CrownIcon />
                     </div>
                     <div className="flex flex-1 flex-col p-6">
-                      <h3 className="text-lg font-semibold tracking-tight">{member.name}</h3>
-                      <p className="mt-2 text-sm text-muted-foreground">{member.title}</p>
-                      {member.dept && <p className="mt-1 text-xs text-muted-foreground/80">{member.dept}</p>}
+                      <h3 className="text-lg font-semibold tracking-tight text-foreground">{formatName(member.name)}</h3>
+                      <p className="mt-2 text-sm text-muted-foreground leading-snug">{member.title}</p>
+                      {member.dept && (
+                        <p className="mt-auto pt-4 text-xs font-medium text-muted-foreground/80">{member.dept}</p>
+                      )}
                     </div>
                   </article>
                 ))}

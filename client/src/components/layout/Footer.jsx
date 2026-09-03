@@ -40,10 +40,11 @@ export default function Footer() {
             A research hub advancing sustainable logistics.
           </p>
           <div className="mt-5 flex gap-3">
-            <Link 
-              to="https://www.linkedin.com/in/iit-madras-fedex-smart-center-for-research-and-technology-3629a7303/" 
+            <a 
+              href="https://www.linkedin.com/company/iitmfedexsmartcenter/posts/?feedView=all" 
               target="_blank" 
-              rel="noreferrer" 
+              rel="noopener noreferrer" 
+              aria-label="LinkedIn"
               className="inline-flex size-9 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-colors hover:border-primary hover:text-primary"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-linkedin size-4" aria-hidden="true">
@@ -51,11 +52,12 @@ export default function Footer() {
                 <rect width="4" height="12" x="2" y="9"></rect>
                 <circle cx="4" cy="4" r="2"></circle>
               </svg>
-            </Link>
-            <Link 
-              to="https://www.instagram.com/smartcenteriitmfedex/" 
+            </a>
+            <a 
+              href="https://www.instagram.com/smartcenteriitmfedex/" 
               target="_blank" 
-              rel="noreferrer" 
+              rel="noopener noreferrer" 
+              aria-label="Instagram"
               className="inline-flex size-9 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-colors hover:border-primary hover:text-primary"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram size-4" aria-hidden="true">
@@ -63,18 +65,19 @@ export default function Footer() {
                 <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                 <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
               </svg>
-            </Link>
-            <Link 
-              to="https://www.youtube.com/@smartcenteriitmfedex" 
+            </a>
+            <a 
+              href="https://www.youtube.com/@smartcenteriitmfedex" 
               target="_blank" 
-              rel="noreferrer" 
+              rel="noopener noreferrer" 
+              aria-label="YouTube"
               className="inline-flex size-9 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-colors hover:border-primary hover:text-primary"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-youtube size-4" aria-hidden="true">
                 <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"></path>
                 <path d="m10 15 5-3-5-3z"></path>
               </svg>
-            </Link>
+            </a>
           </div>
         </div>
         
@@ -116,7 +119,7 @@ export default function Footer() {
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-phone size-4 shrink-0 text-primary mt-1" aria-hidden="true">
                 <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path>
               </svg> 
-              {settings.contact_phone}
+              <a href={`tel:${settings.contact_phone?.replace(/\s/g, '')}`} className="hover:text-primary">{settings.contact_phone}</a>
             </li>
           </ul>
         </div>
