@@ -86,7 +86,7 @@ const defaultSlides = [
     ctaPrimaryLink: "#research",
     ctaSecondaryText: "View Projects",
     ctaSecondaryLink: "#projects",
-    image: "/hero-logistics.png",
+    image: resolveImageUrl("/uploads/hero_supply_chain.png") || "/uploads/hero_supply_chain.png",
     floatingTag: "Live research",
     floatingText: "National Logistics Digital Twin — modelling freight flows across India."
   },
@@ -99,7 +99,7 @@ const defaultSlides = [
     ctaPrimaryLink: "#research",
     ctaSecondaryText: "View Case Studies",
     ctaSecondaryLink: "/publications",
-    image: "/hero-air-cargo.png",
+    image: resolveImageUrl("/uploads/hero_freight_network.png") || "/uploads/hero_freight_network.png",
     floatingTag: "Network Design",
     floatingText: "Multi-modal routing algorithms for large-scale operations."
   },
@@ -112,7 +112,7 @@ const defaultSlides = [
     ctaPrimaryLink: "#research",
     ctaSecondaryText: "See Publications",
     ctaSecondaryLink: "/publications",
-    image: "/hero-ai.png",
+    image: resolveImageUrl("/uploads/hero_predictive_intelligence.png") || "/uploads/hero_predictive_intelligence.png",
     floatingTag: "AI Models",
     floatingText: "SKU-level forecasting models powered by deep learning."
   },
@@ -125,7 +125,7 @@ const defaultSlides = [
     ctaPrimaryLink: "#research",
     ctaSecondaryText: "Watch Demo",
     ctaSecondaryLink: "/gallery",
-    image: "/hero-incubation.png",
+    image: resolveImageUrl("/uploads/hero_autonomous_delivery.png") || "/uploads/hero_autonomous_delivery.png",
     floatingTag: "Drone Tech",
     floatingText: "Path-planning algorithms for last-mile autonomous deliveries."
   }
@@ -224,7 +224,7 @@ export default function HomePage() {
             ctaPrimaryLink: h.cta_primary_link || "#research",
             ctaSecondaryText: h.cta_secondary_text || "View Projects",
             ctaSecondaryLink: h.cta_secondary_link || "#projects",
-            image: resolveImageUrl(h.image_url) || "/hero-logistics.png",
+            image: resolveImageUrl(h.image_url) || resolveImageUrl("/uploads/hero_supply_chain.png"),
             floatingTag: h.floating_tag || "Live research",
             floatingText: h.floating_text || "National Logistics Digital Twin — modelling freight flows across India."
           }));
