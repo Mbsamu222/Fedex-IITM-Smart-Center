@@ -1,6 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, X, ZoomIn, Eye, Image as ImageIcon } from 'lucide-react';
+import { 
+  Calendar, 
+  X, 
+  ZoomIn, 
+  Eye, 
+  Image as ImageIcon, 
+  ArrowUpDown, 
+  Search, 
+  SlidersHorizontal,
+  RotateCcw
+} from 'lucide-react';
 import { publicApi, resolveImageUrl } from '../services/api';
 
 const gradientPairs = [
@@ -38,23 +48,33 @@ const formatDate = (dateVal) => {
 
 // Static fallback data matching the original scraped design
 const staticGallery = [
-  { id: 1, caption: 'Group pic of participants of FedEx SMART Grand Challenge', category: 'Highlights', date: '2025-02-28' },
-  { id: 2, caption: 'Winners of FedEx SMART Grand Challenge 2025', category: 'Event Gallery', date: '2025-02-28' },
-  { id: 3, caption: 'Second place winners — FedEx SMART Grand Challenge 2025', category: 'Event Gallery', date: '2025-02-28' },
-  { id: 4, caption: 'Third place winners — FedEx SMART Grand Challenge 2025', category: 'Event Gallery', date: '2025-02-28' },
-  { id: 5, caption: 'Interactions with Mr. Gautam Bose at the IIT Madras FedEx SMART Center', category: 'Highlights', date: '2025-01-20' },
-  { id: 6, caption: 'Team pic — Everyday GenAI Logistics Operations, Analytics & Management course', category: 'Research', date: '2025-01-15' },
-  { id: 7, caption: 'Team Picture with Prof. N Hemachandra', category: 'Highlights', date: '2024-12-10' },
-  { id: 8, caption: 'A group of people in front of the FedEx facility', category: 'Highlights', date: '2024-11-18' },
-  { id: 9, caption: 'Team picture of IIT Madras FedEx SMART Center', category: 'Highlights', date: '2024-10-05' },
-  { id: 10, caption: 'Ms. Kami Viswanathan at the inauguration of the Center', category: 'Event Gallery', date: '2024-09-22' },
-  { id: 11, caption: 'Group pic post project sharing sessions', category: 'Event Gallery', date: '2024-09-15' },
+  { id: 1, caption: 'Group pic of participants of FedEx SMART Grand Challenge', category: 'Highlights', date: '2025-02-28', sort_order: 1 },
+  { id: 2, caption: 'Winners of FedEx SMART Grand Challenge 2025', category: 'Event Gallery', date: '2025-02-28', sort_order: 2 },
+  { id: 3, caption: 'Second place winners — FedEx SMART Grand Challenge 2025', category: 'Event Gallery', date: '2025-02-28', sort_order: 3 },
+  { id: 4, caption: 'Third place winners — FedEx SMART Grand Challenge 2025', category: 'Event Gallery', date: '2025-02-28', sort_order: 4 },
+  { id: 5, caption: 'Interactions with Mr. Gautam Bose at the IIT Madras FedEx SMART Center', category: 'Highlights', date: '2025-01-20', sort_order: 5 },
+  { id: 6, caption: 'Team pic — Everyday GenAI Logistics Operations, Analytics & Management course', category: 'Research', date: '2025-01-15', sort_order: 6 },
+  { id: 7, caption: 'Team Picture with Prof. N Hemachandra', category: 'Highlights', date: '2024-12-10', sort_order: 7 },
+  { id: 8, caption: 'A group of people in front of the FedEx facility', category: 'Highlights', date: '2024-11-18', sort_order: 8 },
+  { id: 9, caption: 'Team picture of IIT Madras FedEx SMART Center', category: 'Highlights', date: '2024-10-05', sort_order: 9 },
+  { id: 10, caption: 'Ms. Kami Viswanathan at the inauguration of the Center', category: 'Event Gallery', date: '2024-09-22', sort_order: 10 },
+  { id: 11, caption: 'Group pic post project sharing sessions', category: 'Event Gallery', date: '2024-09-15', sort_order: 11 },
+];
+
+const sortOptions = [
+  { id: 'newest', label: 'Newest First (Latest Date)' },
+  { id: 'oldest', label: 'Oldest First' },
+  { id: 'title_asc', label: 'Title (A → Z)' },
+  { id: 'title_desc', label: 'Title (Z → A)' },
+  { id: 'order', label: 'Featured / Default' },
 ];
 
 export default function GalleryPage() {
   const [images, setImages] = useState(staticGallery);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('All');
+  const [sortBy, setSortBy] = useState('newest');
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
 
   const categories = ['All', 'Highlights', 'Event Gallery', 'Research'];
@@ -85,13 +105,51 @@ export default function GalleryPage() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const filteredImages = activeCategory === 'All' 
-    ? images 
-    : images.filter(img => img.category === activeCategory);
+  // Filter and modern sort logic
+  const filteredAndSortedImages = useMemo(() => {
+    let result = images.filter((img) => {
+      const matchCategory = activeCategory === 'All' || img.category === activeCategory;
+      const matchSearch = !searchQuery.trim() || 
+        (img.caption && img.caption.toLowerCase().includes(searchQuery.trim().toLowerCase()));
+      return matchCategory && matchSearch;
+    });
+
+    return result.sort((a, b) => {
+      if (sortBy === 'newest') {
+        const dateA = a.date ? new Date(a.date).getTime() : 0;
+        const dateB = b.date ? new Date(b.date).getTime() : 0;
+        if (dateB !== dateA) return dateB - dateA;
+        return (a.sort_order ?? 0) - (b.sort_order ?? 0);
+      }
+      if (sortBy === 'oldest') {
+        const dateA = a.date ? new Date(a.date).getTime() : Infinity;
+        const dateB = b.date ? new Date(b.date).getTime() : Infinity;
+        if (dateA !== dateB) return dateA - dateB;
+        return (a.sort_order ?? 0) - (b.sort_order ?? 0);
+      }
+      if (sortBy === 'title_asc') {
+        return (a.caption || '').localeCompare(b.caption || '');
+      }
+      if (sortBy === 'title_desc') {
+        return (b.caption || '').localeCompare(a.caption || '');
+      }
+      if (sortBy === 'order') {
+        return (a.sort_order ?? 0) - (b.sort_order ?? 0);
+      }
+      return 0;
+    });
+  }, [images, activeCategory, sortBy, searchQuery]);
+
+  const handleResetFilters = () => {
+    setActiveCategory('All');
+    setSortBy('newest');
+    setSearchQuery('');
+  };
 
   return (
     <>
       <div className="min-h-screen bg-background text-foreground">
+        {/* Header section */}
         <section className="relative overflow-hidden border-b border-border bg-surface">
           <div className="pointer-events-none absolute inset-0 -z-10">
             <div className="absolute -top-40 right-1/4 size-[500px] rounded-full bg-[var(--primary-soft)] opacity-50 blur-3xl"></div>
@@ -106,25 +164,80 @@ export default function GalleryPage() {
           </div>
         </section>
 
-        <section className="py-20 2xl:py-28">
+        {/* Gallery Content Section */}
+        <section className="py-16 2xl:py-24">
           <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
             
-            <div className="mb-12 flex flex-wrap items-center justify-center gap-2">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setActiveCategory(category)}
-                  className={`rounded-full px-5 py-2 text-sm 2xl:text-base font-medium transition-colors ${
-                    activeCategory === category
-                      ? 'bg-primary text-primary-foreground shadow-[var(--shadow-soft)]'
-                      : 'bg-surface text-muted-foreground hover:bg-card hover:text-foreground border border-border/50'
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
+            {/* Modern Filter & Sort Control Bar */}
+            <div className="mb-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between border-b border-border/60 pb-8">
+              
+              {/* Category Filter Pills */}
+              <div className="flex flex-wrap items-center gap-2">
+                {categories.map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => setActiveCategory(category)}
+                    className={`rounded-full px-5 py-2 text-sm font-medium transition-all duration-200 ${
+                      activeCategory === category
+                        ? 'bg-primary text-primary-foreground shadow-[var(--shadow-soft)] scale-100'
+                        : 'bg-surface text-muted-foreground hover:bg-card hover:text-foreground border border-border/60'
+                    }`}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
+
+              {/* Search & Modern Sort Controls */}
+              <div className="flex flex-wrap items-center gap-3">
+                {/* Search Bar */}
+                <div className="relative min-w-[220px] sm:w-64">
+                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search photos..."
+                    className="w-full pl-9 pr-8 py-2 bg-surface border border-border/80 rounded-full text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery('')}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground hover:text-foreground"
+                    >
+                      <X className="size-3.5" />
+                    </button>
+                  )}
+                </div>
+
+                {/* Modern Sort Selector */}
+                <div className="flex items-center gap-2 bg-surface border border-border/80 rounded-full px-3 py-1.5 shadow-xs">
+                  <ArrowUpDown className="size-3.5 text-primary shrink-0" />
+                  <label htmlFor="gallery-sort" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider hidden sm:inline">
+                    Sort:
+                  </label>
+                  <select
+                    id="gallery-sort"
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="bg-transparent text-xs sm:text-sm font-medium text-foreground focus:outline-none cursor-pointer pr-1"
+                  >
+                    {sortOptions.map((opt) => (
+                      <option key={opt.id} value={opt.id} className="bg-card text-foreground">
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Total Count Badge */}
+                <div className="hidden xl:flex items-center text-xs font-medium text-muted-foreground bg-surface border border-border/60 rounded-full px-3 py-2">
+                  {filteredAndSortedImages.length} {filteredAndSortedImages.length === 1 ? 'photo' : 'photos'}
+                </div>
+              </div>
             </div>
 
+            {/* Photos Grid */}
             {loading ? (
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5">
                 {[...Array(6)].map((_, i) => (
@@ -137,14 +250,26 @@ export default function GalleryPage() {
                   </div>
                 ))}
               </div>
-            ) : filteredImages.length === 0 ? (
-              <div className="text-center py-16 bg-surface border border-border rounded-3xl p-8 max-w-md mx-auto">
-                <ImageIcon className="size-12 text-muted-foreground/40 mx-auto mb-3" />
-                <p className="text-muted-foreground font-medium">No images found in this category.</p>
+            ) : filteredAndSortedImages.length === 0 ? (
+              <div className="text-center py-20 bg-surface border border-border rounded-3xl p-8 max-w-lg mx-auto shadow-xs">
+                <ImageIcon className="size-12 text-muted-foreground/40 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-foreground mb-1">No photos found</h3>
+                <p className="text-sm text-muted-foreground mb-6">
+                  {searchQuery 
+                    ? `No gallery images matching "${searchQuery}".` 
+                    : 'No images found for the selected filter.'}
+                </p>
+                <button
+                  onClick={handleResetFilters}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary text-primary-foreground font-medium text-xs hover:bg-primary/90 transition-all shadow-xs"
+                >
+                  <RotateCcw className="size-3.5" />
+                  Reset Filters & Search
+                </button>
               </div>
             ) : (
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5">
-                {filteredImages.map((img, idx) => {
+                {filteredAndSortedImages.map((img, idx) => {
                   const displayDate = formatDate(img.date || img.created_at);
                   return (
                     <figure
@@ -165,7 +290,7 @@ export default function GalleryPage() {
                             <ImagePlaceholder />
                           </div>
                         )}
-                        
+
                         {/* Hover Overlay */}
                         <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                           <div className="size-10 rounded-full bg-black/60 backdrop-blur-md text-white flex items-center justify-center shadow-lg transform scale-75 group-hover:scale-100 transition-transform">
@@ -180,7 +305,7 @@ export default function GalleryPage() {
                           {img.caption || 'IIT Madras FedEx SMART Center'}
                         </p>
 
-                        {/* Date info with precise alignment */}
+                        {/* Date info with clean alignment */}
                         <div className="mt-4 pt-3.5 border-t border-border/60 flex items-center justify-between text-xs text-muted-foreground">
                           <div className="inline-flex items-center gap-1.5 font-medium text-muted-foreground">
                             <Calendar className="size-3.5 text-primary shrink-0" />

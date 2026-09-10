@@ -5,14 +5,27 @@ const auth = require('../middleware/auth');
 // GET /api/gallery
 router.get('/', async (req, res) => {
   try {
-    const { category } = req.query;
+    const { category, sort } = req.query;
     let query = 'SELECT * FROM gallery_images';
     const params = [];
-    if (category) {
+    if (category && category !== 'All') {
       query += ' WHERE category = $1';
       params.push(category);
     }
-    query += ' ORDER BY sort_order ASC, id DESC';
+
+    if (sort === 'oldest') {
+      query += ' ORDER BY date ASC NULLS LAST, sort_order ASC, id ASC';
+    } else if (sort === 'title_asc') {
+      query += ' ORDER BY caption ASC';
+    } else if (sort === 'title_desc') {
+      query += ' ORDER BY caption DESC';
+    } else if (sort === 'order') {
+      query += ' ORDER BY sort_order ASC, date DESC NULLS LAST, id DESC';
+    } else {
+      // Default modern sort: Newest first (latest date first)
+      query += ' ORDER BY date DESC NULLS LAST, sort_order ASC, id DESC';
+    }
+
     const result = await pool.query(query, params);
     res.json(result.rows);
   } catch (error) {
