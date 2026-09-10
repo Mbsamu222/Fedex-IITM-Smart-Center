@@ -23,10 +23,10 @@ router.get('/', async (req, res) => {
 // POST /api/gallery
 router.post('/', auth, async (req, res) => {
   try {
-    const { image_url, caption, category, sort_order } = req.body;
+    const { image_url, caption, category, date, sort_order } = req.body;
     const result = await pool.query(
-      'INSERT INTO gallery_images (image_url, caption, category, sort_order) VALUES ($1,$2,$3,$4) RETURNING *',
-      [image_url, caption, category, sort_order || 0]
+      'INSERT INTO gallery_images (image_url, caption, category, date, sort_order) VALUES ($1,$2,$3,$4,$5) RETURNING *',
+      [image_url, caption, category, date || null, sort_order || 0]
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {
@@ -37,10 +37,10 @@ router.post('/', auth, async (req, res) => {
 // PUT /api/gallery/:id
 router.put('/:id', auth, async (req, res) => {
   try {
-    const { image_url, caption, category, sort_order } = req.body;
+    const { image_url, caption, category, date, sort_order } = req.body;
     const result = await pool.query(
-      'UPDATE gallery_images SET image_url=$1, caption=$2, category=$3, sort_order=$4, updated_at=CURRENT_TIMESTAMP WHERE id=$5 RETURNING *',
-      [image_url, caption, category, sort_order || 0, req.params.id]
+      'UPDATE gallery_images SET image_url=$1, caption=$2, category=$3, date=$4, sort_order=$5, updated_at=CURRENT_TIMESTAMP WHERE id=$6 RETURNING *',
+      [image_url, caption, category, date || null, sort_order || 0, req.params.id]
     );
     if (result.rows.length === 0) return res.status(404).json({ message: 'Not found.' });
     res.json(result.rows[0]);

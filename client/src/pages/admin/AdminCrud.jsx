@@ -201,17 +201,19 @@ const sectionConfig = {
     title: 'Gallery Images',
     fields: [
       { key: 'image_url', label: 'Image', type: 'image', required: true },
-      { key: 'caption', label: 'Caption', type: 'text' },
+      { key: 'caption', label: 'Caption', type: 'text', required: true },
       {
         key: 'category',
         label: 'Category',
         type: 'select',
         options: ['Highlights', 'Event Gallery', 'Research']
       },
+      { key: 'date', label: 'Date', type: 'date' },
       { key: 'sort_order', label: 'Sort Order', type: 'number' },
     ],
     api: { get: adminApi.getGallery, create: adminApi.createGalleryImage, update: adminApi.updateGalleryImage, delete: adminApi.deleteGalleryImage },
     displayField: 'caption',
+    subtitleField: 'category',
   },
   stats: {
     title: 'Statistics',
@@ -1205,8 +1207,8 @@ export default function AdminCrud() {
                                 </td>
                               )}
                               <td className="py-4 px-6 hidden lg:table-cell">
-                                <span className="text-slate-400 text-xs">
-                                  {item.created_at ? new Date(item.created_at).toLocaleDateString() : '—'}
+                                <span className="text-slate-500 text-xs font-medium">
+                                  {item.date ? new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : (item.created_at ? new Date(item.created_at).toLocaleDateString() : '—')}
                                 </span>
                               </td>
                               <td className="py-4 px-6 text-right">

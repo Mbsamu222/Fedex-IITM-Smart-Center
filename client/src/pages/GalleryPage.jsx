@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Calendar, X, ZoomIn, Eye, Image as ImageIcon } from 'lucide-react';
 import { publicApi, resolveImageUrl } from '../services/api';
 
 const gradientPairs = [
@@ -24,25 +25,37 @@ const ImagePlaceholder = () => (
   </svg>
 );
 
+const formatDate = (dateVal) => {
+  if (!dateVal) return null;
+  const d = new Date(dateVal);
+  if (isNaN(d.getTime())) return null;
+  return d.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+};
+
 // Static fallback data matching the original scraped design
 const staticGallery = [
-  { id: 1, caption: 'Group pic of participants of FedEx SMART Grand Challenge', category: 'Highlights' },
-  { id: 2, caption: 'Winners of FedEx SMART Grand Challenge 2025', category: 'Event Gallery' },
-  { id: 3, caption: 'Second place winners — FedEx SMART Grand Challenge 2025', category: 'Event Gallery' },
-  { id: 4, caption: 'Third place winners — FedEx SMART Grand Challenge 2025', category: 'Event Gallery' },
-  { id: 5, caption: 'Interactions with Mr. Gautam Bose at the IIT Madras FedEx SMART Center', category: 'Highlights' },
-  { id: 6, caption: 'Team pic — Everyday GenAI Logistics Operations, Analytics & Management course', category: 'Research' },
-  { id: 7, caption: 'Team Picture with Prof. N Hemachandra', category: 'Highlights' },
-  { id: 8, caption: 'A group of people in front of the FedEx facility', category: 'Highlights' },
-  { id: 9, caption: 'Team picture of IIT Madras FedEx SMART Center', category: 'Highlights' },
-  { id: 10, caption: 'Ms. Kami Viswanathan at the inauguration of the Center', category: 'Event Gallery' },
-  { id: 11, caption: 'Group pic post project sharing sessions', category: 'Event Gallery' },
+  { id: 1, caption: 'Group pic of participants of FedEx SMART Grand Challenge', category: 'Highlights', date: '2025-02-28' },
+  { id: 2, caption: 'Winners of FedEx SMART Grand Challenge 2025', category: 'Event Gallery', date: '2025-02-28' },
+  { id: 3, caption: 'Second place winners — FedEx SMART Grand Challenge 2025', category: 'Event Gallery', date: '2025-02-28' },
+  { id: 4, caption: 'Third place winners — FedEx SMART Grand Challenge 2025', category: 'Event Gallery', date: '2025-02-28' },
+  { id: 5, caption: 'Interactions with Mr. Gautam Bose at the IIT Madras FedEx SMART Center', category: 'Highlights', date: '2025-01-20' },
+  { id: 6, caption: 'Team pic — Everyday GenAI Logistics Operations, Analytics & Management course', category: 'Research', date: '2025-01-15' },
+  { id: 7, caption: 'Team Picture with Prof. N Hemachandra', category: 'Highlights', date: '2024-12-10' },
+  { id: 8, caption: 'A group of people in front of the FedEx facility', category: 'Highlights', date: '2024-11-18' },
+  { id: 9, caption: 'Team picture of IIT Madras FedEx SMART Center', category: 'Highlights', date: '2024-10-05' },
+  { id: 10, caption: 'Ms. Kami Viswanathan at the inauguration of the Center', category: 'Event Gallery', date: '2024-09-22' },
+  { id: 11, caption: 'Group pic post project sharing sessions', category: 'Event Gallery', date: '2024-09-15' },
 ];
 
 export default function GalleryPage() {
   const [images, setImages] = useState(staticGallery);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('All');
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const categories = ['All', 'Highlights', 'Event Gallery', 'Research'];
 
@@ -61,6 +74,15 @@ export default function GalleryPage() {
       }
     };
     fetchGallery();
+  }, []);
+
+  // Keyboard escape handler for lightbox
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setSelectedImage(null);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   const filteredImages = activeCategory === 'All' 
@@ -108,28 +130,127 @@ export default function GalleryPage() {
                 {[...Array(6)].map((_, i) => (
                   <div key={i} className="overflow-hidden rounded-3xl border border-border bg-card animate-pulse">
                     <div className="aspect-[4/3] bg-muted"></div>
-                    <div className="p-5"><div className="h-4 w-3/4 rounded bg-muted"></div></div>
+                    <div className="p-5 space-y-3">
+                      <div className="h-4 w-3/4 rounded bg-muted"></div>
+                      <div className="h-3 w-1/3 rounded bg-muted pt-2"></div>
+                    </div>
                   </div>
                 ))}
               </div>
+            ) : filteredImages.length === 0 ? (
+              <div className="text-center py-16 bg-surface border border-border rounded-3xl p-8 max-w-md mx-auto">
+                <ImageIcon className="size-12 text-muted-foreground/40 mx-auto mb-3" />
+                <p className="text-muted-foreground font-medium">No images found in this category.</p>
+              </div>
             ) : (
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5">
-                {filteredImages.map((img, idx) => (
-                  <figure key={img.id || idx} className="group overflow-hidden rounded-3xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-lift)]">
-                    {img.image_url ? (
-                      <img src={img.image_url} alt={img.caption || ''} className="aspect-[4/3] w-full object-cover" loading="lazy" />
-                    ) : (
-                      <div className={`flex aspect-[4/3] items-center justify-center bg-gradient-to-br ${gradientPairs[idx % gradientPairs.length]}`}>
-                        <ImagePlaceholder />
+                {filteredImages.map((img, idx) => {
+                  const displayDate = formatDate(img.date || img.created_at);
+                  return (
+                    <figure
+                      key={img.id || idx}
+                      onClick={() => setSelectedImage(img)}
+                      className="group flex flex-col justify-between overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-lift)] hover:border-primary/40 cursor-pointer"
+                    >
+                      <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
+                        {img.image_url ? (
+                          <img
+                            src={img.image_url}
+                            alt={img.caption || 'Gallery image'}
+                            className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className={`flex size-full items-center justify-center bg-gradient-to-br ${gradientPairs[idx % gradientPairs.length]}`}>
+                            <ImagePlaceholder />
+                          </div>
+                        )}
+                        
+                        {/* Hover Overlay */}
+                        <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <div className="size-10 rounded-full bg-black/60 backdrop-blur-md text-white flex items-center justify-center shadow-lg transform scale-75 group-hover:scale-100 transition-transform">
+                            <Eye className="size-5" />
+                          </div>
+                        </div>
                       </div>
-                    )}
-                    <figcaption className="p-5 text-sm text-muted-foreground">{img.caption}</figcaption>
-                  </figure>
-                ))}
+
+                      {/* Card Caption & Date Footer */}
+                      <figcaption className="flex flex-1 flex-col justify-between p-5">
+                        <p className="text-sm font-medium text-foreground leading-snug line-clamp-2 group-hover:text-primary transition-colors">
+                          {img.caption || 'IIT Madras FedEx SMART Center'}
+                        </p>
+
+                        {/* Date info with precise alignment */}
+                        <div className="mt-4 pt-3.5 border-t border-border/60 flex items-center justify-between text-xs text-muted-foreground">
+                          <div className="inline-flex items-center gap-1.5 font-medium text-muted-foreground">
+                            <Calendar className="size-3.5 text-primary shrink-0" />
+                            <span>{displayDate || 'Recent'}</span>
+                          </div>
+                          <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-muted-foreground/70 group-hover:text-primary transition-colors">
+                            View <ZoomIn className="size-3" />
+                          </span>
+                        </div>
+                      </figcaption>
+                    </figure>
+                  );
+                })}
               </div>
             )}
           </div>
         </section>
+
+        {/* LIGHTBOX / IMAGE PREVIEW MODAL */}
+        {selectedImage && (
+          <div
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fade-in"
+            onClick={() => setSelectedImage(null)}
+          >
+            <div
+              className="relative max-w-4xl w-full bg-card border border-border rounded-3xl overflow-hidden shadow-2xl animate-scale-in flex flex-col"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="absolute top-4 right-4 z-20 size-10 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center backdrop-blur-md border border-white/20 transition-all hover:scale-105"
+                title="Close"
+              >
+                <X className="size-5" />
+              </button>
+
+              {/* Main Image in Modal */}
+              <div className="relative w-full max-h-[70vh] bg-black/90 flex items-center justify-center overflow-hidden">
+                {selectedImage.image_url ? (
+                  <img
+                    src={selectedImage.image_url}
+                    alt={selectedImage.caption || 'Gallery preview'}
+                    className="max-h-[70vh] w-auto max-w-full object-contain"
+                  />
+                ) : (
+                  <div className="flex h-72 w-full items-center justify-center bg-gradient-to-br from-primary/30 to-accent/20">
+                    <ImagePlaceholder />
+                  </div>
+                )}
+              </div>
+
+              {/* Info Details Footer */}
+              <div className="p-6 bg-card flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-border">
+                <div className="space-y-1 max-w-xl">
+                  <h3 className="text-base sm:text-lg font-semibold text-foreground leading-snug">
+                    {selectedImage.caption || 'Gallery Image'}
+                  </h3>
+                </div>
+
+                <div className="shrink-0 flex items-center gap-2 text-sm text-muted-foreground bg-surface px-4 py-2 rounded-2xl border border-border self-start sm:self-center">
+                  <Calendar className="size-4 text-primary shrink-0" />
+                  <span className="font-medium">
+                    {formatDate(selectedImage.date || selectedImage.created_at) || 'Recent'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
