@@ -208,7 +208,7 @@ const sectionConfig = {
         type: 'select',
         options: ['Highlights', 'Event Gallery', 'Research']
       },
-      { key: 'date', label: 'Date', type: 'date' },
+      { key: 'date', label: 'Date / Month & Year', type: 'text', placeholder: 'e.g. February 2025, Feb 2025, or 15 Jan 2025' },
       { key: 'sort_order', label: 'Sort Order', type: 'number' },
     ],
     api: { get: adminApi.getGallery, create: adminApi.createGalleryImage, update: adminApi.updateGalleryImage, delete: adminApi.deleteGalleryImage },
@@ -1208,7 +1208,11 @@ export default function AdminCrud() {
                               )}
                               <td className="py-4 px-6 hidden lg:table-cell">
                                 <span className="text-slate-500 text-xs font-medium">
-                                  {item.date ? new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : (item.created_at ? new Date(item.created_at).toLocaleDateString() : '—')}
+                                  {item.date ? (
+                                    typeof item.date === 'string' && item.date.includes('T') && !isNaN(Date.parse(item.date))
+                                      ? new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                                      : item.date
+                                  ) : (item.created_at ? new Date(item.created_at).toLocaleDateString() : '—')}
                                 </span>
                               </td>
                               <td className="py-4 px-6 text-right">

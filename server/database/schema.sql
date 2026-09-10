@@ -175,7 +175,7 @@ CREATE TABLE gallery_images (
   image_url TEXT NOT NULL,
   caption VARCHAR(255),
   category VARCHAR(100),
-  date DATE DEFAULT CURRENT_DATE,
+  date VARCHAR(100),
   sort_order INT DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

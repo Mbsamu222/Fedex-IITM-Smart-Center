@@ -27,13 +27,35 @@ const ImagePlaceholder = () => (
 
 const formatDate = (dateVal) => {
   if (!dateVal) return null;
-  const d = new Date(dateVal);
-  if (isNaN(d.getTime())) return null;
-  return d.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  });
+  const str = String(dateVal).trim();
+  if (!str) return null;
+
+  // If already a human formatted string like "February 2025", "Feb 2025", "15 Feb 2025", "2025", etc.
+  if (!str.includes('T') && !/^\d{4}-\d{2}-\d{2}$/.test(str) && !/^\d{4}-\d{2}$/.test(str)) {
+    return str;
+  }
+
+  // If YYYY-MM format (e.g. 2025-02)
+  if (/^\d{4}-\d{2}$/.test(str)) {
+    const [year, month] = str.split('-');
+    const monthIndex = parseInt(month, 10) - 1;
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    if (monthIndex >= 0 && monthIndex < 12) {
+      return `${monthNames[monthIndex]} ${year}`;
+    }
+  }
+
+  // If ISO date like 2025-02-15 or 2025-02-15T00:00:00.000Z
+  const d = new Date(str);
+  if (!isNaN(d.getTime())) {
+    return d.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  }
+
+  return str;
 };
 
 // Static fallback data matching the original scraped design
