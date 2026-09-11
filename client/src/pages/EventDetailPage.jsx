@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { publicApi, resolveImageUrl } from '../services/api';
-import { ArrowLeft, Calendar, MapPin, Clock } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, Clock, UserCheck } from 'lucide-react';
 
 export default function EventDetailPage() {
   const { slug } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -25,6 +27,16 @@ export default function EventDetailPage() {
     fetchEvent();
   }, [slug]);
 
+  const handleBack = () => {
+    if (location.state?.from) {
+      navigate(location.state.from);
+    } else if (window.history.length > 2) {
+      navigate(-1);
+    } else {
+      navigate('/events');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex justify-center items-center">
@@ -44,21 +56,23 @@ export default function EventDetailPage() {
         </div>
         <h1 className="text-4xl font-bold text-foreground mb-4 tracking-tight">Event Not Found</h1>
         <p className="text-lg text-muted-foreground mb-8 max-w-md">{error}</p>
-        <Link to="/events" className="bg-primary text-primary-foreground px-8 py-4 rounded-full hover:bg-primary/90 transition-all font-medium shadow-lg hover:-translate-y-1">
+        <button onClick={handleBack} className="bg-primary text-primary-foreground px-8 py-4 rounded-full hover:bg-primary/90 transition-all font-medium shadow-lg hover:-translate-y-1 cursor-pointer">
           Return to Events
-        </Link>
+        </button>
       </div>
     );
   }
+
+  const hasSpeaker = Boolean(event.speaker_name || event.speaker_image || event.speaker_designation);
 
   return (
     <div className="min-h-screen bg-background text-foreground pb-24 font-sans selection:bg-primary/20 selection:text-primary">
       {/* Top Header Section */}
       <section className="w-full pt-32 pb-12 px-6 lg:px-10 2xl:px-12 3xl:px-16 max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] mx-auto">
-        <Link to="/events" className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-8 text-sm font-semibold w-fit">
+        <button onClick={handleBack} className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-8 text-sm font-semibold w-fit cursor-pointer">
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Events</span>
-        </Link>
+        </button>
 
         <div className="flex flex-wrap items-center gap-3 mb-6">
           <span className="rounded-full bg-accent/10 border border-accent/20 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-accent shadow-sm">
@@ -71,7 +85,7 @@ export default function EventDetailPage() {
           )}
         </div>
 
-        <h1 className="text-xl sm:text-2xl md:text-3xl 2xl:text-4xl font-display font-bold tracking-tight leading-snug text-foreground mb-6 max-w-4xl 2xl:max-w-5xl">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl 2xl:text-5xl font-display font-bold tracking-tight leading-snug text-foreground mb-6 max-w-4xl 2xl:max-w-5xl">
           {event.title}
         </h1>
       </section>
@@ -164,6 +178,41 @@ export default function EventDetailPage() {
         {/* Right Column: Sidebar — matches Research page's sticky sidebar */}
         <div className="lg:col-span-4">
           <div className="sticky top-28 space-y-8">
+
+            {/* Key Speaker Widget */}
+            {hasSpeaker && (
+              <div className="bg-gradient-to-br from-primary/10 via-card to-accent/10 border border-primary/20 rounded-3xl p-6 shadow-xl shadow-muted/50">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="size-2 rounded-full bg-accent"></span>
+                  <h3 className="text-xs font-bold uppercase tracking-widest text-primary">Key Speaker / Person</h3>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="size-16 2xl:size-20 rounded-2xl overflow-hidden border-2 border-accent/40 bg-card shadow-md shrink-0">
+                    {event.speaker_image ? (
+                      <img
+                        src={resolveImageUrl(event.speaker_image)}
+                        alt={event.speaker_name || 'Speaker'}
+                        className="size-full object-cover"
+                      />
+                    ) : (
+                      <div className="size-full flex items-center justify-center font-bold text-accent bg-primary/20">
+                        {event.speaker_name ? event.speaker_name.slice(0, 2).toUpperCase() : 'VIP'}
+                      </div>
+                    )}
+                  </div>
+                  <div className="min-w-0">
+                    <h4 className="text-base 2xl:text-lg font-bold text-foreground leading-snug">
+                      {event.speaker_name}
+                    </h4>
+                    {event.speaker_designation && (
+                      <p className="text-xs 2xl:text-sm text-muted-foreground mt-1 leading-relaxed">
+                        {event.speaker_designation}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Event Info Widget */}
             {(event.start_date || event.end_date || event.time || event.location) && (

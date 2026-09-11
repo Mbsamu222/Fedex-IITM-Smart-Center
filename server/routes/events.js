@@ -46,7 +46,7 @@ router.get('/slug/:slug', async (req, res) => {
 // POST /api/events
 router.post('/', auth, async (req, res) => {
   try {
-    const { title, description, content, start_date, end_date, time, location, event_type, image_url, link, is_featured, sort_order, slug } = req.body;
+    const { title, description, content, start_date, end_date, time, location, event_type, image_url, link, is_featured, sort_order, slug, speaker_name, speaker_designation, speaker_image } = req.body;
     let finalSlug = slug;
     if (!finalSlug) {
       finalSlug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
@@ -59,11 +59,12 @@ router.post('/', auth, async (req, res) => {
     }
 
     const result = await pool.query(
-      'INSERT INTO events (title, description, content, start_date, end_date, time, location, event_type, image_url, link, is_featured, sort_order, slug) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING *',
-      [title, description, content || '', start_date || null, end_date || null, time || null, location || null, event_type || 'event', image_url, link, is_featured || false, sort_order || 0, finalSlug]
+      'INSERT INTO events (title, description, content, start_date, end_date, time, location, event_type, image_url, link, is_featured, sort_order, slug, speaker_name, speaker_designation, speaker_image) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16) RETURNING *',
+      [title, description, content || '', start_date || null, end_date || null, time || null, location || null, event_type || 'event', image_url || null, link || null, is_featured || false, sort_order || 0, finalSlug, speaker_name || null, speaker_designation || null, speaker_image || null]
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {
+    console.error('Create event error:', error);
     res.status(500).json({ message: 'Server error.' });
   }
 });
@@ -71,7 +72,7 @@ router.post('/', auth, async (req, res) => {
 // PUT /api/events/:id
 router.put('/:id', auth, async (req, res) => {
   try {
-    const { title, description, content, start_date, end_date, time, location, event_type, image_url, link, is_featured, sort_order, slug } = req.body;
+    const { title, description, content, start_date, end_date, time, location, event_type, image_url, link, is_featured, sort_order, slug, speaker_name, speaker_designation, speaker_image } = req.body;
     let finalSlug = slug;
     if (!finalSlug) {
       finalSlug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
@@ -84,12 +85,13 @@ router.put('/:id', auth, async (req, res) => {
     }
 
     const result = await pool.query(
-      'UPDATE events SET title=$1, description=$2, content=$3, start_date=$4, end_date=$5, time=$6, location=$7, event_type=$8, image_url=$9, link=$10, is_featured=$11, sort_order=$12, slug=$13, updated_at=CURRENT_TIMESTAMP WHERE id=$14 RETURNING *',
-      [title, description, content || '', start_date || null, end_date || null, time || null, location || null, event_type || 'event', image_url, link, is_featured || false, sort_order || 0, finalSlug, req.params.id]
+      'UPDATE events SET title=$1, description=$2, content=$3, start_date=$4, end_date=$5, time=$6, location=$7, event_type=$8, image_url=$9, link=$10, is_featured=$11, sort_order=$12, slug=$13, speaker_name=$14, speaker_designation=$15, speaker_image=$16, updated_at=CURRENT_TIMESTAMP WHERE id=$17 RETURNING *',
+      [title, description, content || '', start_date || null, end_date || null, time || null, location || null, event_type || 'event', image_url || null, link || null, is_featured || false, sort_order || 0, finalSlug, speaker_name || null, speaker_designation || null, speaker_image || null, req.params.id]
     );
     if (result.rows.length === 0) return res.status(404).json({ message: 'Not found.' });
     res.json(result.rows[0]);
   } catch (error) {
+    console.error('Update event error:', error);
     res.status(500).json({ message: 'Server error.' });
   }
 });

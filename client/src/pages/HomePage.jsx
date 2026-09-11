@@ -64,6 +64,13 @@ const CalendarIcon = () => (
   </svg>
 );
 
+const MapPinIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-map-pin size-3.5 text-primary" aria-hidden="true">
+    <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path>
+    <circle cx="12" cy="10" r="3"></circle>
+  </svg>
+);
+
 const ArrowIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-up-right size-4" aria-hidden="true">
     <path d="M7 7h10v10"></path><path d="M7 17 17 7"></path>
@@ -158,10 +165,10 @@ const defaultFeaturedProjects = [
 ];
 
 const defaultEvents = [
-  { date: 'Oct 2025', title: 'SMART Annual Research Symposium', desc: 'A two-day convening of academia, industry, and policy on the future of supply chains.' },
-  { date: 'Aug 2025', title: 'Industry Roundtable — Resilient Logistics', desc: 'Closed-door dialogue with global supply chain leaders and IIT Madras researchers.' },
-  { date: 'Jun 2025', title: 'SMART Summer School', desc: 'Intensive programme for graduate students on optimisation, ML, and operations research.' },
-  { date: 'Mar 2025', title: 'FedEx × IIT Madras Innovation Day', desc: 'Showcase of student innovation, demos, and pitches from across the centre.' },
+  { id: 1, slug: 'annual-symposium', date: 'Oct 2026', title: 'SMART Annual Research Symposium', desc: 'A two-day convening of academia, industry, and policy on the future of supply chains.', event_type: 'Seminar', location: 'IIT Madras' },
+  { id: 2, slug: 'industry-roundtable', date: 'Aug 2026', title: 'Industry Roundtable — Resilient Logistics', desc: 'Closed-door dialogue with global supply chain leaders and IIT Madras researchers.', event_type: 'Roundtable', location: 'Online' },
+  { id: 3, slug: 'summer-school', date: 'Jun 2026', title: 'SMART Summer School', desc: 'Intensive programme for graduate students on optimisation, ML, and operations research.', event_type: 'Workshop', location: 'IIT Madras' },
+  { id: 4, slug: 'innovation-day', date: 'Mar 2026', title: 'FedEx × IIT Madras Innovation Day', desc: 'Showcase of student innovation, demos, and pitches from across the centre.', event_type: 'Hackathon', location: 'NAC Hall, IIT Madras' },
 ];
 
 const renderTitle = (title, highlight) => {
@@ -250,13 +257,24 @@ export default function HomePage() {
 
         if (Array.isArray(eventsRes.data) && eventsRes.data.length > 0) {
           setEvents(eventsRes.data.map(e => {
-            const dateObj = new Date(e.start_date);
-            const dateString = isNaN(dateObj.getTime()) ? '' : dateObj.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+            const dateObj = e.start_date ? new Date(e.start_date) : (e.event_date ? new Date(e.event_date) : null);
+            let dateString = '';
+            if (dateObj && !isNaN(dateObj.getTime())) {
+              dateString = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            }
             return {
-              date: dateString,
+              id: e.id,
+              slug: e.slug || `event-${e.id}`,
+              date: dateString || e.event_date || '',
               title: e.title,
               desc: e.description,
-              image_url: resolveImageUrl(e.image_url)
+              image_url: resolveImageUrl(e.image_url),
+              event_type: e.event_type || 'Event',
+              location: e.location,
+              time: e.time,
+              speaker_name: e.speaker_name,
+              speaker_designation: e.speaker_designation,
+              speaker_image: resolveImageUrl(e.speaker_image)
             };
           }));
         }
@@ -390,8 +408,8 @@ export default function HomePage() {
           <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
             <div className="grid gap-12 lg:grid-cols-[1fr_2fr]">
               <div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
-                  <span className="size-1.5 rounded-full bg-accent"></span>Our Mission
+                <div className="inline-flex items-center gap-2.5 rounded-full border border-primary/25 bg-primary/5 px-4 py-1.5 text-sm sm:text-base font-bold uppercase tracking-[0.18em] text-primary shadow-sm">
+                  <span className="size-2 rounded-full bg-accent"></span>Our Mission
                 </div>
                 <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl 2xl:text-6xl">A centre built for the problems that matter.</h2>
               </div>
@@ -440,8 +458,8 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-gradient-to-tr from-[#3b1275]/90 via-[#4a1d96]/80 to-[#2e0a6b]/70"></div>
               <div className="relative grid gap-10 p-6 sm:p-16 lg:grid-cols-[1.2fr_1fr] lg:p-20 2xl:p-24">
                 <div>
-                  <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.18em]">
-                    <span className="size-1.5 rounded-full bg-accent"></span> Our Vision
+                  <div className="inline-flex items-center gap-2.5 rounded-full border border-white/30 bg-white/15 px-4 py-1.5 text-sm sm:text-base font-bold uppercase tracking-[0.18em] text-white shadow-sm">
+                    <span className="size-2 rounded-full bg-accent"></span>Our Vision
                   </div>
                   <h2 className="mt-6 text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl 2xl:text-7xl">To be the world’s most trusted research centre for supply chain intelligence.</h2>
                 </div>
@@ -456,8 +474,8 @@ export default function HomePage() {
           <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
             <div className="mb-12 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
               <div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
-                  <span className="size-1.5 rounded-full bg-accent"></span>Milestones
+                <div className="inline-flex items-center gap-2.5 rounded-full border border-primary/25 bg-primary/5 px-4 py-1.5 text-sm sm:text-base font-bold uppercase tracking-[0.18em] text-primary shadow-sm">
+                  <span className="size-2 rounded-full bg-accent"></span>Milestones
                 </div>
                 <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl 2xl:text-6xl">Built in the open. Measured in impact.</h2>
               </div>
@@ -478,8 +496,8 @@ export default function HomePage() {
         <section id="research" className="py-28 2xl:py-36">
           <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
             <div className="mx-auto max-w-3xl 2xl:max-w-4xl text-center">
-              <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
-                <span className="size-1.5 rounded-full bg-accent"></span>Research Areas
+              <div className="inline-flex items-center gap-2.5 rounded-full border border-primary/25 bg-primary/5 px-4 py-1.5 text-sm sm:text-base font-bold uppercase tracking-[0.18em] text-primary shadow-sm">
+                <span className="size-2 rounded-full bg-accent"></span>Research Areas
               </div>
               <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl 2xl:text-6xl">Research that moves industry forward.</h2>
               <p className="mt-5 text-lg 2xl:text-xl text-muted-foreground">Each area pairs rigorous methodology with deployment-grade engineering, in partnership with FedEx and industry collaborators.</p>
@@ -508,8 +526,8 @@ export default function HomePage() {
           <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
             <div className="mb-14 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
               <div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
-                  <span className="size-1.5 rounded-full bg-accent"></span>Research Projects
+                <div className="inline-flex items-center gap-2.5 rounded-full border border-primary/25 bg-primary/5 px-4 py-1.5 text-sm sm:text-base font-bold uppercase tracking-[0.18em] text-primary shadow-sm">
+                  <span className="size-2 rounded-full bg-accent"></span>Research Projects
                 </div>
                 <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl 2xl:text-6xl">From theory to deployed systems.</h2>
               </div>
@@ -552,39 +570,131 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Timeline Events */}
-        <section id="events" className="py-28 2xl:py-36">
+        {/* Events & Activities */}
+        <section id="events" className="py-24 2xl:py-32 bg-surface/50 border-y border-border/60">
           <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
-            <div className="mb-14 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
+            <div className="mb-12 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
               <div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
-                  <span className="size-1.5 rounded-full bg-accent"></span>Events &amp; Activities
+                <div className="inline-flex items-center gap-2.5 rounded-full border border-primary/25 bg-primary/5 px-4 py-1.5 text-sm sm:text-base font-bold uppercase tracking-[0.18em] text-primary shadow-sm">
+                  <span className="size-2 rounded-full bg-accent"></span>Events &amp; Activities
                 </div>
                 <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl 2xl:text-6xl">Where research meets practice.</h2>
+                <p className="mt-3 text-base 2xl:text-lg text-muted-foreground max-w-2xl">
+                  Engaging seminars, industry bootcamps, workshops, and innovation summits hosted by the IIT Madras FedEx SMART Center.
+                </p>
               </div>
+              <Link to="/events" className="inline-flex items-center gap-2 text-sm 2xl:text-base font-semibold text-primary hover:underline shrink-0 group">
+                View all events <ArrowIcon />
+              </Link>
             </div>
 
-            <div className="relative">
-              <div className="absolute left-4 top-0 h-full w-px bg-border md:left-1/2"></div>
-              <div className="space-y-10">
-                {events.map((event, idx) => (
-                  <div
-                    key={idx}
-                    className={`relative grid items-start gap-6 md:grid-cols-2 ${idx % 2 === 1 ? 'md:[&>*:first-child]:order-2' : ''}`}
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-stretch">
+              {events.slice(0, 4).map((event, idx) => {
+                const hasSpeaker = Boolean(event.speaker_name || event.speaker_image || event.speaker_designation);
+                return (
+                  <Link
+                    key={event.id || idx}
+                    to={`/events/${event.slug || event.id}`}
+                    className="group flex flex-col rounded-3xl border border-border bg-card overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/50 hover:shadow-[var(--shadow-lift)]"
                   >
-                    <div className="absolute left-4 top-3 size-2.5 -translate-x-1/2 rounded-full bg-accent ring-4 ring-background md:left-1/2"></div>
-                    <div className={`pl-10 md:pl-0 ${idx % 2 === 0 ? 'md:pr-12 md:text-right' : 'md:pl-12 md:text-left'}`}>
-                      <div className="inline-flex items-center gap-2 text-xs 2xl:text-sm font-medium uppercase tracking-wider text-accent">
-                        <CalendarIcon /> {event.date}
+                    {/* Top Container: Speaker Profile or Event Image */}
+                    <div className={`relative w-full ${hasSpeaker ? 'min-h-[185px]' : 'aspect-[16/11]'} shrink-0 overflow-hidden bg-gradient-to-br from-[#180733] via-[#2c1356] to-[#0a0318] flex flex-col justify-end p-4 sm:p-5 border-b border-border`}>
+                      {/* Background Event Image with transparency */}
+                      {event.image_url && (
+                        <img
+                          src={resolveImageUrl(event.image_url)}
+                          alt={event.title}
+                          className={`absolute inset-0 size-full object-cover transition-transform duration-700 group-hover:scale-105 ${
+                            hasSpeaker ? 'opacity-40 filter brightness-90 contrast-110' : 'opacity-100'
+                          }`}
+                        />
+                      )}
+                      
+                      {/* Gradient protection overlay */}
+                      <div className={`absolute inset-0 pointer-events-none ${
+                        hasSpeaker 
+                          ? 'bg-gradient-to-t from-black/95 via-black/70 to-black/35' 
+                          : 'bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity'
+                      }`}></div>
+
+                      {/* Important Person / Speaker Front-of-Box Layout */}
+                      {hasSpeaker ? (
+                        <div className="relative z-10 flex items-center gap-3.5 sm:gap-4 w-full">
+                          <div className="size-20 sm:size-22 rounded-2xl border-2 border-accent/80 shadow-2xl overflow-hidden bg-black/50 shrink-0 backdrop-blur-md">
+                            {event.speaker_image ? (
+                              <img
+                                src={resolveImageUrl(event.speaker_image)}
+                                alt={event.speaker_name || 'Speaker'}
+                                className="size-full object-cover"
+                              />
+                            ) : (
+                              <div className="size-full flex items-center justify-center font-bold text-base text-accent bg-primary/40">
+                                {event.speaker_name ? event.speaker_name.slice(0, 2).toUpperCase() : 'VIP'}
+                              </div>
+                            )}
+                          </div>
+                          <div className="min-w-0 text-white flex-1 flex flex-col justify-center">
+                            <span className="inline-block w-fit text-[10px] sm:text-[11px] font-extrabold uppercase tracking-widest text-accent bg-accent/25 border border-accent/30 px-2.5 py-0.5 rounded-md backdrop-blur-md mb-1.5 shadow-sm">
+                              Key Speaker
+                            </span>
+                            <div className="font-bold text-base sm:text-lg leading-snug text-white drop-shadow-md break-words">
+                              {event.speaker_name}
+                            </div>
+                            {event.speaker_designation && (
+                              <div className="text-xs sm:text-[13px] text-white/95 leading-snug mt-1 drop-shadow-md font-normal break-words">
+                                {event.speaker_designation}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ) : !event.image_url ? (
+                        <div className="relative z-10 flex flex-col items-center justify-center size-full py-4 text-center">
+                          <span className="text-xl sm:text-2xl font-display font-bold tracking-tight text-white/90">
+                            IITM SMART
+                          </span>
+                          <span className="text-xs uppercase tracking-widest text-accent font-semibold mt-1">
+                            Event Series
+                          </span>
+                        </div>
+                      ) : null}
+                    </div>
+
+                    {/* Card Body */}
+                    <div className="p-6 flex flex-col flex-1 justify-between">
+                      <div>
+                        <div className="flex items-center justify-between gap-2 mb-3">
+                          <span className="inline-flex rounded-full bg-[var(--accent-soft)] px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-accent">
+                            {event.event_type || 'Event'}
+                          </span>
+                          <span className="text-muted-foreground group-hover:text-primary transition-colors">
+                            <ArrowIcon />
+                          </span>
+                        </div>
+                        <h3 className="text-lg 2xl:text-xl font-semibold leading-snug tracking-tight text-foreground group-hover:text-primary transition-colors line-clamp-2 min-h-[3.25rem]">
+                          {event.title}
+                        </h3>
+                        <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground line-clamp-2 min-h-[2.5rem]">
+                          {event.desc}
+                        </p>
                       </div>
-                      <h3 className="mt-2 text-2xl 2xl:text-3xl font-medium tracking-tight">{event.title}</h3>
+
+                      {/* Card Footer */}
+                      <div className="mt-5 pt-4 border-t border-border flex flex-col gap-1.5 text-xs text-muted-foreground font-medium">
+                        {event.date && (
+                          <div className="inline-flex items-center gap-1.5 truncate text-foreground/80 font-semibold">
+                            <CalendarIcon /> {event.date}
+                          </div>
+                        )}
+                        {event.location && (
+                          <div className="inline-flex items-center gap-1.5 truncate">
+                            <MapPinIcon /> {event.location}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <div className={`pl-10 md:pl-0 ${idx % 2 === 0 ? 'md:pl-12' : 'md:pr-12 md:text-right'}`}>
-                      <p className="text-muted-foreground 2xl:text-lg">{event.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -593,8 +703,8 @@ export default function HomePage() {
         <section id="talent" className="bg-surface py-28 2xl:py-36">
           <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16 grid gap-14 lg:grid-cols-[1fr_1.1fr] lg:items-center">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
-                <span className="size-1.5 rounded-full bg-accent"></span>Internship &amp; Talent
+              <div className="inline-flex items-center gap-2.5 rounded-full border border-primary/25 bg-primary/5 px-4 py-1.5 text-sm sm:text-base font-bold uppercase tracking-[0.18em] text-primary shadow-sm">
+                <span className="size-2 rounded-full bg-accent"></span>Internship &amp; Talent
               </div>
               <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl 2xl:text-6xl">Train where the work happens.</h2>
               <p className="mt-5 text-lg 2xl:text-xl text-muted-foreground">Students and early-career researchers join SMART for hands-on projects with faculty mentors and FedEx partners — building real systems that ship to the world.</p>
@@ -646,8 +756,8 @@ export default function HomePage() {
         <section id="partners" className="py-24 2xl:py-32">
           <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
             <div className="text-center">
-              <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
-                <span className="size-1.5 rounded-full bg-accent"></span>Industry Collaborations
+              <div className="inline-flex items-center gap-2.5 rounded-full border border-primary/25 bg-primary/5 px-4 py-1.5 text-sm sm:text-base font-bold uppercase tracking-[0.18em] text-primary shadow-sm">
+                <span className="size-2 rounded-full bg-accent"></span>Industry Collaborations
               </div>
               <h2 className="mx-auto mt-5 max-w-2xl 2xl:max-w-3xl text-3xl font-medium tracking-tight sm:text-4xl 2xl:text-5xl">In partnership with the institutions building the future.</h2>
             </div>
@@ -672,8 +782,8 @@ export default function HomePage() {
               <div className="absolute -bottom-32 -left-20 size-96 rounded-full bg-[var(--primary-soft)] blur-3xl"></div>
               <div className="relative grid items-end gap-10 lg:grid-cols-[1.4fr_1fr]">
                 <div>
-                  <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
-                    <span className="size-1.5 rounded-full bg-accent"></span>Startup &amp; Innovation Ecosystem
+                  <div className="inline-flex items-center gap-2.5 rounded-full border border-primary/25 bg-primary/5 px-4 py-1.5 text-sm sm:text-base font-bold uppercase tracking-[0.18em] text-primary shadow-sm">
+                    <span className="size-2 rounded-full bg-accent"></span>Startup &amp; Innovation Ecosystem
                   </div>
                   <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl 2xl:text-6xl">An incubator for the next generation of supply chain companies.</h2>
                   <p className="mt-5 max-w-xl 2xl:max-w-2xl text-lg 2xl:text-xl text-muted-foreground">Through IIT Madras’ deep-tech incubation network, SMART supports founders building category-defining ventures in logistics, AI, robotics, and sustainability.</p>
@@ -711,8 +821,8 @@ export default function HomePage() {
         <section className="border-t border-border bg-surface py-24 2xl:py-32">
           <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16 grid items-center gap-10 lg:grid-cols-[1.4fr_1fr]">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary">
-                <span className="size-1.5 rounded-full bg-accent"></span>Get in Touch
+              <div className="inline-flex items-center gap-2.5 rounded-full border border-primary/25 bg-primary/5 px-4 py-1.5 text-sm sm:text-base font-bold uppercase tracking-[0.18em] text-primary shadow-sm">
+                <span className="size-2 rounded-full bg-accent"></span>Get in Touch
               </div>
               <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl 2xl:text-6xl">Let’s build the next decade of supply chain research, together.</h2>
               <p className="mt-5 max-w-xl 2xl:max-w-2xl text-muted-foreground 2xl:text-lg">Whether you are a researcher, student, industry partner, or policymaker — we’d love to hear from you.</p>
