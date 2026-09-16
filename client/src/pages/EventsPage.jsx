@@ -151,11 +151,11 @@ export default function EventsPage() {
             <div className="absolute -bottom-32 left-10 size-80 rounded-full bg-[var(--accent-soft)] opacity-60 blur-3xl"></div>
           </div>
           <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16 py-20 lg:py-28 2xl:py-36">
-            <div className="inline-flex items-center gap-2.5 rounded-full border border-primary/25 bg-primary/5 px-4 py-1.5 text-sm sm:text-base font-bold uppercase tracking-[0.18em] text-primary shadow-sm">
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-border bg-surface px-3.5 py-1.5 text-xs sm:text-sm font-semibold uppercase tracking-[0.18em] text-primary">
               <span className="size-2 rounded-full bg-accent"></span>Events
             </div>
-            <h1 className="mt-6 max-w-3xl 2xl:max-w-4xl text-4xl font-medium leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl 2xl:text-7xl">Where research meets community.</h1>
-            <p className="mt-6 max-w-2xl 2xl:max-w-3xl text-lg 2xl:text-xl leading-relaxed text-muted-foreground">Explore past and upcoming seminars, workshops, hackathons, and other engaging initiatives hosted by or involving the IIT Madras-led FedEx SMART Center.</p>
+            <h1 className="mt-5 max-w-3xl 2xl:max-w-4xl text-3xl font-medium leading-tight tracking-tight text-foreground sm:text-4xl lg:text-5xl 2xl:text-6xl">Where research meets community.</h1>
+            <p className="mt-4 max-w-2xl 2xl:max-w-3xl text-base 2xl:text-lg leading-relaxed text-muted-foreground">Explore past and upcoming seminars, workshops, hackathons, and other engaging initiatives hosted by or involving the IIT Madras-led FedEx SMART Center.</p>
           </div>
         </section>
 
