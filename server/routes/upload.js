@@ -55,6 +55,13 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
     }
 
     if (isVercel) {
+      if (!process.env.BLOB_READ_WRITE_TOKEN) {
+        console.error('Upload error: BLOB_READ_WRITE_TOKEN is missing on Vercel environment.');
+        return res.status(500).json({
+          message: 'Image upload failed: BLOB_READ_WRITE_TOKEN is missing. Please create a Vercel Blob store or add the BLOB_READ_WRITE_TOKEN environment variable in your Vercel project settings.'
+        });
+      }
+
       const { put } = require('@vercel/blob');
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
       const ext = path.extname(req.file.originalname).toLowerCase();
@@ -80,7 +87,7 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
     });
   } catch (error) {
     console.error('Upload error:', error);
-    res.status(500).json({ message: 'Server upload error.' });
+    res.status(500).json({ message: error.message || 'Server upload error.' });
   }
 }, (err, req, res, next) => {
   // Multer error handling
@@ -88,3 +95,4 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
 });
 
 module.exports = router;
+

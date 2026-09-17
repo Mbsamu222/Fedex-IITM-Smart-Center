@@ -1,10 +1,12 @@
 const router = require('express').Router();
 const pool = require('../config/db');
 const auth = require('../middleware/auth');
+const ensureSchema = require('../database/ensureSchema');
 
 // GET /api/activities
 router.get('/', async (req, res) => {
   try {
+    await ensureSchema();
     const { featured, type } = req.query;
     let query = 'SELECT * FROM activities';
     const conditions = [];
@@ -17,9 +19,11 @@ router.get('/', async (req, res) => {
     const result = await pool.query(query, params);
     res.json(result.rows);
   } catch (error) {
-    res.status(500).json({ message: 'Server error.' });
+    console.error('Get activities error:', error);
+    res.status(500).json({ message: error.message || 'Server error.' });
   }
 });
+
 
 // GET /api/activities/:id
 router.get('/:id', async (req, res) => {
