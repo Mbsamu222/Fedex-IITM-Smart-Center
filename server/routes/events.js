@@ -2,6 +2,18 @@ const router = require('express').Router();
 const pool = require('../config/db');
 const auth = require('../middleware/auth');
 
+// Ensure sort_order column exists
+(async () => {
+  try {
+    await pool.query(`
+      ALTER TABLE events
+      ADD COLUMN IF NOT EXISTS sort_order INT DEFAULT 0;
+    `);
+  } catch (err) {
+    console.warn('events: could not ensure sort_order column:', err.message);
+  }
+})();
+
 // GET /api/events
 router.get('/', async (req, res) => {
   try {
@@ -13,11 +25,30 @@ router.get('/', async (req, res) => {
     if (featured === 'true') { paramCount++; conditions.push(`is_featured = $${paramCount}`); params.push(true); }
     if (type) { paramCount++; conditions.push(`event_type = $${paramCount}`); params.push(type); }
     if (conditions.length > 0) query += ' WHERE ' + conditions.join(' AND ');
-    query += ' ORDER BY sort_order ASC';
+    query += ' ORDER BY COALESCE(sort_order, 0) ASC, id DESC';
     const result = await pool.query(query, params);
     res.json(result.rows);
   } catch (error) {
     res.status(500).json({ message: 'Server error.' });
+  }
+});
+
+// PUT /api/events/reorder/batch - batch update sort orders
+router.put('/reorder/batch', auth, async (req, res) => {
+  try {
+    const { orders } = req.body; // Array of { id, sort_order }
+    if (!Array.isArray(orders)) {
+      return res.status(400).json({ message: 'Orders array is required.' });
+    }
+    for (const item of orders) {
+      if (item.id !== undefined && typeof item.sort_order === 'number') {
+        await pool.query('UPDATE events SET sort_order = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2', [item.sort_order, item.id]);
+      }
+    }
+    res.json({ message: 'Orders updated successfully.' });
+  } catch (error) {
+    console.error('Batch reorder error:', error.message);
+    res.status(500).json({ message: 'Server error during reorder.' });
   }
 });
 

@@ -95,6 +95,7 @@ export const adminApi = {
   createEvent: (data) => api.post('/events', data),
   updateEvent: (id, data) => api.put(`/events/${id}`, data),
   deleteEvent: (id) => api.delete(`/events/${id}`),
+  reorderEvents: (orders) => api.put('/events/reorder/batch', { orders }),
 
   // Activities
   getActivities: () => api.get('/activities'),

@@ -43,6 +43,16 @@ const teamCategoryTabs = [
   { key: 'postdoc', label: 'Postdoctoral' },
 ];
 
+const eventTypeTabs = [
+  { key: 'all', label: 'All Events' },
+  { key: 'Industry Focused Learning', label: 'Industry Focused Learning' },
+  { key: 'Startup Bootcamp', label: 'Startup Bootcamp' },
+  { key: 'Seminar', label: 'Seminar' },
+  { key: 'Hackathon', label: 'Hackathon' },
+  { key: 'Workshop', label: 'Workshop' },
+  { key: 'Other', label: 'Other' },
+];
+
 const sectionConfig = {
   hero: {
     title: 'Hero Sections',
@@ -109,6 +119,7 @@ const sectionConfig = {
     ],
     api: { get: adminApi.getEvents, create: adminApi.createEvent, update: adminApi.updateEvent, delete: adminApi.deleteEvent },
     displayField: 'title',
+    subtitleField: 'event_type',
   },
   activities: {
     title: 'Activities Management',
@@ -341,6 +352,7 @@ export default function AdminCrud() {
   const [currentPage, setCurrentPage] = useState(1);
   const [previewImage, setPreviewImage] = useState(null);
   const [teamCategoryFilter, setTeamCategoryFilter] = useState('all');
+  const [eventTypeFilter, setEventTypeFilter] = useState('all');
   const [reorderMode, setReorderMode] = useState(false);
   const [reorderList, setReorderList] = useState([]);
   const [editingOrder, setEditingOrder] = useState({});
@@ -355,6 +367,7 @@ export default function AdminCrud() {
   useEffect(() => {
     if (config) fetchItems();
     setCurrentPage(1);
+    setReorderMode(false);
   }, [section]);
 
   useEffect(() => {
@@ -564,19 +577,25 @@ export default function AdminCrud() {
         return false;
       }
     }
+    if (section === 'events' && eventTypeFilter !== 'all') {
+      const evType = (item.event_type || '').toLowerCase();
+      if (evType !== eventTypeFilter.toLowerCase() && !evType.includes(eventTypeFilter.toLowerCase())) {
+        return false;
+      }
+    }
     return true;
   }).sort((a, b) => {
-    if (section === 'team') {
+    if (section === 'team' || section === 'events') {
       return (a.sort_order ?? 0) - (b.sort_order ?? 0);
     }
     return 0;
   });
 
   useEffect(() => {
-    if (section === 'team') {
+    if (section === 'team' || section === 'events') {
       setReorderList([...filteredItems]);
     }
-  }, [items, teamCategoryFilter, section, searchTerm]);
+  }, [items, teamCategoryFilter, eventTypeFilter, section, searchTerm]);
 
   const handleQuickMove = async (item, direction) => {
     const list = [...filteredItems];
@@ -594,8 +613,12 @@ export default function AdminCrud() {
     }));
 
     try {
-      await adminApi.reorderTeam(orders);
-      toast.success(`Moved ${item.name} ${direction}!`);
+      if (section === 'events') {
+        await adminApi.reorderEvents(orders);
+      } else {
+        await adminApi.reorderTeam(orders);
+      }
+      toast.success(`Moved ${item.name || item.title} ${direction}!`);
       fetchItems();
     } catch (err) {
       toast.error('Failed to update order');
@@ -606,7 +629,11 @@ export default function AdminCrud() {
     const num = parseInt(newOrder);
     if (isNaN(num)) return;
     try {
-      await adminApi.reorderTeam([{ id, sort_order: num }]);
+      if (section === 'events') {
+        await adminApi.reorderEvents([{ id, sort_order: num }]);
+      } else {
+        await adminApi.reorderTeam([{ id, sort_order: num }]);
+      }
       toast.success('Position updated!');
       setEditingOrder(prev => {
         const next = { ...prev };
@@ -634,8 +661,13 @@ export default function AdminCrud() {
         id: item.id,
         sort_order: idx + 1
       }));
-      await adminApi.reorderTeam(orders);
-      toast.success('Custom team display order saved successfully!');
+      if (section === 'events') {
+        await adminApi.reorderEvents(orders);
+        toast.success('Custom events display order saved successfully!');
+      } else {
+        await adminApi.reorderTeam(orders);
+        toast.success('Custom team display order saved successfully!');
+      }
       fetchItems();
     } catch (err) {
       toast.error('Failed to save order: ' + (err.response?.data?.message || err.message));
@@ -645,7 +677,7 @@ export default function AdminCrud() {
   };
 
   const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
-  const paginatedItems = (section === 'team' && reorderMode) 
+  const paginatedItems = ((section === 'team' || section === 'events') && reorderMode) 
     ? reorderList 
     : filteredItems.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
@@ -899,28 +931,49 @@ export default function AdminCrud() {
             </div>
           ) : (
             <div className="space-y-6">
-              {/* TEAM MEMBERS CATEGORY FILTER & REORDER TOOLBAR */}
-              {section === 'team' && (
+              {/* TEAM MEMBERS & EVENTS CATEGORY/TYPE FILTER & REORDER TOOLBAR */}
+              {(section === 'team' || section === 'events') && (
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
-                  {/* Category Pills */}
+                  {/* Category / Type Pills */}
                   <div className="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 scrollbar-none">
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1 hidden sm:inline">Team:</span>
-                    {teamCategoryTabs.map((tab) => (
-                      <button
-                        key={tab.key}
-                        onClick={() => {
-                          setTeamCategoryFilter(tab.key);
-                          setCurrentPage(1);
-                        }}
-                        className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
-                          teamCategoryFilter === tab.key
-                            ? 'bg-fedex-purple text-white shadow-sm'
-                            : 'bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/60'
-                        }`}
-                      >
-                        {tab.label}
-                      </button>
-                    ))}
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1 hidden sm:inline">
+                      {section === 'team' ? 'Team:' : 'Type:'}
+                    </span>
+                    {section === 'team' ? (
+                      teamCategoryTabs.map((tab) => (
+                        <button
+                          key={tab.key}
+                          onClick={() => {
+                            setTeamCategoryFilter(tab.key);
+                            setCurrentPage(1);
+                          }}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                            teamCategoryFilter === tab.key
+                              ? 'bg-fedex-purple text-white shadow-sm'
+                              : 'bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/60'
+                          }`}
+                        >
+                          {tab.label}
+                        </button>
+                      ))
+                    ) : (
+                      eventTypeTabs.map((tab) => (
+                        <button
+                          key={tab.key}
+                          onClick={() => {
+                            setEventTypeFilter(tab.key);
+                            setCurrentPage(1);
+                          }}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                            eventTypeFilter === tab.key
+                              ? 'bg-fedex-purple text-white shadow-sm'
+                              : 'bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/60'
+                          }`}
+                        >
+                          {tab.label}
+                        </button>
+                      ))
+                    )}
                   </div>
 
                   {/* Reorder Mode Switcher & Save Button */}
@@ -957,7 +1010,7 @@ export default function AdminCrud() {
               )}
 
               {/* VISUAL REORDER MODE CARDS */}
-              {section === 'team' && reorderMode ? (
+              {(section === 'team' || section === 'events') && reorderMode ? (
                 <div className="space-y-4">
                   <div className="p-4 bg-purple-50 border border-purple-100 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-fedex-purple">
                     <div className="flex items-center gap-2">
@@ -975,11 +1028,12 @@ export default function AdminCrud() {
                   </div>
 
                   <div className="grid gap-3">
-                    {reorderList.map((member, idx) => {
-                      const fullImg = member.image_url ? resolveImageUrl(member.image_url) : null;
+                    {reorderList.map((item, idx) => {
+                      const imgVal = item.image_url || item.speaker_image || item.image || item.url;
+                      const fullImg = imgVal ? resolveImageUrl(imgVal) : null;
                       return (
                         <div
-                          key={member.id || idx}
+                          key={item.id || idx}
                           draggable
                           onDragStart={() => setDraggedIndex(idx)}
                           onDragOver={(e) => e.preventDefault()}
@@ -1003,22 +1057,56 @@ export default function AdminCrud() {
                             </div>
                             <div className="size-12 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0 flex items-center justify-center">
                               {fullImg ? (
-                                <img src={fullImg} alt={member.name} className="size-full object-cover object-top" />
+                                <img src={fullImg} alt={item.name || item.title} className="size-full object-cover object-top" />
+                              ) : section === 'events' ? (
+                                <Calendar className="w-5 h-5 text-slate-400" />
                               ) : (
                                 <Users className="w-5 h-5 text-slate-400" />
                               )}
                             </div>
                             <div>
-                              <h4 className="text-sm font-bold text-slate-900">{member.name}</h4>
-                              <p className="text-xs text-slate-500 line-clamp-1">{member.title || 'No role specified'}</p>
-                              {member.department && <p className="text-[11px] text-slate-400">{member.department}</p>}
-                              <div className="flex flex-wrap gap-1 mt-1.5">
-                                {(member.category || '').split(',').map((c, ci) => (
-                                  <span key={ci} className="text-[10px] font-semibold bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-md text-slate-600">
-                                    {c.trim()}
-                                  </span>
-                                ))}
-                              </div>
+                              <h4 className="text-sm font-bold text-slate-900">{item.name || item.title}</h4>
+                              {section === 'events' ? (
+                                <>
+                                  <div className="flex flex-wrap items-center gap-2 mt-0.5">
+                                    {item.event_type && (
+                                      <span className="text-[10px] font-semibold bg-purple-50 text-fedex-purple border border-purple-100 px-2 py-0.5 rounded-md">
+                                        {item.event_type}
+                                      </span>
+                                    )}
+                                    {item.is_featured && (
+                                      <span className="text-[10px] font-bold bg-amber-50 text-amber-600 border border-amber-200 px-2 py-0.5 rounded-md">
+                                        Featured
+                                      </span>
+                                    )}
+                                    {(item.start_date || item.event_date) && (
+                                      <span className="text-xs text-slate-500">
+                                        {new Date(item.start_date || item.event_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                        {item.end_date ? ` — ${new Date(item.end_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}` : ''}
+                                        {item.time ? ` · ${item.time}` : ''}
+                                      </span>
+                                    )}
+                                  </div>
+                                  {item.speaker_name && (
+                                    <p className="text-[11px] text-slate-500 mt-1">
+                                      <span className="font-semibold text-fedex-purple">Speaker:</span> {item.speaker_name} {item.speaker_designation ? `(${item.speaker_designation})` : ''}
+                                    </p>
+                                  )}
+                                  {item.location && <p className="text-[11px] text-slate-400 mt-0.5">{item.location}</p>}
+                                </>
+                              ) : (
+                                <>
+                                  <p className="text-xs text-slate-500 line-clamp-1">{item.title || 'No role specified'}</p>
+                                  {item.department && <p className="text-[11px] text-slate-400">{item.department}</p>}
+                                  <div className="flex flex-wrap gap-1 mt-1.5">
+                                    {(item.category || '').split(',').map((c, ci) => (
+                                      <span key={ci} className="text-[10px] font-semibold bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-md text-slate-600">
+                                        {c.trim()}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </>
+                              )}
                             </div>
                           </div>
 
@@ -1080,7 +1168,7 @@ export default function AdminCrud() {
                               {config.subtitleField.charAt(0).toUpperCase() + config.subtitleField.slice(1)}
                             </th>
                           )}
-                          {section === 'team' && (
+                          {(section === 'team' || section === 'events') && (
                             <th className="py-4 px-4 text-center">Display Order</th>
                           )}
                           {section === 'team' && (
@@ -1155,7 +1243,7 @@ export default function AdminCrud() {
                                   )}
                                 </td>
                               )}
-                              {section === 'team' && (
+                              {(section === 'team' || section === 'events') && (
                                 <td className="py-4 px-4 text-center">
                                   <div className="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-xl p-1 shadow-xs">
                                     <input
