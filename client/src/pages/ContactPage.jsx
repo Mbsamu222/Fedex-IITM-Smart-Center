@@ -134,7 +134,7 @@ export default function ContactPage() {
             </div>
             <h2 className="mt-5 max-w-2xl 2xl:max-w-3xl text-3xl font-medium tracking-tight sm:text-4xl 2xl:text-5xl">For primary inquiries and official correspondence.</h2>
             <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              <a href={`tel:+91${contactInfo.contact_phone?.replace(/\s/g, '')}`}>
+              <a href={`tel:${contactInfo.contact_phone?.replace(/\s/g, '')}`}>
                 <div className="flex h-full flex-col gap-4 rounded-2xl border border-border bg-card p-6 2xl:p-8 transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[var(--shadow-soft)]">
                   <div className="inline-flex size-11 items-center justify-center rounded-xl bg-[var(--primary-soft)] text-primary"><PhoneIcon /></div>
                   <div>
