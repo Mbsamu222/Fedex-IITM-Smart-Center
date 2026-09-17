@@ -87,35 +87,10 @@ app.get('/api/debug/team', async (req, res) => {
   }
 });
 
-const ensureSchema = require('./database/ensureSchema');
-
-// Auto-migrate / sync database schema on cold start
-ensureSchema().catch(err => console.error('Database schema check failed on boot:', err.message));
-
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Server Error:', err.stack);
   res.status(500).json({ message: 'Internal server error', error: process.env.NODE_ENV === 'development' ? err.message : undefined });
-});
-
-// Diagnostic route — shows live DB state for events
-app.get('/api/debug/events', async (req, res) => {
-  try {
-    const pool = require('./config/db');
-    const columns = await pool.query(`
-      SELECT column_name, data_type, column_default
-      FROM information_schema.columns
-      WHERE table_name = 'events'
-      ORDER BY ordinal_position
-    `);
-    const count = await pool.query(`SELECT COUNT(*) AS total FROM events`);
-    res.json({
-      columns: columns.rows,
-      total: count.rows[0].total,
-    });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
 });
 
 if (!process.env.VERCEL) {

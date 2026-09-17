@@ -15,9 +15,7 @@ import Pagination from '../../components/common/Pagination';
 import ProjectForm from '../../components/admin/ProjectForm';
 import PublicationForm from '../../components/admin/PublicationForm';
 import EventForm from '../../components/admin/EventForm';
-import TeamMemberForm from '../../components/admin/TeamMemberForm';
 import ReactQuill from 'react-quill-new';
-
 import 'react-quill-new/dist/quill.snow.css';
 
 const quillModules = {
@@ -647,8 +645,9 @@ export default function AdminCrud() {
   };
 
   const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
-  const paginatedItems = filteredItems.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
-
+  const paginatedItems = (section === 'team' && reorderMode) 
+    ? reorderList 
+    : filteredItems.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex font-sans w-full max-w-full overflow-hidden">
@@ -900,12 +899,12 @@ export default function AdminCrud() {
             </div>
           ) : (
             <div className="space-y-6">
-              {/* TEAM MEMBERS CATEGORY FILTER & SORT INFO TOOLBAR */}
+              {/* TEAM MEMBERS CATEGORY FILTER & REORDER TOOLBAR */}
               {section === 'team' && (
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
                   {/* Category Pills */}
-                  <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1 hidden sm:inline">Category:</span>
+                  <div className="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 scrollbar-none">
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1 hidden sm:inline">Team:</span>
                     {teamCategoryTabs.map((tab) => (
                       <button
                         key={tab.key}
@@ -924,40 +923,174 @@ export default function AdminCrud() {
                     ))}
                   </div>
 
-                  {/* Sort Method Indicator */}
-                  <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl shrink-0">
-                    <SlidersHorizontal className="w-3.5 h-3.5 text-fedex-purple" />
-                    <span>Sorted by <strong>Sort Order</strong> (Lower numbers appear first)</span>
+                  {/* Reorder Mode Switcher & Save Button */}
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      onClick={() => setReorderMode(!reorderMode)}
+                      className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all border ${
+                        reorderMode
+                          ? 'bg-fedex-orange text-white border-fedex-orange shadow-sm'
+                          : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
+                      }`}
+                      title="Toggle visual custom order mode"
+                    >
+                      <ListOrdered className="w-3.5 h-3.5" />
+                      <span>{reorderMode ? 'Table View' : 'Visual Reorder Mode'}</span>
+                    </button>
+
+                    {reorderMode && (
+                      <button
+                        onClick={handleSaveReorderedList}
+                        disabled={saving}
+                        className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-1.5 rounded-xl text-xs font-semibold shadow-sm transition-all disabled:opacity-50"
+                      >
+                        {saving ? (
+                          <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                        ) : (
+                          <Save className="w-3.5 h-3.5" />
+                        )}
+                        <span>Save New Order</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               )}
 
-              {/* TABULAR GRID VIEW */}
-              <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left">
-                    <thead>
-                      <tr className="border-b border-slate-200 bg-slate-50/60 text-slate-500 text-xs font-bold uppercase tracking-wider">
-                        <th className="py-4 px-6">ID</th>
-                        {hasImageColumn && <th className="py-4 px-4 text-center">Image</th>}
-                        <th className="py-4 px-6">{config.displayField === 'name' ? 'Name' : 'Title'}</th>
-                        {config.subtitleField && (
-                          <th className="py-4 px-6 hidden md:table-cell">
-                            {config.subtitleField.charAt(0).toUpperCase() + config.subtitleField.slice(1)}
-                          </th>
-                        )}
-                        {section === 'team' && (
-                          <th className="py-4 px-4 text-center">Sort Order</th>
-                        )}
-                        {section === 'team' && (
-                          <th className="py-4 px-6 hidden sm:table-cell">Status</th>
-                        )}
-                        <th className="py-4 px-6 hidden lg:table-cell">Created</th>
-                        <th className="py-4 px-6 text-right">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100 text-sm">
+              {/* VISUAL REORDER MODE CARDS */}
+              {section === 'team' && reorderMode ? (
+                <div className="space-y-4">
+                  <div className="p-4 bg-purple-50 border border-purple-100 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-fedex-purple">
+                    <div className="flex items-center gap-2">
+                      <SlidersHorizontal className="w-4 h-4 shrink-0" />
+                      <span><strong>Visual Sorting:</strong> Drag cards or use the Move buttons (Top, Up, Down, Bottom) to change website display order. Click <strong>Save New Order</strong> when done.</span>
+                    </div>
+                    <button
+                      onClick={handleSaveReorderedList}
+                      disabled={saving}
+                      className="flex items-center justify-center gap-1.5 bg-fedex-purple hover:bg-fedex-purple/90 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm transition-all shrink-0 disabled:opacity-50"
+                    >
+                      {saving ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
+                      Save New Order
+                    </button>
+                  </div>
 
+                  <div className="grid gap-3">
+                    {reorderList.map((member, idx) => {
+                      const fullImg = member.image_url ? resolveImageUrl(member.image_url) : null;
+                      return (
+                        <div
+                          key={member.id || idx}
+                          draggable
+                          onDragStart={() => setDraggedIndex(idx)}
+                          onDragOver={(e) => e.preventDefault()}
+                          onDrop={(e) => {
+                            e.preventDefault();
+                            if (draggedIndex !== null && draggedIndex !== idx) {
+                              moveInReorderList(draggedIndex, idx);
+                              setDraggedIndex(null);
+                            }
+                          }}
+                          className={`bg-white border rounded-2xl p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all ${
+                            draggedIndex === idx ? 'opacity-40 border-dashed border-fedex-purple scale-[0.99]' : 'border-slate-200 hover:border-slate-300'
+                          }`}
+                        >
+                          <div className="flex items-center gap-4">
+                            <div className="cursor-grab active:cursor-grabbing text-slate-300 hover:text-slate-600 p-1">
+                              <GripVertical className="w-5 h-5" />
+                            </div>
+                            <div className="flex size-9 items-center justify-center rounded-xl bg-slate-100 border border-slate-200 font-display text-xs font-bold text-slate-700">
+                              #{idx + 1}
+                            </div>
+                            <div className="size-12 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0 flex items-center justify-center">
+                              {fullImg ? (
+                                <img src={fullImg} alt={member.name} className="size-full object-cover object-top" />
+                              ) : (
+                                <Users className="w-5 h-5 text-slate-400" />
+                              )}
+                            </div>
+                            <div>
+                              <h4 className="text-sm font-bold text-slate-900">{member.name}</h4>
+                              <p className="text-xs text-slate-500 line-clamp-1">{member.title || 'No role specified'}</p>
+                              {member.department && <p className="text-[11px] text-slate-400">{member.department}</p>}
+                              <div className="flex flex-wrap gap-1 mt-1.5">
+                                {(member.category || '').split(',').map((c, ci) => (
+                                  <span key={ci} className="text-[10px] font-semibold bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-md text-slate-600">
+                                    {c.trim()}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-1.5 self-end sm:self-center">
+                            <button
+                              type="button"
+                              onClick={() => moveInReorderList(idx, 0)}
+                              disabled={idx === 0}
+                              className="p-2 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-600 disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                              title="Send to Top"
+                            >
+                              <ArrowUpToLine className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => moveInReorderList(idx, idx - 1)}
+                              disabled={idx === 0}
+                              className="p-2 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-600 disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                              title="Move Up"
+                            >
+                              <ArrowUp className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => moveInReorderList(idx, idx + 1)}
+                              disabled={idx === reorderList.length - 1}
+                              className="p-2 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-600 disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                              title="Move Down"
+                            >
+                              <ArrowDown className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => moveInReorderList(idx, reorderList.length - 1)}
+                              disabled={idx === reorderList.length - 1}
+                              className="p-2 rounded-xl bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-600 disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                              title="Send to Bottom"
+                            >
+                              <ArrowDownToLine className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : (
+                /* TABULAR GRID VIEW */
+                <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left">
+                      <thead>
+                        <tr className="border-b border-slate-200 bg-slate-50/60 text-slate-500 text-xs font-bold uppercase tracking-wider">
+                          <th className="py-4 px-6">ID</th>
+                          {hasImageColumn && <th className="py-4 px-4 text-center">Image</th>}
+                          <th className="py-4 px-6">{config.displayField === 'name' ? 'Name' : 'Title'}</th>
+                          {config.subtitleField && (
+                            <th className="py-4 px-6 hidden md:table-cell">
+                              {config.subtitleField.charAt(0).toUpperCase() + config.subtitleField.slice(1)}
+                            </th>
+                          )}
+                          {section === 'team' && (
+                            <th className="py-4 px-4 text-center">Display Order</th>
+                          )}
+                          {section === 'team' && (
+                            <th className="py-4 px-6 hidden sm:table-cell">Status</th>
+                          )}
+                          <th className="py-4 px-6 hidden lg:table-cell">Created</th>
+                          <th className="py-4 px-6 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 text-sm">
                         {paginatedItems.map((item, i) => {
                           const imgVal = item.image_url || item.image || item.url;
                           const fullImgUrl = imgVal ? resolveImageUrl(imgVal) : null;
@@ -1115,12 +1248,11 @@ export default function AdminCrud() {
                     </div>
                   )}
                 </div>
-              </div>
+              )}
+            </div>
           )}
-
         </main>
       </div>
-
 
       {/* MODAL VIEW - CREATE / EDIT */}
       {showModal && (
@@ -1143,12 +1275,6 @@ export default function AdminCrud() {
               onSave={handleSaveProject}
               onCancel={() => setShowModal(false)}
             />
-          ) : section === 'team' ? (
-            <TeamMemberForm
-              member={editingItem}
-              onSave={handleSaveProject}
-              onCancel={() => setShowModal(false)}
-            />
           ) : (
             <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-2xl shadow-xl my-8 animate-scale-in">
               <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
@@ -1159,7 +1285,6 @@ export default function AdminCrud() {
                   <X className="w-5 h-5" />
                 </button>
               </div>
-
               <div className="px-6 py-6 space-y-5 max-h-[65vh] overflow-y-auto">
                 {getFieldsWithOptions().map((field) => (
                   <div key={field.key} className="space-y-2">
