@@ -5,11 +5,25 @@ const auth = require('../middleware/auth');
 // GET /api/contact - Get contact info
 router.get('/', async (req, res) => {
   try {
+    // Auto-update outdated placeholder phone number if present in database
+    await pool.query(
+      "UPDATE site_settings SET setting_value = '044 2257 9668', updated_at = CURRENT_TIMESTAMP WHERE setting_key = 'contact_phone' AND (setting_value = '044 2257 9999' OR setting_value LIKE '%9999%')"
+    ).catch(() => {});
+
     const settings = await pool.query(
       "SELECT setting_key, setting_value FROM site_settings WHERE setting_key IN ('contact_phone','contact_email','contact_address')"
     );
     const contactInfo = {};
-    settings.rows.forEach(row => { contactInfo[row.setting_key] = row.setting_value; });
+    settings.rows.forEach(row => { 
+      let val = row.setting_value;
+      if (row.setting_key === 'contact_phone' && (!val || val === '044 2257 9999' || val.includes('9999'))) {
+        val = '044 2257 9668';
+      }
+      contactInfo[row.setting_key] = val; 
+    });
+    if (!contactInfo.contact_phone) {
+      contactInfo.contact_phone = '044 2257 9668';
+    }
     res.json(contactInfo);
   } catch (error) {
     res.status(500).json({ message: 'Server error.' });
