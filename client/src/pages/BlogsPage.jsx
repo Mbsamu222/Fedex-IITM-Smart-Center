@@ -30,7 +30,7 @@ const staticBlogs = [
   { id: 1, title: 'Decarbonising last-mile logistics in Indian cities', excerpt: 'How modelling EV charging networks at city scale changes the math on emissions.', category: 'Sustainability', published_date: '2026-05-01' },
   { id: 2, title: 'Agentic AI for warehouse tech simplification', excerpt: 'From SOPs to copilots — bringing LLM agents to the warehouse floor.', category: 'AI & ML', published_date: '2026-04-01' },
   { id: 3, title: 'Worker wellness, instrumented', excerpt: 'Wearables, vision and ergonomics research informing safer warehouse operations.', category: 'Worker Wellness', published_date: '2026-03-01' },
-  { id: 4, title: 'Making India a global transshipment hub', excerpt: 'Network design choices that could position India at the centre of global air cargo.', category: 'Infrastructure', published_date: '2026-02-01' },
+  { id: 4, title: 'Making India a global transshipment hub', excerpt: 'Network design choices that could position India at the center of global air cargo.', category: 'Infrastructure', published_date: '2026-02-01' },
   { id: 5, title: '3D bin packing meets real-world ULDs', excerpt: 'Why textbook bin-packing breaks down in air-freight loading — and what works.', category: 'Algorithms', published_date: '2026-01-01' },
   { id: 6, title: 'Inside the SMART Grand Challenge', excerpt: 'Behind the scenes of our flagship student innovation contest.', category: 'Community', published_date: '2025-12-01' },
 ];

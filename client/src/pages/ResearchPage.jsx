@@ -59,7 +59,7 @@ const gradientPairs = [
 
 const defaultAreas = [
   { id: 1, title: 'Supply Chain Sustainability and Modelling', description: 'Decarbonising and optimising supply chain operations through data-driven models and circular-economy approaches.', icon: 'Leaf' },
-  { id: 2, title: 'Logistics Worker Wellness', description: 'Human-centred research on ergonomics, safety, and frontline workforce wellbeing across warehouses and last-mile operations.', icon: 'Heart' },
+  { id: 2, title: 'Logistics Worker Wellness', description: 'Human-centered research on ergonomics, safety, and frontline workforce wellbeing across warehouses and last-mile operations.', icon: 'Heart' },
   { id: 3, title: 'Algorithms and Machine Learning', description: 'Foundational algorithms and learning systems powering predictive and prescriptive supply chain intelligence.', icon: 'Brain' },
   { id: 4, title: 'Logistics Infrastructure', description: 'Network design, EV charging, intermodal optimisation, and digital systems at national scale.', icon: 'Warehouse' },
 ];

@@ -152,7 +152,7 @@ const defaultResearchAreas = [
   { title: 'Drone Logistics', description: 'Autonomous aerial delivery research for last-mile and remote distribution.', icon: 'Plane' },
   { title: 'Demand Forecasting', description: 'Statistical and deep-learning approaches for resilient, high-accuracy forecasts.', icon: 'TrendingUp' },
   { title: 'Logistics Infrastructure', description: 'Network design, warehousing, and intermodal optimisation at national scale.', icon: 'Building' },
-  { title: 'Worker Wellness', description: 'Human-centred research on ergonomics, safety, and frontline workforce wellbeing.', icon: 'Heart' },
+  { title: 'Worker Wellness', description: 'Human-centered research on ergonomics, safety, and frontline workforce wellbeing.', icon: 'Heart' },
   { title: 'Sustainability', description: 'Decarbonising supply chains through circularity, routing, and green logistics.', icon: 'Leaf' },
   { title: 'Digital Twin Systems', description: 'Live digital replicas of physical operations for simulation and control.', icon: 'Monitor' },
 ];
@@ -168,7 +168,7 @@ const defaultEvents = [
   { id: 1, slug: 'annual-symposium', date: 'Oct 2026', title: 'SMART Annual Research Symposium', desc: 'A two-day convening of academia, industry, and policy on the future of supply chains.', event_type: 'Seminar', location: 'IIT Madras' },
   { id: 2, slug: 'industry-roundtable', date: 'Aug 2026', title: 'Industry Roundtable — Resilient Logistics', desc: 'Closed-door dialogue with global supply chain leaders and IIT Madras researchers.', event_type: 'Roundtable', location: 'Online' },
   { id: 3, slug: 'summer-school', date: 'Jun 2026', title: 'SMART Summer School', desc: 'Intensive programme for graduate students on optimisation, ML, and operations research.', event_type: 'Workshop', location: 'IIT Madras' },
-  { id: 4, slug: 'innovation-day', date: 'Mar 2026', title: 'FedEx × IIT Madras Innovation Day', desc: 'Showcase of student innovation, demos, and pitches from across the centre.', event_type: 'Hackathon', location: 'NAC Hall, IIT Madras' },
+  { id: 4, slug: 'innovation-day', date: 'Mar 2026', title: 'FedEx × IIT Madras Innovation Day', desc: 'Showcase of student innovation, demos, and pitches from across the center.', event_type: 'Hackathon', location: 'NAC Hall, IIT Madras' },
 ];
 
 const renderTitle = (title, highlight) => {
@@ -411,7 +411,7 @@ export default function HomePage() {
                 <div className="inline-flex items-center gap-2.5 rounded-full border border-primary/25 bg-primary/5 px-4 py-1.5 text-sm sm:text-base font-bold uppercase tracking-[0.18em] text-primary shadow-sm">
                   <span className="size-2 rounded-full bg-accent"></span>Our Mission
                 </div>
-                <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl 2xl:text-6xl">A centre built for the problems that matter.</h2>
+                <h2 className="mt-5 text-4xl font-medium tracking-tight sm:text-5xl 2xl:text-6xl">A center built for the problems that matter.</h2>
               </div>
               <div className="grid gap-5 sm:grid-cols-3">
                 <div className="group rounded-2xl border border-border bg-card p-7 2xl:p-9 transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-lift)]">
@@ -461,7 +461,7 @@ export default function HomePage() {
                   <div className="inline-flex items-center gap-2.5 rounded-full border border-white/30 bg-white/15 px-4 py-1.5 text-sm sm:text-base font-bold uppercase tracking-[0.18em] text-white shadow-sm">
                     <span className="size-2 rounded-full bg-accent"></span>Our Vision
                   </div>
-                  <h2 className="mt-6 text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl 2xl:text-7xl">To be the world’s most trusted research centre for supply chain intelligence.</h2>
+                  <h2 className="mt-6 text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl 2xl:text-7xl">To be the world’s most trusted research center for supply chain intelligence.</h2>
                 </div>
                 <p className="self-end text-lg 2xl:text-xl leading-relaxed text-white/80">We bring together engineers, data scientists, behavioural researchers, and industry practitioners to design supply chains that are faster, fairer, and more sustainable — and to share what we learn openly with the world.</p>
               </div>

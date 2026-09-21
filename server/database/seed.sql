@@ -58,7 +58,7 @@ INSERT INTO research_areas (title, description, icon, sort_order) VALUES
 ('Drone Logistics', 'Autonomous aerial delivery research for last-mile and remote distribution.', 'Plane', 2),
 ('Demand Forecasting', 'Statistical and deep-learning approaches for resilient, high-accuracy forecasts.', 'TrendingUp', 3),
 ('Logistics Infrastructure', 'Network design, warehousing, and intermodal optimisation at national scale.', 'Building', 4),
-('Worker Wellness', 'Human-centred research on ergonomics, safety, and frontline workforce wellbeing.', 'Heart', 5),
+('Worker Wellness', 'Human-centered research on ergonomics, safety, and frontline workforce wellbeing.', 'Heart', 5),
 ('Sustainability', 'Decarbonising supply chains through circularity, routing, and green logistics.', 'Leaf', 6),
 ('Digital Twin Systems', 'Live digital replicas of physical operations for simulation and control.', 'Monitor', 7);
 
@@ -84,7 +84,7 @@ INSERT INTO blogs (title, excerpt, author, category, published_date) VALUES
 ('Decarbonising last-mile logistics in Indian cities', 'How modelling EV charging networks at city scale changes the math on emissions.', 'SMART Center', 'Sustainability', '2026-06-15'),
 ('Agentic AI for warehouse tech simplification', 'From SOPs to copilots — bringing LLM agents to the warehouse floor.', 'SMART Center', 'AI & ML', '2026-06-01'),
 ('Worker wellness, instrumented', 'Wearables, vision and ergonomics research informing safer warehouse operations.', 'SMART Center', 'Worker Wellness', '2026-05-20'),
-('Making India a global transshipment hub', 'Network design choices that could position India at the centre of global air cargo.', 'SMART Center', 'Logistics', '2026-05-10'),
+('Making India a global transshipment hub', 'Network design choices that could position India at the center of global air cargo.', 'SMART Center', 'Logistics', '2026-05-10'),
 ('3D bin packing meets real-world ULDs', 'Why textbook bin-packing breaks down in air-freight loading — and what works.', 'SMART Center', 'Algorithms', '2026-04-25'),
 ('Inside the SMART Grand Challenge', 'Behind the scenes of our flagship student innovation contest.', 'SMART Center', 'Events', '2026-04-10');
 
