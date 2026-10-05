@@ -123,7 +123,7 @@ export default function ContactPage() {
               <span className="size-2 rounded-full bg-accent"></span>Get in Touch
             </div>
             <h1 className="mt-5 max-w-3xl 2xl:max-w-4xl text-3xl font-medium leading-tight tracking-tight text-foreground sm:text-4xl lg:text-5xl 2xl:text-6xl">We're here to help.</h1>
-            <p className="mt-4 max-w-2xl 2xl:max-w-3xl text-base 2xl:text-lg leading-relaxed text-muted-foreground">Have questions about our research, collaborations, student opportunities, or any general inquiries regarding the IIT Madras-led FedEx SMART Center? We're here to assist you.</p>
+            <p className="mt-4 max-w-2xl 2xl:max-w-3xl text-base 2xl:text-lg leading-relaxed text-muted-foreground">Have questions about our research, collaborations, student opportunities, or any general inquiries regarding the IITM FedEx SMART Center? We're here to assist you.</p>
           </div>
         </section>
         {/* Contact Info */}

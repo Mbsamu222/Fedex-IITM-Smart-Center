@@ -89,7 +89,7 @@ export default function ActivitiesPage() {
               <span className="size-2 rounded-full bg-accent"></span>Announcements
             </div>
             <h1 className="mt-5 max-w-3xl 2xl:max-w-4xl text-3xl font-medium leading-tight tracking-tight text-foreground sm:text-4xl lg:text-5xl 2xl:text-6xl">Stay informed with the latest updates.</h1>
-            <p className="mt-4 max-w-2xl 2xl:max-w-3xl text-base 2xl:text-lg leading-relaxed text-muted-foreground">Explore current and past announcements, job postings, seminars, workshops, and other key activities from the IIT Madras-led FedEx SMART Center.</p>
+            <p className="mt-4 max-w-2xl 2xl:max-w-3xl text-base 2xl:text-lg leading-relaxed text-muted-foreground">Explore current and past announcements, job postings, seminars, workshops, and other key activities from the IITM FedEx SMART Center.</p>
           </div>
         </section>
 

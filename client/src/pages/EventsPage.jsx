@@ -30,7 +30,7 @@ const staticEvents = [
   { id: 4, title: "What's brewing at IIT Madras FedEx SMART Center? Batch 2 launch", description: 'On popular demand — launching Batch 2 of our flagship industry-focused learning program.', event_type: 'Industry Focused Learning', event_date: 'Mar 19, 2026 — May 1, 2026' },
   { id: 5, title: 'Cross-Border Logistics: Sustainability and Intelligent Decision-Making', description: 'Online seminar by Mr. Raghunandanan, P&L Head — South, Rohlig Logistics, aligned with our vision of knowledge-dissemination for researchers, faculty, interns, and industry professionals.', event_type: 'Seminar', speaker_name: 'Mr. Raghunandanan', speaker_designation: 'P&L Head — South, Rohlig Logistics', event_date: 'Feb 27, 2026 · 3:00 PM (Online)' },
   { id: 6, title: 'FedEx SMART Hackathon', description: "PAN-India theme-based competition organised with Shaasthra on 'Reimagining Debt Collection Agency Management through Digital & AI Solutions'. 2,500+ registrations, 400 project submissions, 15 finalists.", event_type: 'Hackathon', event_date: 'Feb 6, 2026' },
-  { id: 7, title: 'Decentralised Multi-Agent Reinforcement Learning of Stochastic Shortest Paths', description: 'Prof. N. Hemachandra, Industrial Engineering and Operations Research, IIT Bombay, presents at the IIT Madras-led FedEx SMART Seminar Series.', event_type: 'Seminar', speaker_name: 'Prof. N. Hemachandra', speaker_designation: 'Industrial Engineering & Operations Research, IIT Bombay', event_date: 'Jan 23, 2026' },
+  { id: 7, title: 'Decentralised Multi-Agent Reinforcement Learning of Stochastic Shortest Paths', description: 'Prof. N. Hemachandra, Industrial Engineering and Operations Research, IIT Bombay, presents at the IITM FedEx SMART Seminar Series.', event_type: 'Seminar', speaker_name: 'Prof. N. Hemachandra', speaker_designation: 'Industrial Engineering & Operations Research, IIT Bombay', event_date: 'Jan 23, 2026' },
 ];
 
 const filterTabs = ['All', 'Hackathon', 'Seminars', 'Industry Focused Learning', 'Others'];
@@ -155,7 +155,7 @@ export default function EventsPage() {
               <span className="size-2 rounded-full bg-accent"></span>Events
             </div>
             <h1 className="mt-5 max-w-3xl 2xl:max-w-4xl text-3xl font-medium leading-tight tracking-tight text-foreground sm:text-4xl lg:text-5xl 2xl:text-6xl">Where research meets community.</h1>
-            <p className="mt-4 max-w-2xl 2xl:max-w-3xl text-base 2xl:text-lg leading-relaxed text-muted-foreground">Explore past and upcoming seminars, workshops, hackathons, and other engaging initiatives hosted by or involving the IIT Madras-led FedEx SMART Center.</p>
+            <p className="mt-4 max-w-2xl 2xl:max-w-3xl text-base 2xl:text-lg leading-relaxed text-muted-foreground">Explore past and upcoming seminars, workshops, hackathons, and other engaging initiatives hosted by or involving the IITM FedEx SMART Center.</p>
           </div>
         </section>
 

@@ -9,7 +9,7 @@ import {
   TrendingUp, Briefcase, Calendar, PenLine, BookOpen, Users, Image,
   BarChart3, MessageSquare, Settings, Bell, ArrowUp, ArrowDown,
   ArrowUpToLine, ArrowDownToLine, GripVertical, ListOrdered,
-  LayoutGrid, SlidersHorizontal, RefreshCw
+  LayoutGrid, SlidersHorizontal, RefreshCw, Layers
 } from 'lucide-react';
 import Pagination from '../../components/common/Pagination';
 import ProjectForm from '../../components/admin/ProjectForm';
@@ -212,10 +212,11 @@ const sectionConfig = {
     subtitleField: 'category',
   },
   gallery: {
-    title: 'Gallery Images',
+    title: 'Gallery Events & Images',
     fields: [
-      { key: 'image_url', label: 'Image', type: 'image', required: true },
-      { key: 'caption', label: 'Caption', type: 'text', required: true },
+      { key: 'caption', label: 'Event Caption / Title', type: 'text', required: true },
+      { key: 'image_url', label: 'Cover / Primary Image', type: 'image', required: true },
+      { key: 'images', label: 'Event Photo Gallery (Add Multiple Images)', type: 'images' },
       {
         key: 'category',
         label: 'Category',
@@ -415,6 +416,8 @@ export default function AdminCrud() {
         initial[f.key] = 0;
       } else if (f.type === 'multiselect') {
         initial[f.key] = [];
+      } else if (f.type === 'images') {
+        initial[f.key] = [];
       } else {
         initial[f.key] = '';
       }
@@ -441,6 +444,17 @@ export default function AdminCrud() {
         } else {
           val = [];
         }
+      }
+      if (f.type === 'images') {
+        let imgs = item.images;
+        if (typeof imgs === 'string') {
+          try { imgs = JSON.parse(imgs); } catch(e) { imgs = []; }
+        }
+        if (!Array.isArray(imgs)) imgs = [];
+        if (imgs.length === 0 && item.image_url) {
+          imgs = [item.image_url];
+        }
+        val = imgs;
       }
       data[f.key] = val ?? '';
     });
@@ -495,6 +509,17 @@ export default function AdminCrud() {
         payload[f.key] = payload[f.key].join(', ');
       }
     });
+
+    if (section === 'gallery') {
+      let imagesList = Array.isArray(payload.images) ? payload.images : [];
+      if (payload.image_url && !imagesList.includes(payload.image_url)) {
+        imagesList = [payload.image_url, ...imagesList];
+      }
+      if (imagesList.length > 0 && !payload.image_url) {
+        payload.image_url = imagesList[0];
+      }
+      payload.images = imagesList;
+    }
 
     setSaving(true);
     try {
@@ -1207,6 +1232,12 @@ export default function AdminCrud() {
                                           }
                                         }}
                                       />
+                                      {section === 'gallery' && (Array.isArray(item.images) ? item.images.length : (typeof item.images === 'string' ? JSON.parse(item.images || '[]').length : 0)) > 1 && (
+                                        <span className="absolute bottom-1 right-1 bg-black/75 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md backdrop-blur-xs shadow flex items-center gap-0.5">
+                                          <Layers className="w-2.5 h-2.5" />
+                                          {Array.isArray(item.images) ? item.images.length : JSON.parse(item.images || '[]').length}
+                                        </span>
+                                      )}
                                       <div className="hidden w-16 h-12 sm:w-20 sm:h-14 rounded-xl bg-slate-100 flex-col items-center justify-center text-slate-400 gap-0.5">
                                         <Image className="w-4 h-4 text-slate-300" />
                                         <span className="text-[9px] font-medium text-slate-400">No Image</span>
@@ -1482,6 +1513,109 @@ export default function AdminCrud() {
                           );
                         })}
                       </select>
+                    ) : field.type === 'images' ? (
+                      <div className="space-y-3">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <p className="text-xs text-slate-500 font-medium">
+                            Upload multiple photos for this single event / gallery showcase.
+                          </p>
+                          <label className="cursor-pointer bg-fedex-purple hover:bg-fedex-purple/90 text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all inline-flex items-center gap-1.5 shadow-xs">
+                            <Plus className="w-3.5 h-3.5" />
+                            Add Images
+                            <input
+                              type="file"
+                              accept="image/*"
+                              multiple
+                              onChange={async (e) => {
+                                const files = Array.from(e.target.files || []);
+                                if (files.length === 0) return;
+                                const toastId = toast.loading(`Uploading ${files.length} image(s)...`);
+                                setUploadingFields(prev => ({ ...prev, [field.key]: true }));
+                                try {
+                                  const newUrls = [];
+                                  for (const file of files) {
+                                    const compressedBlob = await compressImage(file, 1400, 1400, 0.82);
+                                    const uploadData = new FormData();
+                                    uploadData.append('image', compressedBlob, file.name.replace(/\.[^/.]+$/, "") + ".jpg");
+                                    const res = await adminApi.uploadImage(uploadData);
+                                    if (res.data?.url) newUrls.push(res.data.url);
+                                  }
+                                  const currentList = Array.isArray(formData[field.key]) ? formData[field.key] : [];
+                                  const combined = [...currentList, ...newUrls];
+                                  setFormData(prev => ({
+                                    ...prev,
+                                    [field.key]: combined,
+                                    image_url: prev.image_url || combined[0] || ''
+                                  }));
+                                  toast.success(`Successfully added ${newUrls.length} image(s)!`, { id: toastId });
+                                } catch (err) {
+                                  console.error(err);
+                                  toast.error('Failed to upload image(s): ' + (err.response?.data?.message || err.message), { id: toastId });
+                                } finally {
+                                  setUploadingFields(prev => ({ ...prev, [field.key]: false }));
+                                }
+                              }}
+                              className="hidden"
+                            />
+                          </label>
+                        </div>
+
+                        {/* Images Grid */}
+                        {Array.isArray(formData[field.key]) && formData[field.key].length > 0 ? (
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 bg-slate-50 border border-slate-200 rounded-2xl max-h-60 overflow-y-auto">
+                            {formData[field.key].map((imgUrl, imgIdx) => {
+                              const isCover = (formData.image_url === imgUrl) || (!formData.image_url && imgIdx === 0);
+                              return (
+                                <div key={imgIdx} className="relative group rounded-xl overflow-hidden border border-slate-200 bg-white aspect-[4/3] shadow-xs">
+                                  <img
+                                    src={resolveImageUrl(imgUrl)}
+                                    alt={`Photo ${imgIdx + 1}`}
+                                    className="w-full h-full object-cover"
+                                  />
+                                  {isCover && (
+                                    <span className="absolute top-1.5 left-1.5 bg-fedex-purple text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md shadow">
+                                      Cover
+                                    </span>
+                                  )}
+                                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1.5 p-1">
+                                    {!isCover && (
+                                      <button
+                                        type="button"
+                                        onClick={() => setFormData(prev => ({ ...prev, image_url: imgUrl }))}
+                                        className="p-1 bg-white/90 hover:bg-white text-slate-800 rounded-lg text-[10px] font-semibold transition-colors"
+                                        title="Set as Cover Image"
+                                      >
+                                        Set Cover
+                                      </button>
+                                    )}
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const nextList = formData[field.key].filter((_, i) => i !== imgIdx);
+                                        setFormData(prev => ({
+                                          ...prev,
+                                          [field.key]: nextList,
+                                          image_url: prev.image_url === imgUrl ? (nextList[0] || '') : prev.image_url
+                                        }));
+                                      }}
+                                      className="p-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg transition-colors"
+                                      title="Delete image"
+                                    >
+                                      <Trash2 className="w-3.5 h-3.5" />
+                                    </button>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <div className="p-4 border-2 border-dashed border-slate-200 rounded-2xl text-center bg-slate-50/50">
+                            <Image className="w-8 h-8 text-slate-300 mx-auto mb-1.5" />
+                            <p className="text-xs text-slate-500 font-medium">No additional photos uploaded yet.</p>
+                            <p className="text-[11px] text-slate-400">Click &quot;Add Images&quot; above to select multiple photos for this event.</p>
+                          </div>
+                        )}
+                      </div>
                     ) : field.type === 'image' ? (
                       <div className="space-y-3">
                         {(formData[field.key] || localPreviews[field.key]) && (

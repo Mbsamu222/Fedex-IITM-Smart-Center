@@ -143,7 +143,7 @@ const defaultStats = [
   { label: 'Research Team', value: '50', suffix: '+' },
   { label: 'R&D Projects', value: '50', suffix: '+' },
   { label: 'Knowledge Dissemination', value: '35', suffix: '+' },
-  { label: 'Talent Outreach', value: '3,500', suffix: '+' },
+  { label: 'Talent Outreach', value: '6,800', suffix: '+' },
   { label: 'Internship Applications', value: '1,500', suffix: '+' },
 ];
 
@@ -354,7 +354,7 @@ export default function HomePage() {
                   <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">Projects</div>
                 </div>
                 <div>
-                  <div className="font-display text-3xl font-semibold text-primary">3.5K+</div>
+                  <div className="font-display text-3xl font-semibold text-primary">6.8K+</div>
                   <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">Talent</div>
                 </div>
               </div>
@@ -728,7 +728,7 @@ export default function HomePage() {
                   <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path>
                   <path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path>
                 </svg>
-                <div className="mt-6 font-display text-4xl 2xl:text-5xl font-semibold text-primary">3,500+</div>
+                <div className="mt-6 font-display text-4xl 2xl:text-5xl font-semibold text-primary">6,800+</div>
                 <div className="mt-1 text-sm 2xl:text-base text-muted-foreground">Talent outreach</div>
               </div>
               <div className="rounded-3xl border border-border bg-card p-7 2xl:p-9">

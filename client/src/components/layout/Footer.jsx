@@ -6,7 +6,7 @@ const defaultSettings = {
   contact_phone: '044 2257 9668',
   contact_email: 'fedexiitm.admin@imail.iitm.ac.in',
   contact_address: 'NAC 1, Stilt floor, Indian Institute of Technology Madras, Chennai, Tamil Nadu 600036',
-  footer_disclaimer: 'Official page of the IIT Madras-led FedEx SMART Center. All expressions/posts/opinions are solely handled by IIT Madras.',
+  footer_disclaimer: 'Official page of the IITM FedEx SMART Center. All expressions/posts/opinions are solely handled by IIT Madras.',
   copyright_text: '© 2026 Indian Institute of Technology Madras. All Rights Reserved.'
 };
 

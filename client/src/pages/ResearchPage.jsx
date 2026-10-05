@@ -167,7 +167,7 @@ export default function ResearchPage() {
               <span className="size-2 rounded-full bg-accent"></span>Research
             </div>
             <h1 className="mt-5 max-w-3xl 2xl:max-w-4xl text-3xl font-medium leading-tight tracking-tight text-foreground sm:text-4xl lg:text-5xl 2xl:text-6xl">Our Research Landscape</h1>
-            <p className="mt-4 max-w-2xl 2xl:max-w-3xl text-base 2xl:text-lg leading-relaxed text-muted-foreground">Discover the ongoing research projects and technological explorations at the IIT Madras-led FedEx SMART Center, driving innovation across the logistics spectrum. Explore our featured projects under each vertical to understand what we are doing.</p>
+            <p className="mt-4 max-w-2xl 2xl:max-w-3xl text-base 2xl:text-lg leading-relaxed text-muted-foreground">Discover the ongoing research projects and technological explorations at the IITM FedEx SMART Center, driving innovation across the logistics spectrum. Explore our featured projects under each vertical to understand what we are doing.</p>
           </div>
         </section>
 
