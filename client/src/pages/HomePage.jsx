@@ -752,27 +752,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Partners */}
-        <section id="partners" className="py-24 2xl:py-32">
-          <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1536px] 3xl:max-w-[1800px] 4xl:max-w-[2200px] px-6 lg:px-10 2xl:px-12 3xl:px-16">
-            <div className="text-center">
-              <div className="inline-flex items-center gap-2.5 rounded-full border border-primary/25 bg-primary/5 px-4 py-1.5 text-sm sm:text-base font-bold uppercase tracking-[0.18em] text-primary shadow-sm">
-                <span className="size-2 rounded-full bg-accent"></span>Industry Collaborations
-              </div>
-              <h2 className="mx-auto mt-5 max-w-2xl 2xl:max-w-3xl text-3xl font-medium tracking-tight sm:text-4xl 2xl:text-5xl">In partnership with the institutions building the future.</h2>
-            </div>
-            <div className="mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-3xl border border-border bg-border sm:grid-cols-4 2xl:grid-cols-8">
-              <div className="flex h-24 items-center justify-center bg-card font-display text-lg 2xl:text-xl font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">FedEx</div>
-              <div className="flex h-24 items-center justify-center bg-card font-display text-lg 2xl:text-xl font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">IIT Madras</div>
-              <div className="flex h-24 items-center justify-center bg-card font-display text-lg 2xl:text-xl font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">Govt. of India</div>
-              <div className="flex h-24 items-center justify-center bg-card font-display text-lg 2xl:text-xl font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">DST</div>
-              <div className="flex h-24 items-center justify-center bg-card font-display text-lg 2xl:text-xl font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">NITI Aayog</div>
-              <div className="flex h-24 items-center justify-center bg-card font-display text-lg 2xl:text-xl font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">CII</div>
-              <div className="flex h-24 items-center justify-center bg-card font-display text-lg 2xl:text-xl font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">NASSCOM</div>
-              <div className="flex h-24 items-center justify-center bg-card font-display text-lg 2xl:text-xl font-medium tracking-tight text-muted-foreground transition-colors hover:text-primary">World Bank</div>
-            </div>
-          </div>
-        </section>
 
         {/* Startups */}
         <section className="py-28 2xl:py-36">
