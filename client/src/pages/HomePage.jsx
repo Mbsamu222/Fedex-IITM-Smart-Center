@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { publicApi, resolveImageUrl } from '../services/api';
 import NewsPopup from '../components/common/NewsPopup';
+import CountUp from '../components/common/CountUp';
 
 // Icons mapping for research areas
 const BrainIcon = () => (
@@ -143,8 +144,8 @@ const defaultStats = [
   { label: 'Research Team', value: '50', suffix: '+' },
   { label: 'R&D Projects', value: '50', suffix: '+' },
   { label: 'Knowledge Dissemination', value: '35', suffix: '+' },
-  { label: 'Talent Outreach', value: '6,800', suffix: '+' },
-  { label: 'Internship Applications', value: '1,500', suffix: '+' },
+  { label: 'Talent Outreach', value: '3500', suffix: '+' },
+  { label: 'Immersive Internship applications', value: '1500', suffix: '+' },
 ];
 
 const defaultResearchAreas = [
@@ -483,8 +484,10 @@ export default function HomePage() {
             </div>
             <div className="grid grid-cols-2 gap-px overflow-hidden rounded-3xl border border-border bg-border md:grid-cols-3 lg:grid-cols-6">
               {stats.map((stat, idx) => (
-                <div key={idx} className="bg-card p-6 sm:p-8 2xl:p-10">
-                  <div className="font-display text-4xl sm:text-5xl 2xl:text-6xl font-semibold text-primary">{stat.value}{stat.suffix}</div>
+                <div key={idx} className="bg-card p-6 sm:p-8 2xl:p-10 transition-colors hover:bg-surface/50">
+                  <div className="font-display text-4xl sm:text-5xl 2xl:text-6xl font-semibold text-primary tabular-nums">
+                    <CountUp value={stat.value} suffix={stat.suffix || ''} />
+                  </div>
                   <div className="mt-3 text-sm 2xl:text-base leading-snug text-muted-foreground">{stat.label}</div>
                 </div>
               ))}
