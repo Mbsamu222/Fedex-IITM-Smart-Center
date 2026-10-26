@@ -5,11 +5,12 @@ import { adminApi } from '../../services/api';
 import {
   LayoutDashboard, Image, Users, FileText, Calendar, PenLine, BookOpen,
   Briefcase, BarChart3, Settings, LogOut, MessageSquare, ChevronRight,
-  TrendingUp, Monitor, Menu, X, PlusCircle, User, Bell
+  TrendingUp, Monitor, Menu, X, PlusCircle, User, Bell, Megaphone
 } from 'lucide-react';
 
 const sections = [
   { key: 'hero', label: 'Hero Section', description: 'Manage homepage sliders & key call-to-actions.', icon: Monitor, color: 'bg-indigo-50 text-indigo-600 border-indigo-100' },
+  { key: 'activities', label: 'Announcements & Activities', description: 'Publish announcements, seminars, job postings & activities shown on the homepage.', icon: Megaphone, color: 'bg-amber-50 text-amber-600 border-amber-100' },
   { key: 'research-areas', label: 'Research Areas', description: 'Modify the center\'s key research verticals.', icon: TrendingUp, color: 'bg-blue-50 text-blue-600 border-blue-100' },
   { key: 'projects', label: 'Projects', description: 'Add/edit active and featured research projects.', icon: Briefcase, color: 'bg-orange-50 text-fedex-orange border-orange-100' },
   { key: 'events', label: 'Events & News', description: 'Publish announcements, seminars and hackathons.', icon: Calendar, color: 'bg-emerald-50 text-emerald-600 border-emerald-100' },
@@ -39,6 +40,7 @@ export default function AdminDashboard() {
     const fetchCounts = async () => {
       try {
         const results = await Promise.allSettled([
+          adminApi.getActivities(),
           adminApi.getResearchAreas(),
           adminApi.getProjects(),
           adminApi.getEvents(),
@@ -50,7 +52,7 @@ export default function AdminDashboard() {
           adminApi.getStats(),
           adminApi.getMessages(),
         ]);
-        const keys = ['research-areas', 'projects', 'events', 'news', 'blogs', 'publications', 'team', 'gallery', 'stats', 'messages'];
+        const keys = ['activities', 'research-areas', 'projects', 'events', 'news', 'blogs', 'publications', 'team', 'gallery', 'stats', 'messages'];
         const c = {};
         results.forEach((r, i) => {
           c[keys[i]] = r.status === 'fulfilled' ? (r.value.data?.length || 0) : 0;

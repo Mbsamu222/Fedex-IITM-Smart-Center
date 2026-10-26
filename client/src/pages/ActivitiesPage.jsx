@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { publicApi, resolveImageUrl } from '../services/api';
 import Pagination from '../components/common/Pagination';
+import { ExternalLink, Eye, X } from 'lucide-react';
 
 const CalendarIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-calendar size-3.5 text-primary" aria-hidden="true">
@@ -38,11 +40,14 @@ export default function ActivitiesPage() {
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
+  const [previewImage, setPreviewImage] = useState(null);
   const ITEMS_PER_PAGE = 12;
 
   useEffect(() => {
     setCurrentPage(1);
   }, [activeFilter]);
+
+  const location = useLocation();
 
   useEffect(() => {
     const fetchActivities = async () => {
@@ -61,6 +66,24 @@ export default function ActivitiesPage() {
     };
     fetchActivities();
   }, []);
+
+  // Smooth scroll and highlight card if navigated from an announcement link with hash
+  useEffect(() => {
+    if (!loading && location.hash) {
+      const timer = setTimeout(() => {
+        const targetId = location.hash.replace('#', '');
+        const targetEl = document.getElementById(targetId);
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          targetEl.classList.add('ring-4', 'ring-primary', 'shadow-2xl');
+          setTimeout(() => {
+            targetEl.classList.remove('ring-4', 'ring-primary', 'shadow-2xl');
+          }, 4000);
+        }
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [loading, location.hash]);
 
   const filteredActivities = activeFilter === 'All' ? activities : activities.filter(a => {
     const type = (a.activity_type || '').toLowerCase();
@@ -133,6 +156,7 @@ export default function ActivitiesPage() {
                   <>
                     <div className="mt-12 flex flex-col gap-6">
                       {paginatedActivities.map((activity, idx) => {
+                        const hasImage = Boolean(activity.image_url);
                         const CardWrapper = activity.external_url ? 'a' : 'div';
                         const wrapperProps = activity.external_url ? { 
                           href: activity.external_url, 
@@ -141,24 +165,96 @@ export default function ActivitiesPage() {
                         } : {};
 
                         return (
-                          <CardWrapper key={activity.id || idx} {...wrapperProps} className={`group flex flex-col rounded-3xl border border-border bg-card overflow-hidden transition-all hover:border-primary/40 ${activity.external_url ? 'cursor-pointer hover:-translate-y-1 hover:shadow-[var(--shadow-lift)]' : ''}`}>
-                            <div className="p-6 md:p-8 flex flex-col flex-1">
-                              <span className="inline-flex w-fit rounded-full bg-[var(--accent-soft)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-accent">
-                                {activity.activity_type || 'Announcement'}
-                              </span>
-                              <h3 className="mt-4 text-xl md:text-2xl font-bold leading-snug tracking-tight group-hover:text-primary transition-colors">{activity.title}</h3>
-                              <p className="mt-4 text-sm md:text-base leading-relaxed text-muted-foreground whitespace-pre-wrap">{activity.description}</p>
+                          <CardWrapper 
+                            key={activity.id || idx} 
+                            id={`activity-${activity.id}`} 
+                            {...wrapperProps} 
+                            className={`group flex flex-col ${hasImage ? 'md:flex-row' : ''} rounded-3xl border border-border bg-card overflow-hidden transition-all duration-300 hover:border-primary/50 hover:shadow-[var(--shadow-lift)] ${activity.external_url ? 'cursor-pointer hover:-translate-y-1' : ''}`}
+                          >
+                            {/* Image Poster / Banner - Handles all types and sizes (portrait, landscape, square) */}
+                            {hasImage && (
+                              <div 
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  setPreviewImage({ url: activity.image_url, title: activity.title });
+                                }}
+                                className="relative w-full md:w-[320px] lg:w-[380px] xl:w-[420px] shrink-0 bg-slate-900/5 dark:bg-slate-950/40 p-3 sm:p-4 border-b md:border-b-0 md:border-r border-border flex items-center justify-center overflow-hidden min-h-[260px] md:min-h-[340px] cursor-zoom-in group/img"
+                              >
+                                {/* Ambient blurred backdrop to seamlessly frame any size & aspect ratio */}
+                                <img 
+                                  src={activity.image_url} 
+                                  alt="" 
+                                  aria-hidden="true"
+                                  className="absolute inset-0 size-full object-cover blur-2xl opacity-25 scale-125 pointer-events-none select-none"
+                                />
+                                <div className="absolute inset-0 bg-black/5 dark:bg-black/20 pointer-events-none"></div>
+
+                                {/* Full, uncropped poster/banner image */}
+                                <img 
+                                  src={activity.image_url} 
+                                  alt={activity.title} 
+                                  className="relative z-10 max-h-[340px] md:max-h-[380px] w-auto max-w-full object-contain rounded-2xl shadow-md transition-transform duration-300 group-hover/img:scale-[1.02]"
+                                  onError={(e) => {
+                                    e.currentTarget.parentElement.style.display = 'none';
+                                  }}
+                                />
+
+                                <span className="absolute bottom-3 right-3 z-20 inline-flex items-center gap-1.5 rounded-full bg-black/75 hover:bg-black text-white text-xs px-3 py-1.5 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-lg">
+                                  <Eye className="size-3.5" />
+                                  <span>Expand Poster</span>
+                                </span>
+                              </div>
+                            )}
+
+                            {/* Activity Information */}
+                            <div className="p-6 md:p-8 flex flex-col flex-1 justify-between">
+                              <div>
+                                <div className="flex flex-wrap items-center justify-between gap-3">
+                                  <span className="inline-flex w-fit rounded-full bg-[var(--accent-soft)] px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-accent">
+                                    {activity.activity_type || 'Announcement'}
+                                  </span>
+
+                                  {activity.status && (
+                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                                      activity.status === 'Active' 
+                                        ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800'
+                                        : 'bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400 border border-amber-200 dark:border-amber-800'
+                                    }`}>
+                                      <span className={`mr-1.5 size-1.5 rounded-full ${activity.status === 'Active' ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`}></span>
+                                      {activity.status}
+                                    </span>
+                                  )}
+                                </div>
+
+                                <h3 className="mt-4 text-xl md:text-2xl font-bold leading-snug tracking-tight group-hover:text-primary transition-colors">
+                                  {activity.title}
+                                </h3>
+
+                                <p className="mt-4 text-sm md:text-base leading-relaxed text-muted-foreground whitespace-pre-wrap">
+                                  {activity.description}
+                                </p>
+                              </div>
                               
-                              <div className="mt-6 flex flex-col gap-3 border-t border-border pt-5 text-sm text-muted-foreground font-medium">
-                                {(activity.start_date || activity.end_date || activity.activity_date) && (
-                                  <span className="inline-flex items-center gap-2">
-                                    <CalendarIcon /> {formatActivityDate(activity)}
-                                  </span>
-                                )}
-                                {activity.location && (
-                                  <span className="inline-flex items-center gap-2">
-                                    <MapPinIcon /> {activity.location}
-                                  </span>
+                              <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5 text-sm text-muted-foreground font-medium">
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
+                                  {(activity.start_date || activity.end_date || activity.activity_date) && (
+                                    <span className="inline-flex items-center gap-2">
+                                      <CalendarIcon /> {formatActivityDate(activity)}
+                                    </span>
+                                  )}
+                                  {activity.location && (
+                                    <span className="inline-flex items-center gap-2">
+                                      <MapPinIcon /> {activity.location}
+                                    </span>
+                                  )}
+                                </div>
+
+                                {activity.external_url && (
+                                  <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 group-hover:bg-primary group-hover:text-primary-foreground text-primary px-4 py-1.5 text-xs font-semibold transition-all">
+                                    <span>View Notice / Apply</span>
+                                    <ExternalLink className="size-3.5" />
+                                  </div>
                                 )}
                               </div>
                             </div>
@@ -175,6 +271,39 @@ export default function ActivitiesPage() {
             )}
           </div>
         </section>
+
+        {/* Lightbox / Zoom Modal for Full Image Poster Preview */}
+        {previewImage && (
+          <div 
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200"
+            onClick={() => setPreviewImage(null)}
+          >
+            <div 
+              className="relative max-w-4xl max-h-[90vh] overflow-hidden rounded-2xl bg-black border border-white/20 shadow-2xl flex flex-col"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="absolute top-3 right-3 z-10">
+                <button
+                  type="button"
+                  onClick={() => setPreviewImage(null)}
+                  className="rounded-full bg-black/60 hover:bg-black text-white p-2 backdrop-blur-md transition-colors"
+                >
+                  <X className="size-5" />
+                </button>
+              </div>
+              <img 
+                src={previewImage.url} 
+                alt={previewImage.title || 'Announcement Poster'} 
+                className="max-h-[80vh] w-auto max-w-full object-contain mx-auto"
+              />
+              {previewImage.title && (
+                <div className="p-3 bg-black/90 text-white text-xs sm:text-sm font-medium text-center truncate">
+                  {previewImage.title}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

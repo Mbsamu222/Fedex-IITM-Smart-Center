@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
     if (featured === 'true') { paramCount++; conditions.push(`is_featured = $${paramCount}`); params.push(true); }
     if (type) { paramCount++; conditions.push(`activity_type = $${paramCount}`); params.push(type); }
     if (conditions.length > 0) query += ' WHERE ' + conditions.join(' AND ');
-    query += ' ORDER BY sort_order ASC';
+    query += ' ORDER BY sort_order ASC, created_at DESC, id DESC';
     const result = await pool.query(query, params);
     res.json(result.rows);
   } catch (error) {

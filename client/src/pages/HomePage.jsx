@@ -818,7 +818,7 @@ export default function HomePage() {
         </section>
       </div>
 
-      <NewsPopup />
+      <NewsPopup showBackToTop={showBackToTop} />
 
       <button
         type="button"
